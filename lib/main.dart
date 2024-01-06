@@ -23,6 +23,8 @@ Future<void> main() async {
 
       WidgetsFlutterBinding.ensureInitialized();
 
+      Bloc.observer = const AppBlocObserver();
+
       HydratedBloc.storage = await HydratedStorage.build(
         storageDirectory: kIsWeb
             ? HydratedStorage.webStorageDirectory
