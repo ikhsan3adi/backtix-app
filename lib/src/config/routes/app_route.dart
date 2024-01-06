@@ -27,6 +27,20 @@ class AppRoute {
       navigatorKey: rootNavigatorKey,
       redirect: routerNotifier.redirect,
       initialLocation: '/splash',
+      routes: [
+        GoRoute(
+          path: '/splash',
+          name: RouteNames.splash,
+          builder: (_, __) => const SplashPage(),
+          routes: [
+            GoRoute(
+              path: RouteNames.onboarding,
+              name: RouteNames.onboarding,
+              builder: (_, __) => const OnboardingPage(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
