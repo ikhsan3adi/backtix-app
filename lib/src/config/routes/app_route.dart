@@ -40,6 +40,20 @@ class AppRoute {
             ),
           ],
         ),
+        GoRoute(
+          path: '/login',
+          name: RouteNames.login,
+          builder: (_, state) {
+            return LoginPage(initialUsername: state.pathParameters['username']);
+          },
+          routes: [
+            GoRoute(
+              path: RouteNames.register,
+              name: RouteNames.register,
+              builder: (_, __) => const RegisterPage(),
+            ),
+          ],
+        ),
       ],
     );
   }

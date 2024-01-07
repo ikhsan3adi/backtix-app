@@ -40,6 +40,10 @@ Future<void> initializeDependencies() async {
     LoggingInterceptor(),
   ]);
 
+  GetIt.I.registerFactory<LoginBloc>(() => LoginBloc(GetIt.I<AuthService>()));
+  GetIt.I.registerFactory<RegisterBloc>(
+    () => RegisterBloc(GetIt.I<AuthService>()),
+  );
 Future<void> initDio() async {
   final client = DioClient(
     baseUrl: apiBaseUrl,
