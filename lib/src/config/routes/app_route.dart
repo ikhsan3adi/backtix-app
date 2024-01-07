@@ -54,6 +54,11 @@ class AppRoute {
             ),
           ],
         ),
+        GoRoute(
+          path: '/activation',
+          name: RouteNames.activation,
+          builder: (_, __) => const OtpActivationPage(),
+        ),
       ],
     );
   }

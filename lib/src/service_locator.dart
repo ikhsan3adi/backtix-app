@@ -44,6 +44,11 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerFactory<RegisterBloc>(
     () => RegisterBloc(GetIt.I<AuthService>()),
   );
+  GetIt.I.registerFactory<UserActivationCubit>(
+    () => UserActivationCubit(GetIt.I<AuthService>()),
+  );
+}
+
 Future<void> initDio() async {
   final client = DioClient(
     baseUrl: apiBaseUrl,
