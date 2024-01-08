@@ -60,6 +60,7 @@ class AppRoute {
           builder: (_, __) => const OtpActivationPage(),
         ),
       ],
+      refreshListenable: routerNotifier,
     );
   }
 }
