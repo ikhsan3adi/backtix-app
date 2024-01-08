@@ -59,6 +59,25 @@ class AppRoute {
           name: RouteNames.activation,
           builder: (_, __) => const OtpActivationPage(),
         ),
+        StatefulShellRoute.indexedStack(
+          parentNavigatorKey: rootNavigatorKey,
+          builder: (_, __, navigationShell) {
+            return NavigationShell(navigationShell: navigationShell);
+          },
+          branches: [
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: RouteNames.home,
+                  path: '/home',
+                  pageBuilder: (_, __) {
+                    return const NoTransitionPage(child: HomePage());
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ],
       refreshListenable: routerNotifier,
     );
