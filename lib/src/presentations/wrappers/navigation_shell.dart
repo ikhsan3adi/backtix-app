@@ -38,6 +38,7 @@ class NavigationShell extends StatelessWidget {
   // Mobile
   NavigationBar _navigationBar() {
     return NavigationBar(
+      height: 60,
       selectedIndex: navigationShell.currentIndex,
       onDestinationSelected: _goBranch,
       destinations: const [

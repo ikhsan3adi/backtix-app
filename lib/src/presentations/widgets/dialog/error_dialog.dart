@@ -28,10 +28,7 @@ class ErrorDialog extends StatelessWidget {
           400 => 'Validation error',
           401 => 'Authentication error',
           403 => 'Access denied',
-          406 => 'Not acceptable',
-          409 => 'Not available',
-          500 => 'Server error',
-          _ => 'Unknown error',
+          _ => error?.response?.data['error'] ?? 'Unknown error',
         },
       ),
       content: Column(
@@ -42,8 +39,11 @@ class ErrorDialog extends StatelessWidget {
             color: context.colorScheme.error,
             size: 48,
           ),
+          const SizedBox(height: 4),
           Text(
-            error?.response?.data['message'] ?? 'Unknown error',
+            message.runtimeType == List
+                ? (message as List).join('\n')
+                : (error?.response?.data['message'] ?? 'Unknown error'),
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.error,
             ),

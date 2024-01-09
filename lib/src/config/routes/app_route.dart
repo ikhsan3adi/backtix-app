@@ -44,7 +44,9 @@ class AppRoute {
           path: '/login',
           name: RouteNames.login,
           builder: (_, state) {
-            return LoginPage(initialUsername: state.pathParameters['username']);
+            return LoginPage(
+              initialUsername: state.uri.queryParameters['username'],
+            );
           },
           routes: [
             GoRoute(

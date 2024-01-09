@@ -20,11 +20,10 @@ class OnboardingCubit extends HydratedCubit<OnboardingState> {
   @override
   Map<String, dynamic>? toJson(OnboardingState state) {
     return {
-      'onboardingFinished': switch (state) {
-        _Finished() => true,
-        _Unfinish() => false,
-        _ => false,
-      },
+      'onboardingFinished': state.maybeWhen(
+        finished: () => true,
+        orElse: () => false,
+      ),
     };
   }
 }

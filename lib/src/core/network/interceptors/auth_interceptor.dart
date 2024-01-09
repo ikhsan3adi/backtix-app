@@ -14,7 +14,10 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final statusCode = err.response?.statusCode;
-    final String? message = err.response?.data['message'];
+    final dynamic messageResponse = err.response?.data['message'];
+    final String? message = messageResponse.runtimeType == List
+        ? messageResponse[0]
+        : messageResponse;
 
     if (statusCode == 401) {
       // If a 401 response is received, refresh the access token
@@ -25,9 +28,6 @@ class AuthInterceptor extends Interceptor {
         state.mapOrNull(
           authenticated: (_) async {
             return handler.resolve(await _dio.fetch(err.requestOptions));
-          },
-          unauthenticated: (_) {
-            _authBloc.add(const AuthEvent.removeAuthentication());
           },
         );
       });

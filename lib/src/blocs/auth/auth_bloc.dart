@@ -52,7 +52,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     _RefreshAuthentication event,
     Emitter<AuthState> emit,
   ) async {
-    if (state is! _Authenticated) return;
+    if (state is! _Authenticated) {
+      return emit(const AuthState.unauthenticated());
+    }
 
     try {
       final currentState = (state as _Authenticated);
@@ -106,7 +108,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
     if (json['authenticated']) {
-      return AuthState.authenticated(user: json['user'], auth: json['auth']);
+      return AuthState.authenticated(
+        user: UserModel.fromJson(json['user']),
+        auth: NewAuthModel.fromJson(json['auth']),
+      );
     }
     return const AuthState.unauthenticated();
   }
