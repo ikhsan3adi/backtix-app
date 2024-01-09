@@ -90,7 +90,7 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _obscurePassword = true;
+  final _obscurePassword = ValueNotifier(true);
 
   @override
   void initState() {
@@ -102,6 +102,7 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _obscurePassword.dispose();
     super.dispose();
   }
 
@@ -182,27 +183,32 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
       ),
     ),
     const SizedBox(height: 8),
-    CustomTextFormField(
-      controller: _passwordController,
-      obscureText: _obscurePassword,
-      validator: Validatorless.multiple([
-        Validatorless.between(8, 64, 'Must have minimum 8 character'),
-        Validatorless.required('Password required'),
-      ]),
-      decoration: InputDecoration(
-        labelText: 'Enter your password',
-        helperText: '',
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() => _obscurePassword = !_obscurePassword);
-          },
-          icon: Icon(
-            _obscurePassword
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
+    ValueListenableBuilder<bool>(
+      valueListenable: _obscurePassword,
+      builder: (context, value, widget) {
+        return CustomTextFormField(
+          controller: _passwordController,
+          obscureText: value,
+          validator: Validatorless.multiple([
+            Validatorless.between(8, 64, 'Must have minimum 8 character'),
+            Validatorless.required('Password required'),
+          ]),
+          decoration: InputDecoration(
+            labelText: 'Enter your password',
+            helperText: '',
+            suffixIcon: IconButton(
+              onPressed: () {
+                _obscurePassword.value = !_obscurePassword.value;
+              },
+              icon: Icon(
+                value
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     ),
   ];
 }

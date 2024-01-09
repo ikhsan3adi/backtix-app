@@ -5,8 +5,10 @@ import 'package:backtix_app/src/data/models/auth/register_user_model.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:regexpattern/regexpattern.dart';
 import 'package:validatorless/validatorless.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -15,11 +17,15 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(forceMaterialTransparency: true),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height / 8),
+            padding: EdgeInsets.only(
+              bottom: context.height / 8,
+              top: (context.height / 8) - kToolbarHeight,
+            ),
             child: Text(
               'Enter your details to continue',
               style: context.textTheme.headlineMedium?.copyWith(
@@ -34,7 +40,7 @@ class RegisterPage extends StatelessWidget {
                 listener: (context, state) {
                   state.whenOrNull(
                     success: (user) {
-                      // TODO: show snackbar
+                      Fluttertoast.showToast(msg: 'User register successful');
                       context.goNamed(
                         RouteNames.login,
                         queryParameters: {'username': user.username},
@@ -89,7 +95,7 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _obscurePassword = true;
+  final _obscurePassword = ValueNotifier(true);
 
   @override
   void dispose() {
@@ -98,6 +104,7 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
     _fullnameController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _obscurePassword.dispose();
     super.dispose();
   }
 
@@ -110,6 +117,7 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ...formWidgets,
+          const SizedBox(height: 16),
           BlocBuilder<RegisterBloc, RegisterState>(
             builder: (context, state) {
               final bloc = context.read<RegisterBloc>();
@@ -179,6 +187,7 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
         helperText: '',
       ),
     ),
+    const SizedBox(height: 8),
     CustomTextFormField(
       controller: _usernameController,
       validator: Validatorless.multiple([
@@ -194,6 +203,7 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
         helperText: '',
       ),
     ),
+    const SizedBox(height: 8),
     CustomTextFormField(
       controller: _fullnameController,
       validator: Validatorless.required('Full name required'),
@@ -202,28 +212,40 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
         helperText: '',
       ),
     ),
-    CustomTextFormField(
-      controller: _passwordController,
-      obscureText: _obscurePassword,
-      validator: Validatorless.multiple([
-        Validatorless.between(8, 64, 'Must have minimum 8 character'),
-        Validatorless.required('Password required'),
-      ]),
-      decoration: InputDecoration(
-        labelText: 'Enter your password',
-        helperText: '',
-        suffixIcon: IconButton.outlined(
-          onPressed: () {
-            setState(() => _obscurePassword = !_obscurePassword);
-          },
-          icon: Icon(
-            _obscurePassword
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
+    const SizedBox(height: 8),
+    ValueListenableBuilder<bool>(
+      valueListenable: _obscurePassword,
+      builder: (context, value, widget) {
+        return CustomTextFormField(
+          controller: _passwordController,
+          obscureText: value,
+          validator: Validatorless.multiple([
+            Validatorless.required('Password required'),
+            Validatorless.between(8, 64, 'Must have minimum 8 character'),
+            Validatorless.regex(
+              RegExp(RegexPattern.passwordHard),
+              'Password must contains uppercase, lowercase, number and symbol',
+            ),
+          ]),
+          decoration: InputDecoration(
+            labelText: 'Enter your password',
+            helperText: '',
+            errorMaxLines: 2,
+            suffixIcon: IconButton(
+              onPressed: () {
+                _obscurePassword.value = !_obscurePassword.value;
+              },
+              icon: Icon(
+                value
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     ),
+    const SizedBox(height: 8),
     CustomTextFormField(
       controller: _confirmPasswordController,
       obscureText: true,

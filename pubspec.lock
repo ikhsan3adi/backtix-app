@@ -728,6 +728,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  regexpattern:
+    dependency: "direct main"
+    description:
+      name: regexpattern
+      sha256: "86b9c9c076cfbd2021c7a887a312a71d962c3a29906c911277da8343e4ac901b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
   retrofit:
     dependency: "direct main"
     description:
