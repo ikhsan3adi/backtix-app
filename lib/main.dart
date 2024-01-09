@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:backtix_app/src/app.dart';
 import 'package:backtix_app/src/blocs/app_bloc_observer.dart';
-import 'package:backtix_app/src/blocs/app_theme_mode/app_theme_mode_cubit.dart';
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
 import 'package:backtix_app/src/service_locator.dart';
 import 'package:dotenv/dotenv.dart';
 import 'package:flutter/foundation.dart';
@@ -45,7 +45,7 @@ Future<void> main() async {
         MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (_) => GetIt.I<AppThemeModeCubit>(),
+              create: (_) => GetIt.I<ThemeModeCubit>(),
             ),
             BlocProvider(
               create: (_) => GetIt.I<AuthBloc>(),

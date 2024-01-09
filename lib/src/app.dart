@@ -1,4 +1,4 @@
-import 'package:backtix_app/src/blocs/app_theme_mode/app_theme_mode_cubit.dart';
+import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
 import 'package:backtix_app/src/config/app_theme.dart';
 import 'package:backtix_app/src/config/routes/app_route.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +12,13 @@ class App extends StatelessWidget {
     final router = AppRoute().goRouter;
     final appTheme = AppTheme();
 
-    return BlocBuilder<AppThemeModeCubit, AppThemeModeState>(
-      builder: (context, state) {
+    return BlocBuilder<ThemeModeCubit, ThemeMode>(
+      builder: (_, themeMode) {
         return MaterialApp.router(
           title: 'BackTix',
           theme: appTheme.lightTheme,
           darkTheme: appTheme.darkTheme,
-          themeMode: state.when(
-            light: () => ThemeMode.light,
-            dark: () => ThemeMode.dark,
-          ),
+          themeMode: themeMode,
           routerConfig: router,
         );
       },
