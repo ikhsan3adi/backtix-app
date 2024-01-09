@@ -1,7 +1,6 @@
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({super.key, this.error});
@@ -21,8 +20,14 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusCode = error?.response?.statusCode ?? 0;
+    final message = error?.response?.data['message'];
 
     return AlertDialog(
+      titleTextStyle: context.textTheme.headlineSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+      ),
+      actionsAlignment: MainAxisAlignment.center,
+      actionsOverflowAlignment: OverflowBarAlignment.center,
       title: Text(
         switch (statusCode) {
           400 => 'Validation error',
@@ -37,7 +42,7 @@ class ErrorDialog extends StatelessWidget {
           Icon(
             statusCode >= 500 ? Icons.cloud_off_outlined : Icons.error_outline,
             color: context.colorScheme.error,
-            size: 48,
+            size: 52,
           ),
           const SizedBox(height: 4),
           Text(
@@ -51,9 +56,18 @@ class ErrorDialog extends StatelessWidget {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => context.pop(),
-          child: const Text('OK'),
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text('OK'),
+                ),
+              ),
+            ),
+          ],
         )
       ],
     );
