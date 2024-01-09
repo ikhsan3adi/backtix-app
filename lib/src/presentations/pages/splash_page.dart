@@ -5,6 +5,7 @@ import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
@@ -58,16 +59,22 @@ class SplashPage extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   'BACKTIX',
-                  style: context.textTheme.headlineMedium,
+                  style: context.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
             ],
           ),
         ),
-        const Expanded(
+        Expanded(
           flex: 1,
-          child: Center(child: CircularProgressIndicator()),
+          child: Center(
+            child: SpinKitFadingFour(
+              color: context.colorScheme.primary,
+            ),
+          ),
         )
       ],
     );
