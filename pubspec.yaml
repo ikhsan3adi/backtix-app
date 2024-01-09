@@ -74,7 +74,7 @@ dependencies:
   intl: ^0.19.0
   flutter_spinkit: ^5.2.0
   fluttertoast: ^8.2.4
-
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
