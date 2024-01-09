@@ -61,9 +61,12 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
 
   final _otpController = TextEditingController();
 
+  final _resendCount = ValueNotifier(0);
+
   @override
   void dispose() {
     _otpController.dispose();
+    _resendCount.dispose();
     super.dispose();
   }
 
@@ -72,6 +75,7 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CustomTextFormField(
             controller: _otpController,
@@ -81,6 +85,7 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
               Validatorless.required('OTP required'),
             ]),
           ),
+          const SizedBox(height: 16),
           BlocBuilder<UserActivationCubit, UserActivationState>(
             builder: (context, state) {
               final bloc = context.read<UserActivationCubit>();
@@ -95,30 +100,47 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
                   },
                 ),
                 icon: const Icon(Icons.check_circle_outline),
-                label: state.maybeWhen(
-                  loading: () => const Text('Loading...'),
-                  orElse: () => const Text('Login'),
+                label: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Text(state.maybeWhen(
+                    loading: () => 'Loading...',
+                    orElse: () => 'Activate',
+                  )),
                 ),
               );
             },
           ),
-          Row(
-            children: [
-              const Text('Doesn\'t receive an email?'),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: () {
-                  context.read<UserActivationCubit>().requestActivation();
-                },
-                child: Text(
-                  'Resend',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: context.colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: 8),
+          Center(
+            child: ValueListenableBuilder(
+              valueListenable: _resendCount,
+              builder: (_, value, __) {
+                if (value >= 5) {
+                  return const SizedBox();
+                }
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Doesn\'t receive an email?'),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: () {
+                        if (value >= 5) return;
+                        context.read<UserActivationCubit>().requestActivation();
+                        _resendCount.value += 1;
+                      },
+                      child: Text(
+                        'Resend ($value)',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: context.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ],
       ),
