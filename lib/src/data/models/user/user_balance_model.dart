@@ -6,8 +6,8 @@ part 'user_balance_model.g.dart';
 @freezed
 class UserBalanceModel with _$UserBalanceModel {
   const factory UserBalanceModel({
-    required int balance,
-    required int revenue,
+    required num balance,
+    required num revenue,
   }) = _Balance;
 
   factory UserBalanceModel.fromJson(Map<String, dynamic> json) =>
