@@ -40,7 +40,18 @@ class ErrorDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            statusCode >= 500 ? Icons.cloud_off_outlined : Icons.error_outline,
+            switch (error?.type) {
+              DioExceptionType.badResponse => statusCode >= 500
+                  ? Icons.cloud_off_outlined
+                  : Icons.error_outline,
+              DioExceptionType.sendTimeout ||
+              DioExceptionType.receiveTimeout ||
+              DioExceptionType.badCertificate ||
+              DioExceptionType.connectionError ||
+              DioExceptionType.connectionTimeout =>
+                Icons.wifi_off_outlined,
+              _ => Icons.bug_report_outlined,
+            },
             color: context.colorScheme.error,
             size: 52,
           ),
