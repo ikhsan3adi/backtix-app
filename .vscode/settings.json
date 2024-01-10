@@ -8,6 +8,7 @@
     "**/Thumbs.db": true,
     "**/*.freezed.dart": true,
     "**/*.g.dart": true,
+    ".flutter-*": true
   },
   "bloc.newBlocTemplate.type": "freezed"
 }
