@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/auth/register_user_model.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -158,7 +161,15 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
                       loading: null,
                       success: null,
                       orElse: () => () {
-                        bloc.add(const RegisterEvent.googleSignUp());
+                        if (Platform.isAndroid ||
+                            Platform.isIOS ||
+                            Platform.isMacOS ||
+                            kIsWeb) {
+                          return bloc.add(const RegisterEvent.googleSignUp());
+                        }
+                        context.showSimpleTextSnackBar(
+                          'Google sign up not supported on ${Platform.operatingSystem}',
+                        );
                       },
                     ),
                     icon: const FaIcon(FontAwesomeIcons.google),

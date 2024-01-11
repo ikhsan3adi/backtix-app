@@ -25,4 +25,11 @@ extension BuildContextX on BuildContext {
       return sm;
     }
   }
+
+  showSimpleTextSnackBar(String text) {
+    ScaffoldMessenger.of(this).clearSnackBars();
+    return ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(content: Text(text)),
+    );
+  }
 }

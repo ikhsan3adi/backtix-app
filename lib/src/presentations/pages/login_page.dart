@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -153,7 +156,15 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
                       loading: null,
                       success: null,
                       orElse: () => () {
-                        bloc.add(const LoginEvent.googleSignIn());
+                        if (Platform.isAndroid ||
+                            Platform.isIOS ||
+                            Platform.isMacOS ||
+                            kIsWeb) {
+                          return bloc.add(const LoginEvent.googleSignIn());
+                        }
+                        context.showSimpleTextSnackBar(
+                          'Google sign in not supported on ${Platform.operatingSystem}',
+                        );
                       },
                     ),
                     icon: const FaIcon(FontAwesomeIcons.google),
