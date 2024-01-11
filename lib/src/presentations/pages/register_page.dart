@@ -6,6 +6,7 @@ import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regexpattern/regexpattern.dart';
@@ -160,7 +161,7 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
                         bloc.add(const RegisterEvent.googleSignUp());
                       },
                     ),
-                    icon: const Icon(Icons.login_outlined),
+                    icon: const FaIcon(FontAwesomeIcons.google),
                     label: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Text('Sign Up with Google'),

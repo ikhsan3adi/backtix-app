@@ -5,6 +5,7 @@ import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:validatorless/validatorless.dart';
@@ -155,7 +156,7 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
                         bloc.add(const LoginEvent.googleSignIn());
                       },
                     ),
-                    icon: const Icon(Icons.login_outlined),
+                    icon: const FaIcon(FontAwesomeIcons.google),
                     label: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Text('Sign in with Google'),
