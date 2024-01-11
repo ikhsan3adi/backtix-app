@@ -4,7 +4,7 @@ import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
-import 'package:backtix_app/src/core/network/constant.dart';
+import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
 import 'package:backtix_app/src/core/network/interceptors/auth_interceptor.dart';
 import 'package:backtix_app/src/core/network/interceptors/logging_interceptor.dart';
