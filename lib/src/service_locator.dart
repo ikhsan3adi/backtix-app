@@ -51,7 +51,7 @@ Future<void> initializeDependencies() async {
 
 Future<void> initDio() async {
   final client = DioClient(
-    baseUrl: apiBaseUrl,
+    baseUrl: Constant.apiBaseUrl,
     contentType: Headers.jsonContentType,
   );
 
