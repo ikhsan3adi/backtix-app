@@ -10,6 +10,7 @@ import 'package:backtix_app/src/core/network/interceptors/auth_interceptor.dart'
 import 'package:backtix_app/src/core/network/interceptors/logging_interceptor.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
+import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -21,6 +22,9 @@ Future<void> initializeDependencies() async {
   await initDio();
 
   GetIt.I.registerSingleton<AuthService>(AuthService(GetIt.I<Dio>()));
+  GetIt.I.registerLazySingleton<GoogleAuthService>(
+    () => GoogleAuthService(GetIt.I<AuthService>()),
+  );
   GetIt.I.registerSingleton<UserService>(UserService(GetIt.I<Dio>()));
 
   GetIt.I.registerSingleton<UserRepository>(

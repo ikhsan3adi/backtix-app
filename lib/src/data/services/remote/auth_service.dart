@@ -1,3 +1,4 @@
+import 'package:backtix_app/src/data/models/auth/google_auth_result.dart';
 import 'package:backtix_app/src/data/models/auth/new_auth_model.dart';
 import 'package:backtix_app/src/data/models/auth/register_user_model.dart';
 import 'package:backtix_app/src/data/models/user/user_model.dart';
@@ -19,6 +20,11 @@ abstract class AuthService {
   Future<HttpResponse<NewAuthModel>> usernameLogin(
     @Field('username') String username,
     @Field('password') String password,
+  );
+
+  @POST('auth/google')
+  Future<HttpResponse<GoogleAuthResult>> googleSignInOrSignUp(
+    @Field('idToken') String idToken,
   );
 
   @NoBody()

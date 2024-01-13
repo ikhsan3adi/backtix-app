@@ -9,7 +9,7 @@ class UserRepository {
   const UserRepository(this._userService);
 
   Future<Either<DioException, UserModel>> getMyDetails() async {
-    return TaskEither.tryCatch(
+    return await TaskEither.tryCatch(
       () async => (await _userService.getMyDetails()).data,
       (error, _) => error as DioException,
     ).run();
