@@ -45,7 +45,12 @@ Future<void> initializeDependencies() async {
     LoggingInterceptor(),
   ]);
 
-  GetIt.I.registerFactory<LoginBloc>(() => LoginBloc(GetIt.I<AuthService>()));
+  GetIt.I.registerFactory<LoginBloc>(
+    () => LoginBloc(
+      GetIt.I<AuthService>(),
+      GetIt.I<GoogleAuthService>(),
+    ),
+  );
   GetIt.I.registerFactory<RegisterBloc>(
     () => RegisterBloc(GetIt.I<AuthService>()),
   );
