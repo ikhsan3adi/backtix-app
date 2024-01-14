@@ -36,6 +36,7 @@ Future<void> initializeDependencies() async {
       GetIt.I<AuthService>(),
       GetIt.I<UserRepository>(),
       GetIt.I<DioClient>(),
+      GetIt.I<GoogleAuthService>(),
     ),
   );
 

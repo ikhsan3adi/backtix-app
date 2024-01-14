@@ -3,6 +3,7 @@ import 'package:backtix_app/src/data/models/auth/new_auth_model.dart';
 import 'package:backtix_app/src/data/models/user/user_model.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
+import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -15,9 +16,14 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final AuthService _authService;
   final UserRepository _userRepository;
   final DioClient _dioClient;
+  final GoogleAuthService _googleAuthService;
 
-  AuthBloc(this._authService, this._userRepository, this._dioClient)
-      : super(const _Initial()) {
+  AuthBloc(
+    this._authService,
+    this._userRepository,
+    this._dioClient,
+    this._googleAuthService,
+  ) : super(const _Initial()) {
     on<_AddAuthentication>(_addAuthentication);
     on<_RefreshAuthentication>(_refreshAuthentication);
     on<_RemoveAuthentication>(_removeAuthentication);
@@ -93,8 +99,9 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       await _authService.logoutUser(currentState.auth.refreshToken!);
     } finally {
       _dioClient.deleteAccessTokenHeader();
+      await _googleAuthService.signOut();
+      emit(const AuthState.unauthenticated());
     }
-    return emit(const AuthState.unauthenticated());
   }
 
   Future<void> _updateUserDetails(
