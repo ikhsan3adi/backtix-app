@@ -52,7 +52,10 @@ Future<void> initializeDependencies() async {
     ),
   );
   GetIt.I.registerFactory<RegisterBloc>(
-    () => RegisterBloc(GetIt.I<AuthService>()),
+    () => RegisterBloc(
+      GetIt.I<AuthService>(),
+      GetIt.I<GoogleAuthService>(),
+    ),
   );
   GetIt.I.registerFactory<UserActivationCubit>(
     () => UserActivationCubit(GetIt.I<AuthService>()),

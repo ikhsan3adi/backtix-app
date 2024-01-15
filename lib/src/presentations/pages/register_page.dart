@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
@@ -43,12 +44,20 @@ class RegisterPage extends StatelessWidget {
               return BlocListener<RegisterBloc, RegisterState>(
                 listener: (context, state) {
                   state.whenOrNull(
-                    success: (user) {
-                      Fluttertoast.showToast(msg: 'User register successful');
-                      context.goNamed(
-                        RouteNames.login,
-                        queryParameters: {'username': user.username},
-                      );
+                    success: (user, auth, isRegistered) {
+                      if (auth != null && (isRegistered ?? false)) {
+                        Fluttertoast.showToast(msg: 'User has been registered');
+                        return context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.authenticate(newAuth: auth));
+                      } else if (user != null) {
+                        Fluttertoast.showToast(msg: 'User register successful');
+                        return context.goNamed(
+                          RouteNames.login,
+                          queryParameters: {'username': user.username},
+                        );
+                      }
+                      Fluttertoast.showToast(msg: 'Sign up failed, try again');
                     },
                     error: (error) => ErrorDialog.show(context, error),
                   );
