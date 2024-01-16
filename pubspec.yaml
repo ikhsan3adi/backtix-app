@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   fpdart: ^1.1.0
-  dotenv: ^4.2.0
+  flutter_dotenv: ^5.1.0
   window_manager: ^0.3.7
 
   # data class
@@ -59,7 +59,7 @@ dependencies:
   dio: ^5.4.0
 
   # webview
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview: ^6.0.0
 
   # auth
   google_sign_in: ^6.2.1
@@ -75,6 +75,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   fluttertoast: ^8.2.4
   smooth_page_indicator: ^1.1.0
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:

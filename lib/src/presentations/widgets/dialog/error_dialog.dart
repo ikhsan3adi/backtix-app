@@ -2,25 +2,33 @@ import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class ErrorDialog extends StatelessWidget {
-  const ErrorDialog({super.key, this.error});
-
-  final DioException? error;
-
+class ErrorDialog {
   static show(
     BuildContext context,
-    DioException? error,
+    Exception error,
   ) {
     return showDialog(
       context: context,
-      builder: (_) => ErrorDialog(error: error),
+      builder: (_) {
+        if (error.runtimeType == DioException) {
+          return _NetworkErrorDialog(error as DioException);
+        }
+
+        return _DefaultErrorDialog(error);
+      },
     );
   }
+}
+
+class _NetworkErrorDialog extends StatelessWidget {
+  const _NetworkErrorDialog(this.error);
+
+  final DioException error;
 
   @override
   Widget build(BuildContext context) {
-    final statusCode = error?.response?.statusCode ?? 0;
-    final message = error?.response?.data['message'];
+    final statusCode = error.response?.statusCode ?? 0;
+    final message = error.response?.data['message'] ?? error.message;
 
     return AlertDialog(
       titleTextStyle: context.textTheme.headlineSmall?.copyWith(
@@ -33,14 +41,14 @@ class ErrorDialog extends StatelessWidget {
           400 => 'Validation error',
           401 => 'Authentication error',
           403 => 'Access denied',
-          _ => error?.response?.data['error'] ?? 'Unknown error',
+          _ => error.response?.data['error'] ?? 'Unknown error',
         },
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            switch (error?.type) {
+            switch (error.type) {
               DioExceptionType.badResponse => statusCode >= 500
                   ? Icons.cloud_off_outlined
                   : Icons.error_outline,
@@ -59,7 +67,59 @@ class ErrorDialog extends StatelessWidget {
           Text(
             message.runtimeType == List
                 ? (message as List).join('\n')
-                : (error?.response?.data['message'] ?? 'Unknown error'),
+                : (message ?? 'Unknown error'),
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colorScheme.error,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text('OK'),
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class _DefaultErrorDialog extends StatelessWidget {
+  const _DefaultErrorDialog(this.error);
+
+  final dynamic error;
+
+  @override
+  Widget build(BuildContext context) {
+    final message = (error as dynamic).message ?? error.toString();
+
+    return AlertDialog(
+      titleTextStyle: context.textTheme.headlineSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+      ),
+      actionsAlignment: MainAxisAlignment.center,
+      actionsOverflowAlignment: OverflowBarAlignment.center,
+      title: const Text('An error has occurred'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.close_outlined,
+            color: context.colorScheme.error,
+            size: 52,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            message ?? 'Unknown error',
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.error,
             ),

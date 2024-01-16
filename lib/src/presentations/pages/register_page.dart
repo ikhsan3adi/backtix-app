@@ -1,11 +1,16 @@
+import 'dart:io';
+
+import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/auth/register_user_model.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regexpattern/regexpattern.dart';
@@ -39,12 +44,20 @@ class RegisterPage extends StatelessWidget {
               return BlocListener<RegisterBloc, RegisterState>(
                 listener: (context, state) {
                   state.whenOrNull(
-                    success: (user) {
-                      Fluttertoast.showToast(msg: 'User register successful');
-                      context.goNamed(
-                        RouteNames.login,
-                        queryParameters: {'username': user.username},
-                      );
+                    success: (user, auth, isRegistered) {
+                      if (auth != null && (isRegistered ?? false)) {
+                        Fluttertoast.showToast(msg: 'User has been registered');
+                        return context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.authenticate(newAuth: auth));
+                      } else if (user != null) {
+                        Fluttertoast.showToast(msg: 'User register successful');
+                        return context.goNamed(
+                          RouteNames.login,
+                          queryParameters: {'username': user.username},
+                        );
+                      }
+                      Fluttertoast.showToast(msg: 'Sign up failed, try again');
                     },
                     error: (error) => ErrorDialog.show(context, error),
                   );
@@ -157,10 +170,18 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
                       loading: null,
                       success: null,
                       orElse: () => () {
-                        bloc.add(const RegisterEvent.googleSignUp());
+                        if (Platform.isAndroid ||
+                            Platform.isIOS ||
+                            Platform.isMacOS ||
+                            kIsWeb) {
+                          return bloc.add(const RegisterEvent.googleSignUp());
+                        }
+                        context.showSimpleTextSnackBar(
+                          'Google sign up not supported on ${Platform.operatingSystem}',
+                        );
                       },
                     ),
-                    icon: const Icon(Icons.login_outlined),
+                    icon: const FaIcon(FontAwesomeIcons.google),
                     label: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Text('Sign Up with Google'),

@@ -9,12 +9,9 @@ class UserRepository {
   const UserRepository(this._userService);
 
   Future<Either<DioException, UserModel>> getMyDetails() async {
-    try {
-      final response = await _userService.getMyDetails();
-
-      return Right(response.data);
-    } on DioException catch (e) {
-      return Left(e);
-    }
+    return await TaskEither.tryCatch(
+      () async => (await _userService.getMyDetails()).data,
+      (error, _) => error as DioException,
+    ).run();
   }
 }
