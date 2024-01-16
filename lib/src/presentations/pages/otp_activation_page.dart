@@ -1,10 +1,12 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:validatorless/validatorless.dart';
 
 class OtpActivationPage extends StatelessWidget {
@@ -13,11 +15,28 @@ class OtpActivationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        leading: TextButton.icon(
+          icon: const Icon(Icons.arrow_back),
+          label: const Text('Logout'),
+          onPressed: () async {
+            final bloc = context.read<AuthBloc>()
+              ..add(const AuthEvent.removeAuthentication());
+
+            await bloc.stream.first
+                .then((_) => context.goNamed(RouteNames.login));
+          },
+        ),
+      ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height / 8),
+            padding: EdgeInsets.only(
+              bottom: context.height / 8,
+              top: (context.height / 8) - kToolbarHeight,
+            ),
             child: Text(
               'Activate your account',
               style: context.textTheme.headlineMedium?.copyWith(
@@ -84,6 +103,7 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
               Validatorless.number('Value not a number'),
               Validatorless.required('OTP required'),
             ]),
+            decoration: const InputDecoration(labelText: 'Enter 6-digit OTP'),
           ),
           const SizedBox(height: 16),
           BlocBuilder<UserActivationCubit, UserActivationState>(
@@ -93,9 +113,9 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
                 onPressed: state.maybeWhen(
                   loading: null,
                   success: null,
-                  orElse: () => () {
+                  orElse: () => () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      bloc.activateUser(otp: _otpController.value.text);
+                      await bloc.activateUser(otp: _otpController.value.text);
                     }
                   },
                 ),
