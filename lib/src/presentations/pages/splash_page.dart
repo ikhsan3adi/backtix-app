@@ -6,6 +6,7 @@ import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,19 +42,16 @@ class SplashPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return Column(
       children: [
-        const Expanded(flex: 1, child: SizedBox()),
+        const Spacer(),
         Expanded(
           flex: 2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Expanded(flex: 1, child: SizedBox()),
+              const Spacer(),
               Expanded(
                 flex: 2,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: context.width * .35,
-                ),
+                child: SvgPicture.asset('assets/images/logo.svg'),
               ),
               Expanded(
                 flex: 1,
@@ -71,9 +69,7 @@ class SplashPage extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Center(
-            child: SpinKitFadingFour(
-              color: context.colorScheme.primary,
-            ),
+            child: SpinKitFadingFour(color: context.colorScheme.primary),
           ),
         )
       ],

@@ -29,11 +29,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   final List<Widget> _pages = [
     const _OnboardingHero(
-      svgAsset: 'assets/svg/onboarding1.svg',
+      svgAsset: 'assets/images/onboarding-01.svg',
       text: 'Create & share your event',
     ),
     const _OnboardingHero(
-      svgAsset: 'assets/svg/onboarding2.svg',
+      svgAsset: 'assets/images/onboarding-02.svg',
       text: 'Find events and buy tickets. No hassle',
     ),
   ];
@@ -49,17 +49,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 8,
                   child: PageView(
                     controller: _controller,
+                    onPageChanged: (value) {
+                      _pageIndexListenable.value = value;
+                    },
                     children: _pages,
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: _onboardingAction(context),
-                  ),
+                  flex: 2,
+                  child: _onboardingAction(context),
                 ),
               ],
             ),
@@ -77,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 48),
+            padding: const EdgeInsets.only(bottom: 48, top: 8),
             child: SmoothPageIndicator(
               controller: _controller,
               count: _pages.length,
