@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.VIDEO_CAPTURE" />
     <uses-permission android:name="android.permission.AUDIO_CAPTURE" />
     <application
-        android:label="backtix_app"
+        android:label="BackTix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data

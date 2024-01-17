@@ -1,6 +1,6 @@
 {
-    "name": "backtix_app",
-    "short_name": "backtix_app",
+    "name": "BackTix | Event & Ticketing app",
+    "short_name": "BackTix",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#00BCD4",
