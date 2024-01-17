@@ -25,13 +25,19 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final InputDecoration? decoration;
 
-  final inputBorder = OutlineInputBorder(
+  final inputBorderBase = OutlineInputBorder(
     borderRadius: BorderRadius.circular(30),
     borderSide: const BorderSide(width: 2),
   );
 
   @override
   Widget build(BuildContext context) {
+    final inputBorder = inputBorderBase.copyWith(
+      borderSide: inputBorderBase.borderSide.copyWith(
+        color: context.colorScheme.onSurface,
+      ),
+    );
+
     return TextFormField(
       controller: _controller,
       onChanged: onChanged,
