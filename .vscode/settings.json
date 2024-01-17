@@ -8,7 +8,12 @@
     "**/Thumbs.db": true,
     "**/*.freezed.dart": true,
     "**/*.g.dart": true,
-    ".flutter-*": true
+    ".dart_tool": true,
+    ".idea": true,
+    ".flutter-*": true,
+    "windows": true,
+    "linux": true,
+    "macos": true,
   },
   "bloc.newBlocTemplate.type": "freezed"
 }
