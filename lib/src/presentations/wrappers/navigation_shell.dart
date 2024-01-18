@@ -1,5 +1,7 @@
 import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class NavigationShell extends StatelessWidget {
@@ -7,6 +9,20 @@ class NavigationShell extends StatelessWidget {
     super.key,
     required this.navigationShell,
   });
+
+  final StatefulNavigationShell navigationShell;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: const [],
+      child: _NavigationShell(navigationShell: navigationShell),
+    );
+  }
+}
+
+class _NavigationShell extends StatelessWidget {
+  const _NavigationShell({required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
@@ -22,81 +38,30 @@ class NavigationShell extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: context.responsive(
+        //
+        // Mobile
         navigationShell,
+        //
+        // Tablet & Desktop
         md: Row(
           children: [
-            _navigationRail(context),
+            HomeNavigationRail(
+              currentIndex: navigationShell.currentIndex,
+              onDestinationSelected: _goBranch,
+            ),
             const VerticalDivider(width: 1, thickness: 1),
             Flexible(child: navigationShell),
           ],
         ),
       ),
-      bottomNavigationBar: context.isMobile ? _navigationBar() : null,
-    );
-  }
-
-  // Mobile
-  NavigationBar _navigationBar() {
-    return NavigationBar(
-      height: 60,
-      selectedIndex: navigationShell.currentIndex,
-      onDestinationSelected: _goBranch,
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.airplane_ticket_outlined),
-          selectedIcon: Icon(Icons.airplane_ticket),
-          label: 'My Tickets',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.event_outlined),
-          selectedIcon: Icon(Icons.event_note),
-          label: 'My Events',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outline),
-          selectedIcon: Icon(Icons.person),
-          label: 'Account',
-        ),
-      ],
-    );
-  }
-
-  // Tablet & Desktop
-  NavigationRail _navigationRail(BuildContext context) {
-    return NavigationRail(
-      selectedIndex: navigationShell.currentIndex,
-      onDestinationSelected: _goBranch,
-      extended: context.isDesktop,
-      labelType: context.isDesktop
-          ? NavigationRailLabelType.none
-          : NavigationRailLabelType.all,
-      destinations: const [
-        NavigationRailDestination(
-          icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home),
-          label: Text('Home'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.airplane_ticket_outlined),
-          selectedIcon: Icon(Icons.airplane_ticket),
-          label: Text('My Tickets'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.event_outlined),
-          selectedIcon: Icon(Icons.event_note),
-          label: Text('My Events'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.person_outline),
-          selectedIcon: Icon(Icons.person),
-          label: Text('Account'),
-        ),
-      ],
+      //
+      // Mobile
+      bottomNavigationBar: context.isMobile
+          ? HomeNavigationBar(
+              currentIndex: navigationShell.currentIndex,
+              onDestinationSelected: _goBranch,
+            )
+          : null,
     );
   }
 }
