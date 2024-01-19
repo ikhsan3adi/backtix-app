@@ -53,7 +53,10 @@ Future<void> main() async {
               create: (_) => GetIt.I<ThemeModeCubit>(),
             ),
             BlocProvider(
-              create: (_) => GetIt.I<AuthBloc>(),
+              create: (_) => GetIt.I<AuthBloc>()
+                ..add(
+                  const AuthEvent.refreshAuthentication(),
+                ),
             ),
           ],
           child: App(router: router, appTheme: appTheme),

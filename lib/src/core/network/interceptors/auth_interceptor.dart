@@ -24,10 +24,14 @@ class AuthInterceptor extends Interceptor {
       _authBloc.add(const AuthEvent.refreshAuthentication());
 
       // Repeat the request with the updated header
-      await _authBloc.stream.first.then((state) async {
+      return await _authBloc.stream.first.then((state) async {
         state.mapOrNull(
           authenticated: (_) async {
-            return handler.resolve(await _dio.fetch(err.requestOptions));
+            return handler.resolve(
+              await _dio.fetch(
+                err.requestOptions.copyWith(headers: _dio.options.headers),
+              ),
+            );
           },
         );
       });
