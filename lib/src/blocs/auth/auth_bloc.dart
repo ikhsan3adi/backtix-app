@@ -5,6 +5,7 @@ import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -65,23 +66,33 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     try {
       final currentState = (state as _Authenticated);
 
+      emit(currentState.copyWith(status: AuthRefreshStatus.refreshing));
+
       if (currentState.auth.refreshToken == null) {
         return emit(const AuthState.unauthenticated());
       }
 
-      final response = await _authService
-          .refreshAccessToken(currentState.auth.refreshToken!);
+      final response = await _authService.refreshAccessToken(
+        currentState.auth.refreshToken!,
+      );
 
-      _dioClient.setAccessTokenHeader(accessToken: response.data.accessToken);
+      _dioClient.setAccessTokenHeader(
+        accessToken: response.data.accessToken,
+      );
 
       return emit(AuthState.authenticated(
-        user: (state as _Authenticated).user,
-        auth: response.data,
+        user: currentState.user,
+        auth: currentState.auth.copyWith(
+          accessToken: response.data.accessToken,
+        ),
+        status: AuthRefreshStatus.done,
       ));
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         return emit(const AuthState.unauthenticated());
       }
+    } catch (e) {
+      if (kDebugMode) print(e.toString());
     }
   }
 
@@ -109,7 +120,24 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     final currentState = (state as _Authenticated);
-    emit(AuthState.authenticated(user: event.user, auth: currentState.auth));
+
+    if (event.user != null) {
+      return emit(
+        AuthState.authenticated(user: event.user!, auth: currentState.auth),
+      );
+    }
+
+    final result = await _userRepository.getMyDetails();
+
+    return result.fold(
+      (_) => null,
+      (user) {
+        return emit(AuthState.authenticated(
+          user: user,
+          auth: currentState.auth,
+        ));
+      },
+    );
   }
 
   @override

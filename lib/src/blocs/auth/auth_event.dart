@@ -8,6 +8,6 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.removeAuthentication() = _RemoveAuthentication;
 
   const factory AuthEvent.updateUserDetails({
-    required UserModel user,
+    UserModel? user,
   }) = _UpdateUserDetails;
 }
