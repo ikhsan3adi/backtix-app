@@ -10,7 +10,7 @@ class AppTheme {
     fontFamily: fontFamily,
   );
 
-  late final ThemeData darkTheme = ThemeData(
+  final ThemeData darkTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.dark,
