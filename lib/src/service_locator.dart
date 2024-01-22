@@ -26,9 +26,15 @@ Future<void> initializeDependencies() async {
     () => GoogleAuthService(GetIt.I<AuthService>()),
   );
   GetIt.I.registerSingleton<UserService>(UserService(GetIt.I<Dio>()));
+  GetIt.I.registerLazySingleton<EventService>(
+    () => EventService(GetIt.I<Dio>()),
+  );
 
   GetIt.I.registerSingleton<UserRepository>(
     UserRepository(GetIt.I<UserService>()),
+  );
+  GetIt.I.registerLazySingleton<EventRepository>(
+    () => EventRepository(GetIt.I<EventService>()),
   );
 
   GetIt.I.registerSingleton<AuthBloc>(
