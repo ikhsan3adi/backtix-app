@@ -15,9 +15,13 @@ class OtpActivationPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
+        leadingWidth: context.width / 3,
         leading: TextButton.icon(
           icon: const Icon(Icons.arrow_back),
           label: const Text('Logout'),
+          style: TextButton.styleFrom(
+            alignment: AlignmentDirectional.centerStart,
+          ),
           onPressed: () async {
             context
                 .read<AuthBloc>()

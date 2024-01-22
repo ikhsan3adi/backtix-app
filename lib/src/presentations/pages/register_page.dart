@@ -45,7 +45,7 @@ class RegisterPage extends StatelessWidget {
                 listener: (context, state) {
                   state.whenOrNull(
                     success: (user, auth, isRegistered) {
-                      if (auth != null && (isRegistered ?? false)) {
+                      if (auth != null && (isRegistered)) {
                         Fluttertoast.showToast(msg: 'User has been registered');
                         return context
                             .read<AuthBloc>()
