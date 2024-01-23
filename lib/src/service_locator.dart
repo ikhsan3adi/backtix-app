@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
@@ -8,8 +9,10 @@ import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
 import 'package:backtix_app/src/core/network/interceptors/auth_interceptor.dart';
 import 'package:backtix_app/src/core/network/interceptors/logging_interceptor.dart';
+import 'package:backtix_app/src/data/repositories/event_repository.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
+import 'package:backtix_app/src/data/services/remote/event_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
 import 'package:dio/dio.dart';
@@ -65,6 +68,10 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<UserActivationCubit>(
     () => UserActivationCubit(GetIt.I<AuthService>()),
+  );
+
+  GetIt.I.registerFactory<PublishedEventsBloc>(
+    () => PublishedEventsBloc(GetIt.I<EventRepository>()),
   );
 }
 
