@@ -66,6 +66,10 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerFactory<UserActivationCubit>(
     () => UserActivationCubit(GetIt.I<AuthService>()),
   );
+
+  GetIt.I.registerFactory<PublishedEventsBloc>(
+    () => PublishedEventsBloc(GetIt.I<EventRepository>()),
+  );
 }
 
 Future<void> initDio() async {
