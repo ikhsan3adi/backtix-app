@@ -44,6 +44,17 @@ class _EventSearchBarState extends State<EventSearchBar> {
           onPressed: () async {
             if (_controller.value.text.isEmpty) return;
 
+            final isSearchPage =
+                GoRouterState.of(context).name == RouteNames.eventSearch;
+
+            if (isSearchPage) {
+              return context.read<EventSearchCubit>().getEvents(
+                    EventQuery(
+                      page: 0,
+                      search: _controller.value.text,
+                    ),
+                  );
+            }
             context.goNamed(
               RouteNames.eventSearch,
               pathParameters: {'search': _controller.value.text},

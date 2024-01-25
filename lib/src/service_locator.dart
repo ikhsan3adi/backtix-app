@@ -70,6 +70,9 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerFactory<PublishedEventsBloc>(
     () => PublishedEventsBloc(GetIt.I<EventRepository>()),
   );
+  GetIt.I.registerFactory<EventSearchCubit>(
+    () => EventSearchCubit(GetIt.I<EventRepository>()),
+  );
 }
 
 Future<void> initDio() async {
