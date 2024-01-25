@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
@@ -72,6 +73,9 @@ Future<void> initializeDependencies() async {
 
   GetIt.I.registerFactory<PublishedEventsBloc>(
     () => PublishedEventsBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<EventSearchCubit>(
+    () => EventSearchCubit(GetIt.I<EventRepository>()),
   );
 }
 
