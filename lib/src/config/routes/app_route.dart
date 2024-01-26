@@ -1,3 +1,4 @@
+import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/config/routes/router_notifier.dart';
 import 'package:backtix_app/src/presentations/pages/home_page.dart';
@@ -12,25 +13,25 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoute {
-  AppRoute() : _goRouter = AppRoute.init();
+  AppRoute({required AuthBloc authBloc}) : _authBloc = authBloc;
 
-  final GoRouter _goRouter;
+  final AuthBloc _authBloc;
 
-  GoRouter get goRouter => _goRouter;
+  GoRouter get goRouter => init();
 
   static final rootNavigatorKey = GlobalKey<NavigatorState>();
 
-  static GoRouter init() {
-    final RouterNotifier routerNotifier = RouterNotifier();
+  GoRouter init() {
+    final RouterNotifier routerNotifier = RouterNotifier(authBloc: _authBloc);
 
     return GoRouter(
       debugLogDiagnostics: true,
       navigatorKey: rootNavigatorKey,
       redirect: routerNotifier.redirect,
-      initialLocation: '/splash',
+      initialLocation: '/',
       routes: [
         GoRoute(
-          path: '/splash',
+          path: '/',
           name: RouteNames.splash,
           builder: (_, __) => const SplashPage(),
           routes: [

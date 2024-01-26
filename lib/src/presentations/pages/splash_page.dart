@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashPage extends StatelessWidget {
@@ -28,15 +27,8 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => GetIt.I<OnboardingCubit>(),
-      child: Builder(
-        builder: (context) {
-          splashing(context);
-          return Scaffold(body: _buildBody(context));
-        },
-      ),
-    );
+    splashing(context);
+    return Scaffold(body: _buildBody(context));
   }
 
   Widget _buildBody(BuildContext context) {

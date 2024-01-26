@@ -4,7 +4,6 @@ import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -40,32 +39,25 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OnboardingCubit>.value(
-      value: GetIt.I<OnboardingCubit>(),
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  flex: 8,
-                  child: PageView(
-                    controller: _controller,
-                    onPageChanged: (value) {
-                      _pageIndexListenable.value = value;
-                    },
-                    children: _pages,
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: _onboardingAction(context),
-                ),
-              ],
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            flex: 8,
+            child: PageView(
+              controller: _controller,
+              onPageChanged: (value) {
+                _pageIndexListenable.value = value;
+              },
+              children: _pages,
             ),
-          );
-        },
+          ),
+          Expanded(
+            flex: 2,
+            child: _onboardingAction(context),
+          ),
+        ],
       ),
     );
   }
@@ -110,8 +102,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       context.goNamed(RouteNames.login);
                     },
                     child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 32,
+                      ),
                       child: Text('Get Started'),
                     ),
                   );
