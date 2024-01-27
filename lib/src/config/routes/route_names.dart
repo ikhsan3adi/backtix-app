@@ -6,4 +6,5 @@ class RouteNames {
   static const String activation = 'activation';
 
   static const String home = 'home';
+  static const String eventSearch = 'event/search';
 }

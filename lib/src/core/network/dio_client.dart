@@ -38,10 +38,10 @@ class DioClient {
   }
 
   void setAccessTokenHeader({required String accessToken}) {
-    _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+    dio.options.headers['Authorization'] = 'Bearer $accessToken';
   }
 
   void deleteAccessTokenHeader() {
-    _dio.options.headers['Authorization'] = null;
+    dio.options.headers['Authorization'] = null;
   }
 }

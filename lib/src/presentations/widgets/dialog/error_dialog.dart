@@ -37,11 +37,19 @@ class _NetworkErrorDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.center,
       actionsOverflowAlignment: OverflowBarAlignment.center,
       title: Text(
-        switch (statusCode) {
-          400 => 'Validation error',
-          401 => 'Authentication error',
-          403 => 'Access denied',
-          _ => error.response?.data['error'] ?? 'Unknown error',
+        switch (error.type) {
+          DioExceptionType.sendTimeout ||
+          DioExceptionType.receiveTimeout ||
+          DioExceptionType.badCertificate ||
+          DioExceptionType.connectionError ||
+          DioExceptionType.connectionTimeout =>
+            'Connection error',
+          _ => switch (statusCode) {
+              400 => 'Validation error',
+              401 => 'Authentication error',
+              403 => 'Access denied',
+              _ => error.response?.data['error'] ?? 'Unknown error',
+            },
         },
       ),
       content: Column(
@@ -65,9 +73,17 @@ class _NetworkErrorDialog extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            message.runtimeType == List
-                ? (message as List).join('\n')
-                : (message ?? 'Unknown error'),
+            switch (error.type) {
+              DioExceptionType.sendTimeout ||
+              DioExceptionType.receiveTimeout ||
+              DioExceptionType.badCertificate ||
+              DioExceptionType.connectionError ||
+              DioExceptionType.connectionTimeout =>
+                'Connection error',
+              _ => message.runtimeType == List
+                  ? (message as List).join('\n')
+                  : (message ?? 'Unknown error'),
+            },
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.error,
             ),

@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.8.1"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.1"
   change_app_package_name:
     dependency: "direct dev"
     description:
@@ -624,6 +632,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  midtrans_sdk:
+    dependency: "direct main"
+    description:
+      name: midtrans_sdk
+      sha256: "2e0ce5aa20f4bce2bb8eb506ad93417d1a429e220cb4d5351ee8b1f1fd9c9100"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   mime:
     dependency: transitive
     description:
@@ -832,6 +848,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      sha256: "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -5,6 +5,7 @@ import 'package:backtix_app/src/presentations/pages/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/onboarding_page.dart';
 import 'package:backtix_app/src/presentations/pages/otp_activation_page.dart';
 import 'package:backtix_app/src/presentations/pages/register_page.dart';
+import 'package:backtix_app/src/presentations/pages/search_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/splash_page.dart';
 import 'package:backtix_app/src/presentations/wrappers/navigation_shell.dart';
 import 'package:flutter/widgets.dart';
@@ -75,6 +76,18 @@ class AppRoute {
                   pageBuilder: (_, __) {
                     return const NoTransitionPage(child: HomePage());
                   },
+                  routes: [
+                    GoRoute(
+                      name: RouteNames.eventSearch,
+                      path: '${RouteNames.eventSearch}/:search',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        return SearchEventPage(
+                          keyword: state.pathParameters['search'] ?? '',
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
