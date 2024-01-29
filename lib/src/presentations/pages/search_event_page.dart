@@ -17,7 +17,7 @@ class SearchEventPage extends StatelessWidget {
     return BlocProvider(
       create: (_) {
         return GetIt.I<EventSearchCubit>()
-          ..getEvents(EventQuery(search: keyword));
+          ..getEvents(EventQuery(search: keyword, ongoingOnly: false));
       },
       child: Scaffold(body: _SearchEventPage(keyword: keyword)),
     );

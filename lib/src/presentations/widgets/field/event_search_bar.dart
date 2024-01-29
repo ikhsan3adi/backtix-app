@@ -52,6 +52,7 @@ class _EventSearchBarState extends State<EventSearchBar> {
                     EventQuery(
                       page: 0,
                       search: _controller.value.text,
+                      ongoingOnly: false,
                     ),
                   );
             }
