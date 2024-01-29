@@ -13,4 +13,5 @@ export 'image/image_error_widget.dart';
 export 'navigation/home_navigation_bar.dart';
 export 'navigation/home_navigation_rail.dart';
 export 'other/inkwelled_stack.dart';
+export 'other/marquee_widget.dart';
 export 'other/shimmer.dart';

@@ -45,10 +45,7 @@ class UpcomingEventsCarousel extends StatelessWidget {
                 return Shimmer(
                   child: Container(
                     height: 300,
-                    margin: EdgeInsets.only(
-                      left: 16,
-                      right: index == 1 ? 16 : 0,
-                    ),
+                    margin: const EdgeInsets.only(left: 16),
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       borderRadius: BorderRadius.circular(12),
@@ -67,10 +64,7 @@ class UpcomingEventsCarousel extends StatelessWidget {
                       // TODO goto event detail
                     },
                     event: events[index],
-                    margin: EdgeInsets.only(
-                      left: 16,
-                      right: index == events.length - 1 ? 16 : 0,
-                    ),
+                    margin: const EdgeInsets.only(left: 16),
                     height: 300,
                   );
                 },
@@ -192,19 +186,37 @@ class _EventCard extends StatelessWidget {
               ),
             ),
             Align(
-              alignment: Alignment.topRight,
-              child: CustomBadge(
-                margin: const EdgeInsets.all(8),
-                borderColor: event.ticketAvailable
-                    ? Colors.greenAccent
-                    : Colors.redAccent,
-                fillColor: event.ticketAvailable
-                    ? Colors.black54.withGreen(50)
-                    : Colors.black54.withRed(50),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
+              alignment: Alignment.topCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomBadge(
+                    margin: const EdgeInsets.all(8),
+                    borderColor: Colors.white,
+                    fillColor: Colors.black54,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints.loose(
+                        const Size.fromWidth(150),
+                      ),
+                      child: MarqueeWidget(
+                        child: Text(
+                          '@${event.user?.username ?? 'Unknown'}',
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  CustomBadge(
+                    margin: const EdgeInsets.all(8),
+                    borderColor: event.ticketAvailable
+                        ? Colors.greenAccent
+                        : Colors.redAccent,
+                    fillColor: event.ticketAvailable
+                        ? Colors.black54.withGreen(50)
+                        : Colors.black54.withRed(50),
+                    child: Text(
                       event.ticketAvailable ? 'Available' : 'Sold out',
                       style: context.textTheme.labelSmall?.copyWith(
                         color: event.ticketAvailable
@@ -212,8 +224,8 @@ class _EventCard extends StatelessWidget {
                             : Colors.redAccent,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -17,6 +17,13 @@ class EventListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateStart = DateFormat('dd/MM/y').format(event.date.toLocal());
+    final dateEnd = event.endDate == null
+        ? ''
+        : ' - ${DateFormat('dd/MM/y').format(event.endDate!.toLocal())}';
+
+    final dateText = '$dateStart$dateEnd';
+
     return Container(
       height: 120,
       clipBehavior: Clip.hardEdge,
@@ -40,9 +47,53 @@ class EventListTile extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: CustomNetworkImage(
-                    src: event.images[0].image,
-                    small: true,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      CustomNetworkImage(
+                        src: event.images[0].image,
+                        small: true,
+                      ),
+                      if (event.isEnded)
+                        Container(
+                          color: Colors.grey.withAlpha(100),
+                          child: const Center(
+                            child: Icon(
+                              Icons.not_interested_outlined,
+                              color: Colors.white70,
+                              size: 32,
+                            ),
+                          ),
+                        ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: CustomBadge(
+                          margin: const EdgeInsets.all(2),
+                          borderColor: Colors.white,
+                          fillColor: Colors.black87,
+                          strokeWidth: 1,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 3,
+                            vertical: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints.loose(
+                              const Size.fromWidth(82),
+                            ),
+                            child: MarqueeWidget(
+                              child: Text(
+                                '@${event.user?.username ?? 'Unknown'}',
+                                style: context.textTheme.bodySmall?.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 10.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -55,6 +106,8 @@ class EventListTile extends StatelessWidget {
                       event.name,
                       style: context.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color:
+                            event.isEnded ? context.theme.disabledColor : null,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -65,34 +118,59 @@ class EventListTile extends StatelessWidget {
                         FaIcon(
                           FontAwesomeIcons.calendarDay,
                           size: 18,
-                          color: context.colorScheme.primary,
+                          color: event.isEnded
+                              ? context.theme.disabledColor
+                              : context.colorScheme.primary,
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          DateFormat('dd/MM/y').format(event.date.toLocal()),
+                          dateText,
+                          style: TextStyle(
+                            color: event.isEnded
+                                ? context.theme.disabledColor
+                                : null,
+                          ),
                         ),
                         const SizedBox(width: 8),
-                        FaIcon(
-                          FontAwesomeIcons.clock,
-                          size: 18,
-                          color: context.colorScheme.primary,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          DateFormat.Hms().format(event.date.toLocal()),
-                        ),
+                        if (event.endDate == null) ...[
+                          FaIcon(
+                            FontAwesomeIcons.clock,
+                            size: 18,
+                            color: event.isEnded
+                                ? context.theme.disabledColor
+                                : context.colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            DateFormat.Hms().format(event.date.toLocal()),
+                            style: TextStyle(
+                              color: event.isEnded
+                                  ? context.theme.disabledColor
+                                  : null,
+                            ),
+                          ),
+                        ]
                       ],
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const FaIcon(
+                        FaIcon(
                           FontAwesomeIcons.locationDot,
                           size: 18,
-                          color: Colors.red,
+                          color: event.isEnded
+                              ? context.theme.disabledColor
+                              : Colors.red,
                         ),
                         const SizedBox(width: 4),
-                        Text(event.location),
+                        Text(
+                          event.location,
+                          style: TextStyle(
+                            color: event.isEnded
+                                ? context.theme.disabledColor
+                                : null,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -117,9 +195,17 @@ class _TicketAvailableBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = event.ticketAvailable ? Colors.green : Colors.red;
-    final colorDarkTheme =
-        event.ticketAvailable ? Colors.greenAccent : Colors.redAccent;
+    final color =
+        event.ticketAvailable && !event.isEnded ? Colors.green : Colors.red;
+    final colorDarkTheme = event.ticketAvailable && !event.isEnded
+        ? Colors.greenAccent
+        : Colors.redAccent;
+
+    final String text = event.isEnded
+        ? 'Ended'
+        : event.ticketAvailable
+            ? 'Available'
+            : 'Sold out';
 
     return CustomBadge(
       margin: const EdgeInsets.all(4),
@@ -128,7 +214,7 @@ class _TicketAvailableBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            event.ticketAvailable ? 'Available' : 'Sold out',
+            text,
             style: context.textTheme.labelSmall?.copyWith(
               color: context.isDark ? colorDarkTheme : color,
             ),
