@@ -380,7 +380,9 @@ class _OtherEventList extends StatelessWidget {
                     Container(
                       height: 180,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: context.isDark
+                            ? Colors.grey[800]
+                            : Colors.grey[200],
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(child: NotFoundWidget()),

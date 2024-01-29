@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
+import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filters.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
@@ -156,7 +157,10 @@ class _FilterChips extends StatelessWidget {
           children: [
             FilterChip(
               showCheckmark: false,
-              avatar: const Icon(Icons.calendar_month_outlined),
+              avatar: Icon(
+                Icons.calendar_month_outlined,
+                color: context.colorScheme.onSurface,
+              ),
               selected: query.from != null,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -184,7 +188,10 @@ class _FilterChips extends StatelessWidget {
               padding: const EdgeInsets.only(left: 6),
               child: FilterChip(
                 showCheckmark: false,
-                avatar: const Icon(Icons.calendar_month),
+                avatar: Icon(
+                  Icons.calendar_month,
+                  color: context.colorScheme.onSurface,
+                ),
                 selected: query.to != null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
