@@ -45,20 +45,23 @@ class _MarqueeWidgetState extends State<MarqueeWidget> {
   }
 
   void scroll(_) async {
-    do {
+    while (_controller.hasClients && _controller.position.maxScrollExtent > 0) {
       await Future.delayed(widget.pauseDuration);
-      await _controller.animateTo(
-        _controller.position.maxScrollExtent,
-        duration: widget.animationDuration,
-        curve: Curves.linear,
-      );
+      if (_controller.hasClients) {
+        await _controller.animateTo(
+          _controller.position.maxScrollExtent,
+          duration: widget.animationDuration,
+          curve: Curves.linear,
+        );
+      }
       await Future.delayed(widget.pauseDuration);
-      await _controller.animateTo(
-        0.0,
-        duration: widget.backDuration,
-        curve: Curves.ease,
-      );
-    } while (
-        _controller.hasClients && _controller.position.maxScrollExtent > 0);
+      if (_controller.hasClients) {
+        await _controller.animateTo(
+          0.0,
+          duration: widget.backDuration,
+          curve: Curves.ease,
+        );
+      }
+    }
   }
 }
