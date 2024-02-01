@@ -34,6 +34,8 @@ class EventModel with _$EventModel {
     return endDate?.toLocal().isBefore(DateTime.now().toLocal()) ?? false;
   }
 
+  bool get isLatLongSet => latitude != null && longitude != null;
+
   factory EventModel.fromJson(Map<String, dynamic> json) =>
       _$EventModelFromJson(json);
 }
