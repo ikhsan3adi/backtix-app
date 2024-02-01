@@ -32,9 +32,7 @@ class WebViewPage extends StatelessWidget {
       );
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await launchUrl(Uri.parse(url));
-    });
+    await launchUrl(Uri.parse(url));
   }
 
   @override
