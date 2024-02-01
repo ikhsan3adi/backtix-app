@@ -1,5 +1,5 @@
-import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/user/user_model.dart';
@@ -20,8 +20,6 @@ class NearbyEventsCarousel extends StatelessWidget {
     final user = context.watch<UserModel>();
 
     if (!user.isUserLocationSet) {
-      context.read<AuthBloc>().add(const AuthEvent.updateUserDetails());
-
       return Container(
         height: 150,
         margin: const EdgeInsets.only(left: 16, right: 16),
@@ -143,6 +141,13 @@ class _EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateStart = DateFormat('dd/MM/y').format(event.date.toLocal());
+    final dateEnd = event.endDate == null
+        ? ''
+        : ' - ${DateFormat('dd/MM/y').format(event.endDate!.toLocal())}';
+
+    final dateText = '$dateStart$dateEnd';
+
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: Container(
@@ -162,7 +167,10 @@ class _EventCard extends StatelessWidget {
             SizedBox(
               height: height,
               width: double.infinity,
-              child: CustomNetworkImage(src: event.images[0].image),
+              child: Hero(
+                tag: event.id,
+                child: CustomNetworkImage(src: event.images[0].image),
+              ),
             ),
             Container(
               height: height,
@@ -207,9 +215,7 @@ class _EventCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          DateFormat('dd/MM/y').format(event.date.toLocal()),
-                        ),
+                        Text(dateText),
                         const SizedBox(width: 8),
                         const FaIcon(
                           FontAwesomeIcons.clock,
@@ -217,7 +223,7 @@ class _EventCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 4),
-                        Text(DateFormat.Hms().format(event.date.toLocal())),
+                        Text(DateFormat.Hm().format(event.date.toLocal())),
                       ],
                     ),
                     const SizedBox(height: 4),

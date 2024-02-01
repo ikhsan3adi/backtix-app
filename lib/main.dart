@@ -54,7 +54,7 @@ Future<void> main() async {
         MultiBlocProvider(
           providers: [
             BlocProvider.value(
-              value: authBloc..add(const AuthEvent.refreshAuthentication()),
+              value: authBloc..add(const AuthEvent.updateUserDetails()),
             ),
             BlocProvider(
               create: (_) => GetIt.I<ThemeModeCubit>(),

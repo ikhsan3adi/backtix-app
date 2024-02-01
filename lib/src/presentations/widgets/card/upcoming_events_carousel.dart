@@ -92,6 +92,13 @@ class _EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateStart = DateFormat('dd/MM/y').format(event.date.toLocal());
+    final dateEnd = event.endDate == null
+        ? ''
+        : ' - ${DateFormat('dd/MM/y').format(event.endDate!.toLocal())}';
+
+    final dateText = '$dateStart$dateEnd';
+
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: Container(
@@ -111,7 +118,10 @@ class _EventCard extends StatelessWidget {
             SizedBox(
               height: height,
               width: double.infinity,
-              child: CustomNetworkImage(src: event.images[0].image),
+              child: Hero(
+                tag: event.id,
+                child: CustomNetworkImage(src: event.images[0].image),
+              ),
             ),
             Container(
               height: height,
@@ -156,9 +166,7 @@ class _EventCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          DateFormat('dd/MM/y').format(event.date.toLocal()),
-                        ),
+                        Text(dateText),
                         const SizedBox(width: 8),
                         const FaIcon(
                           FontAwesomeIcons.clock,
@@ -166,7 +174,7 @@ class _EventCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 4),
-                        Text(DateFormat.Hms().format(event.date.toLocal())),
+                        Text(DateFormat.Hm().format(event.date.toLocal())),
                       ],
                     ),
                     const SizedBox(height: 4),

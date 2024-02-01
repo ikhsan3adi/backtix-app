@@ -50,9 +50,12 @@ class EventListTile extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      CustomNetworkImage(
-                        src: event.images[0].image,
-                        small: true,
+                      Hero(
+                        tag: event.id,
+                        child: CustomNetworkImage(
+                          src: event.images[0].image,
+                          small: true,
+                        ),
                       ),
                       if (event.isEnded)
                         Container(
@@ -131,8 +134,8 @@ class EventListTile extends StatelessWidget {
                                 : null,
                           ),
                         ),
-                        const SizedBox(width: 8),
                         if (event.endDate == null) ...[
+                          const SizedBox(width: 8),
                           FaIcon(
                             FontAwesomeIcons.clock,
                             size: 18,
@@ -142,14 +145,14 @@ class EventListTile extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            DateFormat.Hms().format(event.date.toLocal()),
+                            DateFormat.Hm().format(event.date.toLocal()),
                             style: TextStyle(
                               color: event.isEnded
                                   ? context.theme.disabledColor
                                   : null,
                             ),
                           ),
-                        ]
+                        ],
                       ],
                     ),
                     const SizedBox(height: 4),
