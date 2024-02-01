@@ -5,4 +5,11 @@ class Constant {
 
   static String googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
   static String googleServerClientId = dotenv.env['GOOGLE_SERVER_CLIENT_ID']!;
+
+  static String googleMapsUrlFromLatLong({
+    required double lat,
+    required double long,
+  }) {
+    return 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+  }
 }

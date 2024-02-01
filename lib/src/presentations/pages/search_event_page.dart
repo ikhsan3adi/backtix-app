@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filters.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
@@ -6,6 +7,7 @@ import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class SearchEventPage extends StatelessWidget {
@@ -292,9 +294,15 @@ class _EventList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 return EventListTile(
-                  onTap: () {
-                    // TODO event detail
-                  },
+                  onTap: () => context.pushNamed(
+                    RouteNames.eventDetail,
+                    pathParameters: {'id': state.events[index].id},
+                    queryParameters: {
+                      'name': state.events[index].name,
+                      'heroImageTag': state.events[index].id,
+                      'heroImageUrl': state.events[index].images[0].image,
+                    },
+                  ),
                   event: state.events[index],
                 );
               },

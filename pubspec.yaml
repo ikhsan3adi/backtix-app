@@ -60,6 +60,7 @@ dependencies:
 
   # webview
   flutter_inappwebview: ^6.0.0
+  url_launcher: ^6.2.4
 
   # auth
   google_sign_in: ^6.2.1

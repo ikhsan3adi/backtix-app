@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filters.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
@@ -7,6 +8,7 @@ import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -396,9 +398,15 @@ class _OtherEventList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 return EventListTile(
-                  onTap: () {
-                    // TODO goto event detail
-                  },
+                  onTap: () => context.goNamed(
+                    RouteNames.eventDetail,
+                    pathParameters: {'id': events[index].id},
+                    queryParameters: {
+                      'name': events[index].name,
+                      'heroImageTag': events[index].id,
+                      'heroImageUrl': events[index].images[0].image,
+                    },
+                  ),
                   event: events[index],
                 );
               },

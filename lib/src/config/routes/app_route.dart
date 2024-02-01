@@ -1,6 +1,7 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/config/routes/router_notifier.dart';
+import 'package:backtix_app/src/presentations/pages/event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/home_page.dart';
 import 'package:backtix_app/src/presentations/pages/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/onboarding_page.dart';
@@ -78,6 +79,20 @@ class AppRoute {
                     return const NoTransitionPage(child: HomePage());
                   },
                   routes: [
+                    GoRoute(
+                      name: RouteNames.eventDetail,
+                      path: '${RouteNames.eventDetail}/:id',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        final queryParams = state.uri.queryParameters;
+                        return EventDetailPage(
+                          id: state.pathParameters['id'] ?? '',
+                          name: queryParams['name'],
+                          heroImageTag: queryParams['heroImageTag'],
+                          heroImageUrl: queryParams['heroImageUrl'],
+                        );
+                      },
+                    ),
                     GoRoute(
                       name: RouteNames.eventSearch,
                       path: '${RouteNames.eventSearch}/:search',
