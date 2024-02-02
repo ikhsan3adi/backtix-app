@@ -7,6 +7,7 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.refreshAuthentication() = _RefreshAuthentication;
   const factory AuthEvent.removeAuthentication() = _RemoveAuthentication;
 
+  /// refresh user detail
   const factory AuthEvent.updateUserDetails({
     UserModel? user,
   }) = _UpdateUserDetails;
