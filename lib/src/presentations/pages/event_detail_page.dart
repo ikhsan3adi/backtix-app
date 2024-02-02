@@ -200,7 +200,12 @@ class _EventInfoState extends State<_EventInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PublishedEventDetailCubit, PublishedEventDetailState>(
+    return BlocConsumer<PublishedEventDetailCubit, PublishedEventDetailState>(
+      listener: (_, state) {
+        state.mapOrNull(
+          error: (state) => ErrorDialog.show(context, state.exception),
+        );
+      },
       builder: (context, state) {
         return SliverList.list(
           children: [
@@ -332,7 +337,9 @@ class _EventInfoState extends State<_EventInfo> {
                               ),
                               child: FaIcon(
                                 FontAwesomeIcons.mapLocationDot,
-                                color: context.colorScheme.primary,
+                                color: event.isEnded
+                                    ? context.theme.disabledColor
+                                    : context.colorScheme.primary,
                               ),
                             ),
                         ],
@@ -421,7 +428,7 @@ class _EventInfoState extends State<_EventInfo> {
   List<Widget> get _loadingWidget {
     return [
       const SizedBox(
-        height: 80,
+        height: 40,
         child: Shimmer(),
       ),
       const Divider(height: 32),

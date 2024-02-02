@@ -35,6 +35,7 @@ class _EventSearchBarState extends State<EventSearchBar> {
   Widget build(BuildContext context) {
     return CustomTextFormField(
       controller: _controller,
+      maxLines: 1,
       decoration: InputDecoration(
         isDense: true,
         labelText: 'Search events',
