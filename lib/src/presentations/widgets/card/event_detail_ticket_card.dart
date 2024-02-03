@@ -20,29 +20,28 @@ class EventDetailTicketCard extends StatelessWidget {
     final dateText = '$dateStart$dateEnd';
 
     return Container(
-      height: 100,
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              margin: const EdgeInsets.all(1),
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: context.theme.disabledColor,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                ),
-                borderRadius: BorderRadius.circular(8),
+          Container(
+            width: 100,
+            height: 100,
+            margin: const EdgeInsets.all(1),
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: context.theme.disabledColor,
+                strokeAlign: BorderSide.strokeAlignOutside,
               ),
-              child: ticket.image == null
-                  ? const Center(child: Text('No image'))
-                  : CustomNetworkImage(
-                      src: ticket.image!,
-                      small: true,
-                    ),
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: ticket.image == null
+                ? const Center(child: TicketImagePlaceholder())
+                : CustomNetworkImage(
+                    src: ticket.image!,
+                    small: true,
+                  ),
           ),
           const SizedBox(width: 8),
           Expanded(

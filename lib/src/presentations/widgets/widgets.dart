@@ -12,6 +12,7 @@ export 'form/custom_text_form_field.dart';
 export 'image/custom_network_image.dart';
 export 'image/event_detail_images_carousel.dart';
 export 'image/image_error_widget.dart';
+export 'image/ticket_image_placeholder.dart';
 export 'navigation/home_navigation_bar.dart';
 export 'navigation/home_navigation_rail.dart';
 export 'other/inkwelled_stack.dart';
