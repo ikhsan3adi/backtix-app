@@ -1,4 +1,5 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' show dotenv;
+import 'package:intl/intl.dart';
 
 class Constant {
   static String apiBaseUrl = dotenv.env['API_BASE_URL']!;
@@ -11,5 +12,21 @@ class Constant {
     required double long,
   }) {
     return 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+  }
+
+  /// example: IDR 1.2k
+  static String toSimpleCurrency(dynamic numberOrString) {
+    return NumberFormat.compactSimpleCurrency(
+      // locale: Intl.getCurrentLocale(),
+      locale: 'id_ID',
+    ).format(numberOrString);
+  }
+
+  /// example: IDR 1.200,00
+  static String toCurrency(dynamic numberOrString) {
+    return NumberFormat.currency(
+      // locale: Intl.getCurrentLocale(),
+      locale: 'id_ID',
+    ).format(numberOrString);
   }
 }
