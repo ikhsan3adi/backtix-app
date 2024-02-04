@@ -29,11 +29,26 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     on<_UpdateUserDetails>(_updateUserDetails);
   }
 
+  /// Refresh user detail after [_refreshAt] times [_addAuthentication] called
+  int _counter = 0;
+  final int _refreshAt = 3;
+
   Future<void> _addAuthentication(
     _AddAuthentication event,
     Emitter<AuthState> emit,
   ) async {
     _dioClient.setAccessTokenHeader(accessToken: event.newAuth.accessToken);
+
+    final currentUser = state.mapOrNull(authenticated: (s) => s.user);
+
+    if (_counter < _refreshAt && currentUser != null) {
+      _counter++;
+      return emit(AuthState.authenticated(
+        user: currentUser,
+        auth: event.newAuth,
+      ));
+    }
+    _counter = 0;
 
     final result = await _userRepository.getMyDetails();
 
