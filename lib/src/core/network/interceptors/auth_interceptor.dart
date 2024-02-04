@@ -1,15 +1,15 @@
-import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+import 'package:backtix_app/src/blocs/auth/auth_helper.dart';
 import 'package:dio/dio.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio _dio;
-  final AuthBloc _authBloc;
+  final AuthHelper _authHelper;
 
   AuthInterceptor({
     required Dio dio,
-    required AuthBloc authBloc,
+    required AuthHelper authHelper,
   })  : _dio = dio,
-        _authBloc = authBloc;
+        _authHelper = authHelper;
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -21,38 +21,19 @@ class AuthInterceptor extends Interceptor {
 
     if (statusCode == 401) {
       // If a 401 response is received, refresh the access token
-      _authBloc.add(const AuthEvent.refreshAuthentication());
+      if (await _authHelper.refreshAccessToken() == null) {
+        return handler.next(err);
+      }
 
       // Repeat the request with the updated header
-      return await _authBloc.stream.firstWhere((state) {
-        return state.maybeMap(
-          authenticated: (state) => state.status == AuthRefreshStatus.done,
-          orElse: () => false,
-        );
-      }).then((state) async {
-        state.mapOrNull(
-          authenticated: (_) async {
-            return handler.resolve(
-              await _dio.fetch(
-                err.requestOptions.copyWith(headers: _dio.options.headers),
-              ),
-            );
-          },
-        );
-      });
+      return handler.resolve(
+        await _dio.fetch(
+          err.requestOptions.copyWith(headers: _dio.options.headers),
+        ),
+      );
     } else if (statusCode == 403 && message == 'UNACTIVATED') {
       // If a UNACTIVATED response is received, set user to unactivated
-      final user = _authBloc.state.mapOrNull(
-        authenticated: (state) => state.user,
-      );
-
-      if (user != null) {
-        _authBloc.add(
-          AuthEvent.updateUserDetails(
-            user: user.copyWith(activated: false),
-          ),
-        );
-      }
+      _authHelper.deactivateUser();
     }
     return handler.next(err);
   }

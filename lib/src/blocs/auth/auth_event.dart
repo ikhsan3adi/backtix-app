@@ -4,7 +4,6 @@ part of 'auth_bloc.dart';
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.authenticate({required NewAuthModel newAuth}) =
       _AddAuthentication;
-  const factory AuthEvent.refreshAuthentication() = _RefreshAuthentication;
   const factory AuthEvent.removeAuthentication() = _RemoveAuthentication;
 
   /// refresh user detail

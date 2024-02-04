@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+import 'package:backtix_app/src/blocs/auth/auth_helper.dart';
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
@@ -52,8 +53,20 @@ Future<void> initializeDependencies() async {
   );
 
   GetIt.I<Dio>().interceptors.addAll([
-    AuthInterceptor(dio: GetIt.I<Dio>(), authBloc: GetIt.I<AuthBloc>()),
     LoggingInterceptor(),
+    AuthInterceptor(
+      dio: GetIt.I<Dio>(),
+      authHelper: AuthHelper(
+        GetIt.I<AuthBloc>(),
+        AuthService(
+          Dio(BaseOptions(
+            receiveDataWhenStatusError: true,
+            contentType: Headers.jsonContentType,
+          )),
+          baseUrl: Constant.apiBaseUrl,
+        ),
+      ),
+    ),
   ]);
 
   GetIt.I.registerFactory<LoginBloc>(
