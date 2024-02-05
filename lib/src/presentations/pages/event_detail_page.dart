@@ -42,7 +42,8 @@ class EventDetailPage extends StatelessWidget {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: ResponsivePadding(
-            child: Padding(
+            child: Container(
+              height: 72,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
@@ -168,7 +169,7 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                 left: 16,
                 right: 16,
                 top: 16,
-                bottom: 72,
+                bottom: 100,
               ),
               sliver: _EventInfo(name: widget.name),
             ),
@@ -289,7 +290,7 @@ class _EventInfoState extends State<_EventInfo> {
                     onTap: !event.isLatLongSet
                         ? null
                         : () async {
-                            await WebViewPage.show(
+                            await WebViewPage.showAsBottomSheet(
                               context,
                               url: Constant.googleMapsUrlFromLatLong(
                                 lat: event.latitude!,

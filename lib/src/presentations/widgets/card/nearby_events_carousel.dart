@@ -192,7 +192,7 @@ class _EventCard extends StatelessWidget {
                     Colors.black54.withBlue(50).withGreen(30),
                     Colors.black87.withBlue(50).withGreen(30),
                   ],
-                  stops: const [0, 0.5, 0.6, 0.7, 1],
+                  stops: const [0, 0.35, 0.6, 0.7, 1],
                 ),
               ),
             ),

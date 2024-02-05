@@ -14,9 +14,9 @@ class EventDetailTicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dateStart =
-        DateFormat('dd/MM/y').format(ticket.salesOpenDate.toLocal());
+        DateFormat('dd/MM/yy').format(ticket.salesOpenDate.toLocal());
     final dateEnd =
-        ' - ${DateFormat('dd/MM/y').format(ticket.purchaseDeadline.toLocal())}';
+        ' - ${DateFormat('dd/MM/yy').format(ticket.purchaseDeadline.toLocal())}';
 
     final dateText = '$dateStart$dateEnd';
 

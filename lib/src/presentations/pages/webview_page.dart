@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final bool _supported =
-    Platform.isAndroid || Platform.isIOS || Platform.isMacOS || kIsWeb;
-
 class WebViewPage extends StatelessWidget {
   const WebViewPage({super.key, required this.url, this.title});
+
+  static final bool _supported =
+      Platform.isAndroid || Platform.isIOS || Platform.isMacOS || kIsWeb;
 
   final String url;
   final String? title;
 
   /// if supported, open inappwebview, otherwise launch url on external browser
-  static Future<void> show(
+  static Future<void> showAsBottomSheet(
     BuildContext context, {
     required String url,
     String? title,
@@ -23,8 +23,8 @@ class WebViewPage extends StatelessWidget {
     if (_supported) {
       return await showModalBottomSheet(
         context: context,
-        useSafeArea: true,
         isScrollControlled: true,
+        useSafeArea: true,
         builder: (_) => WebViewPage(
           url: url,
           title: title,
