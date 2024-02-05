@@ -10,10 +10,12 @@ class EventListTile extends StatelessWidget {
     super.key,
     required this.event,
     this.onTap,
+    this.heroImageTag,
   });
 
   final EventModel event;
   final VoidCallback? onTap;
+  final String? heroImageTag;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,11 @@ class EventListTile extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       Hero(
-                        tag: event.id,
                         child: CustomNetworkImage(
                           src: event.images[0].image,
                           small: true,
                         ),
+                      tag: heroImageTag ?? event.id,
                       ),
                       if (event.isEnded)
                         Container(
