@@ -1,0 +1,1 @@
+enum PaymentMethod { direct, balance }

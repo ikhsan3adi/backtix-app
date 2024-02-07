@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/auth/auth_helper.dart';
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
@@ -7,19 +9,24 @@ import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_purchase/ticket_purchase_bloc.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
 import 'package:backtix_app/src/core/network/interceptors/auth_interceptor.dart';
 import 'package:backtix_app/src/core/network/interceptors/logging_interceptor.dart';
 import 'package:backtix_app/src/data/repositories/event_repository.dart';
+import 'package:backtix_app/src/data/repositories/ticket_repository.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/event_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
+import 'package:backtix_app/src/data/services/remote/payment_service.dart';
+import 'package:backtix_app/src/data/services/remote/ticket_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:midtrans_sdk/midtrans_sdk.dart';
 
 Future<void> initializeDependencies() async {
   GetIt.I.registerSingleton<ThemeModeCubit>(ThemeModeCubit());
@@ -35,12 +42,20 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerLazySingleton<EventService>(
     () => EventService(GetIt.I<Dio>()),
   );
+  GetIt.I.registerLazySingleton<TicketService>(
+    () => TicketService(GetIt.I<Dio>()),
+  );
+
+  await initPaymentService();
 
   GetIt.I.registerSingleton<UserRepository>(
     UserRepository(GetIt.I<UserService>()),
   );
   GetIt.I.registerLazySingleton<EventRepository>(
     () => EventRepository(GetIt.I<EventService>()),
+  );
+  GetIt.I.registerLazySingleton<TicketRepository>(
+    () => TicketRepository(GetIt.I<TicketService>()),
   );
 
   GetIt.I.registerSingleton<AuthBloc>(
@@ -94,6 +109,13 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerFactory<EventSearchCubit>(
     () => EventSearchCubit(GetIt.I<EventRepository>()),
   );
+  GetIt.I.registerFactory<TicketPurchaseBloc>(
+    () => TicketPurchaseBloc(
+      GetIt.I<TicketRepository>(),
+      GetIt.I<EventRepository>(),
+      GetIt.I<PaymentService>(),
+    ),
+  );
 }
 
 Future<void> initDio() async {
@@ -107,4 +129,27 @@ Future<void> initDio() async {
   final Dio dio = GetIt.I<DioClient>().dio;
 
   GetIt.I.registerSingleton<Dio>(dio);
+}
+
+Future<void> initPaymentService() async {
+  if (!PaymentService.isSdkSupported) {
+    GetIt.I.registerSingleton<PaymentService>(PaymentService());
+    return;
+  }
+
+  final config = MidtransConfig(
+    clientKey: Constant.midtransClientKey,
+    merchantBaseUrl: Constant.midtransMerchantBaseUrl,
+    colorTheme: ColorTheme(
+      colorPrimary: const Color(0xFF40C4FF),
+      colorPrimaryDark: const Color(0xFF21767C),
+      colorSecondary: const Color(0xFF40C4FF),
+    ),
+  );
+
+  final sdk = await MidtransSDK.init(config: config);
+
+  final service = PaymentService(midtransSdk: sdk);
+
+  GetIt.I.registerSingleton<PaymentService>(service);
 }

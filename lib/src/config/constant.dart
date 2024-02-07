@@ -7,6 +7,9 @@ class Constant {
   static String googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
   static String googleServerClientId = dotenv.env['GOOGLE_SERVER_CLIENT_ID']!;
 
+  static String midtransClientKey = dotenv.env['MIDTRANS_CLIENT_KEY']!;
+  static String midtransMerchantBaseUrl = dotenv.env['MIDTRANS_MERCHANT_BASE_URL']!;
+
   static String googleMapsUrlFromLatLong({
     required double lat,
     required double long,

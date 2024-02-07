@@ -71,6 +71,7 @@ dependencies:
   # form
   validatorless: ^1.2.3
   regexpattern: ^2.6.0
+  input_quantity: ^2.2.0
 
   # ui
   go_router: ^12.1.3

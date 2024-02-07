@@ -2,6 +2,7 @@ import 'package:backtix_app/src/blocs/events/published_event_detail/published_ev
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
+import 'package:backtix_app/src/presentations/pages/ticket_purchase_page.dart';
 import 'package:backtix_app/src/presentations/pages/webview_page.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -46,27 +47,40 @@ class EventDetailPage extends StatelessWidget {
               height: 72,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () {
-                        // TODO: buy ticket
-                      },
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 22),
-                      ),
-                      child: const Text(
-                        'Get Ticket',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ),
+                  Expanded(child: _ctaButton),
                 ],
               ),
             ),
           ),
         );
       }),
+    );
+  }
+
+  Widget get _ctaButton {
+    return BlocBuilder<PublishedEventDetailCubit, PublishedEventDetailState>(
+      builder: (context, state) {
+        return FilledButton(
+          onPressed: state.maybeMap(
+            loaded: (state) => state.event.isEnded
+                ? null
+                : () async => await TicketPurchasePage.show(
+                      context,
+                      eventId: state.event.id,
+                    ),
+            orElse: () => null,
+          ),
+          child: Text(
+            state.whenOrNull(
+                  loaded: (e) => e.isEnded ? 'Event has ended' : 'Get Ticket',
+                ) ??
+                'Loading',
+            style: const TextStyle(fontSize: 18),
+          ),
+        );
+      },
     );
   }
 }
