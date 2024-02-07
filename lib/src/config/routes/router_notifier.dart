@@ -27,7 +27,7 @@ class RouterNotifier extends ChangeNotifier {
             return '/login';
         }
       },
-      authenticated: (user, _, __) {
+      authenticated: (user, _) {
         if (!user.activated) return '/activation';
 
         switch (state.matchedLocation) {

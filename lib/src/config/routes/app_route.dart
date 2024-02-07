@@ -10,6 +10,7 @@ import 'package:backtix_app/src/presentations/pages/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/search_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/splash_page.dart';
 import 'package:backtix_app/src/presentations/wrappers/navigation_shell.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,7 +27,7 @@ class AppRoute {
     final RouterNotifier routerNotifier = RouterNotifier(authBloc: _authBloc);
 
     return GoRouter(
-      debugLogDiagnostics: true,
+      debugLogDiagnostics: kDebugMode,
       navigatorKey: rootNavigatorKey,
       redirect: routerNotifier.redirect,
       initialLocation: '/',
