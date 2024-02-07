@@ -53,15 +53,9 @@ Future<void> main() async {
       runApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider.value(
-              value: authBloc..add(const AuthEvent.updateUserDetails()),
-            ),
-            BlocProvider(
-              create: (_) => GetIt.I<ThemeModeCubit>(),
-            ),
-            BlocProvider(
-              create: (_) => GetIt.I<OnboardingCubit>(),
-            ),
+            BlocProvider.value(value: authBloc),
+            BlocProvider(create: (_) => GetIt.I<ThemeModeCubit>()),
+            BlocProvider(create: (_) => GetIt.I<OnboardingCubit>()),
           ],
           child: App(router: router, appTheme: appTheme),
         ),
