@@ -27,79 +27,78 @@ class EventListTile extends StatelessWidget {
     final dateText = '$dateStart$dateEnd';
 
     return Container(
-      height: 120,
       clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      constraints: const BoxConstraints(minHeight: 120),
       child: InkWelledStack(
+        alignment: Alignment.bottomLeft,
         onTap: onTap,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AspectRatio(
-                aspectRatio: 1,
-                child: Container(
-                  margin: const EdgeInsets.all(1),
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: context.theme.disabledColor,
-                      strokeAlign: BorderSide.strokeAlignOutside,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
+              Container(
+                height: 120,
+                width: 120,
+                margin: const EdgeInsets.all(1),
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: context.theme.disabledColor,
+                    strokeAlign: BorderSide.strokeAlignOutside,
                   ),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Hero(
-                        child: CustomNetworkImage(
-                          src: event.images[0].image,
-                          small: true,
-                        ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Hero(
                       tag: heroImageTag ?? event.id,
+                      child: CustomNetworkImage(
+                        src: event.images[0].image,
+                        small: true,
                       ),
-                      if (event.isEnded)
-                        Container(
-                          color: Colors.grey.withAlpha(100),
-                          child: const Center(
-                            child: Icon(
-                              Icons.not_interested_outlined,
-                              color: Colors.white70,
-                              size: 32,
-                            ),
+                    ),
+                    if (event.isEnded)
+                      Container(
+                        color: Colors.grey.withAlpha(100),
+                        child: const Center(
+                          child: Icon(
+                            Icons.not_interested_outlined,
+                            color: Colors.white70,
+                            size: 32,
                           ),
                         ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: CustomBadge(
-                          margin: const EdgeInsets.all(2),
-                          borderColor: Colors.white,
-                          fillColor: Colors.black87,
-                          strokeWidth: 1,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 3,
-                            vertical: 1,
+                      ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: CustomBadge(
+                        margin: const EdgeInsets.all(2),
+                        borderColor: Colors.white,
+                        fillColor: Colors.black87,
+                        strokeWidth: 1,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 3,
+                          vertical: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints.loose(
+                            const Size.fromWidth(82),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints.loose(
-                              const Size.fromWidth(82),
-                            ),
-                            child: MarqueeWidget(
-                              child: Text(
-                                '@${event.user?.username ?? 'Unknown'}',
-                                style: context.textTheme.bodySmall?.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 10.5,
-                                ),
+                          child: MarqueeWidget(
+                            child: Text(
+                              '@${event.user?.username ?? 'Unknown'}',
+                              style: context.textTheme.bodySmall?.copyWith(
+                                color: Colors.white,
+                                fontSize: 10.5,
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 8),
