@@ -1,10 +1,13 @@
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
+import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filters.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class SearchEventPage extends StatelessWidget {
@@ -17,7 +20,7 @@ class SearchEventPage extends StatelessWidget {
     return BlocProvider(
       create: (_) {
         return GetIt.I<EventSearchCubit>()
-          ..getEvents(EventQuery(search: keyword));
+          ..getEvents(EventQuery(search: keyword, ongoingOnly: false));
       },
       child: Scaffold(body: _SearchEventPage(keyword: keyword)),
     );
@@ -156,7 +159,10 @@ class _FilterChips extends StatelessWidget {
           children: [
             FilterChip(
               showCheckmark: false,
-              avatar: const Icon(Icons.calendar_month_outlined),
+              avatar: Icon(
+                Icons.calendar_month_outlined,
+                color: context.colorScheme.onSurface,
+              ),
               selected: query.from != null,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -184,7 +190,10 @@ class _FilterChips extends StatelessWidget {
               padding: const EdgeInsets.only(left: 6),
               child: FilterChip(
                 showCheckmark: false,
-                avatar: const Icon(Icons.calendar_month),
+                avatar: Icon(
+                  Icons.calendar_month,
+                  color: context.colorScheme.onSurface,
+                ),
                 selected: query.to != null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -285,9 +294,15 @@ class _EventList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 return EventListTile(
-                  onTap: () {
-                    // TODO event detail
-                  },
+                  onTap: () => context.pushNamed(
+                    RouteNames.eventDetail,
+                    pathParameters: {'id': state.events[index].id},
+                    queryParameters: {
+                      'name': state.events[index].name,
+                      'heroImageTag': state.events[index].id,
+                      'heroImageUrl': state.events[index].images[0].image,
+                    },
+                  ),
                   event: state.events[index],
                 );
               },

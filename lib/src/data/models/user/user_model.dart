@@ -22,7 +22,7 @@ class UserModel with _$UserModel {
     double? latitude,
     double? longitude,
     required DateTime createdAt,
-    required DateTime updatedAt,
+    DateTime? updatedAt,
     DateTime? deletedAt,
     UserBalanceModel? balance,
   }) = _UserModel;
@@ -35,8 +35,7 @@ class UserModel with _$UserModel {
         fullname: 'dummy',
         email: 'dummy',
         activated: true,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        createdAt: DateTime(2024),
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

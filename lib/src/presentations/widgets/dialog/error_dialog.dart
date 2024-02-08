@@ -9,6 +9,7 @@ class ErrorDialog {
   ) {
     return showDialog(
       context: context,
+      useSafeArea: true,
       builder: (_) {
         if (error.runtimeType == DioException) {
           return _NetworkErrorDialog(error as DioException);

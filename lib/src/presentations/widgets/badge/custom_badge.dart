@@ -10,6 +10,7 @@ class CustomBadge extends StatelessWidget {
     this.padding,
     this.margin,
     this.strokeWidth,
+    this.borderRadius,
   });
 
   final Widget child;
@@ -20,6 +21,7 @@ class CustomBadge extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
+  final BorderRadiusGeometry? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class CustomBadge extends StatelessWidget {
           ),
       decoration: BoxDecoration(
         color: fillColor,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: borderRadius ?? BorderRadius.circular(30),
         border: Border.all(
           width: strokeWidth ?? 1.5,
           color: borderColor ?? context.colorScheme.primary,

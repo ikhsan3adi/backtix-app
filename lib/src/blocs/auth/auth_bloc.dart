@@ -4,7 +4,6 @@ import 'package:backtix_app/src/data/models/user/user_model.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -26,16 +25,30 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     this._googleAuthService,
   ) : super(const _Initial()) {
     on<_AddAuthentication>(_addAuthentication);
-    on<_RefreshAuthentication>(_refreshAuthentication);
     on<_RemoveAuthentication>(_removeAuthentication);
     on<_UpdateUserDetails>(_updateUserDetails);
   }
+
+  /// Refresh user detail after [_refreshAt] times [_addAuthentication] called
+  int _counter = 0;
+  final int _refreshAt = 3;
 
   Future<void> _addAuthentication(
     _AddAuthentication event,
     Emitter<AuthState> emit,
   ) async {
     _dioClient.setAccessTokenHeader(accessToken: event.newAuth.accessToken);
+
+    final currentUser = state.mapOrNull(authenticated: (s) => s.user);
+
+    if (_counter < _refreshAt && currentUser != null) {
+      _counter++;
+      return emit(AuthState.authenticated(
+        user: currentUser,
+        auth: event.newAuth,
+      ));
+    }
+    _counter = 0;
 
     final result = await _userRepository.getMyDetails();
 
@@ -53,47 +66,6 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         ));
       },
     );
-  }
-
-  Future<void> _refreshAuthentication(
-    _RefreshAuthentication event,
-    Emitter<AuthState> emit,
-  ) async {
-    if (state is! _Authenticated) {
-      return emit(const AuthState.unauthenticated());
-    }
-
-    try {
-      final currentState = (state as _Authenticated);
-
-      emit(currentState.copyWith(status: AuthRefreshStatus.refreshing));
-
-      if (currentState.auth.refreshToken == null) {
-        return emit(const AuthState.unauthenticated());
-      }
-
-      final response = await _authService.refreshAccessToken(
-        currentState.auth.refreshToken!,
-      );
-
-      _dioClient.setAccessTokenHeader(
-        accessToken: response.data.accessToken,
-      );
-
-      return emit(AuthState.authenticated(
-        user: currentState.user,
-        auth: currentState.auth.copyWith(
-          accessToken: response.data.accessToken,
-        ),
-        status: AuthRefreshStatus.done,
-      ));
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        return emit(const AuthState.unauthenticated());
-      }
-    } catch (e) {
-      if (kDebugMode) print(e.toString());
-    }
   }
 
   Future<void> _removeAuthentication(

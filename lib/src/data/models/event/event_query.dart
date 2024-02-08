@@ -13,6 +13,8 @@ class EventQuery with _$EventQuery {
     String? search,
     String? location,
     List<String>? categories,
+    @Default(false) bool? endedOnly,
+    @Default(true) bool? ongoingOnly,
   }) = _EventQuery;
 
   factory EventQuery.fromJson(Map<String, dynamic> json) =>

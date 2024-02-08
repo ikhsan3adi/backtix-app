@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:backtix_app/src/app.dart';
 import 'package:backtix_app/src/blocs/app_bloc_observer.dart';
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
 import 'package:backtix_app/src/config/app_theme.dart';
 import 'package:backtix_app/src/config/routes/app_route.dart';
@@ -35,6 +36,7 @@ Future<void> main() async {
 
       await initializeDependencies();
 
+      /// for debugging on desktop
       if (kDebugMode &&
           (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
         await windowManager.ensureInitialized();
@@ -43,21 +45,17 @@ Future<void> main() async {
         await windowManager.setAlignment(Alignment.topRight);
       }
 
-      final router = AppRoute().goRouter;
+      final authBloc = GetIt.I<AuthBloc>();
+
+      final router = AppRoute(authBloc: authBloc).goRouter;
       final appTheme = AppTheme();
 
       runApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (_) => GetIt.I<ThemeModeCubit>(),
-            ),
-            BlocProvider(
-              create: (_) => GetIt.I<AuthBloc>()
-                ..add(
-                  const AuthEvent.refreshAuthentication(),
-                ),
-            ),
+            BlocProvider.value(value: authBloc),
+            BlocProvider(create: (_) => GetIt.I<ThemeModeCubit>()),
+            BlocProvider(create: (_) => GetIt.I<OnboardingCubit>()),
           ],
           child: App(router: router, appTheme: appTheme),
         ),

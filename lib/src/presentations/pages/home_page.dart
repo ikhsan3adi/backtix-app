@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filters.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
@@ -7,6 +8,7 @@ import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -380,7 +382,9 @@ class _OtherEventList extends StatelessWidget {
                     Container(
                       height: 180,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: context.isDark
+                            ? Colors.grey[800]
+                            : Colors.grey[200],
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(child: NotFoundWidget()),
@@ -393,11 +397,20 @@ class _OtherEventList extends StatelessWidget {
               itemCount: events.length,
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
+                //! Avoid hero tag conflict
+                final heroImageTag = '${events[index].id}_other';
                 return EventListTile(
-                  onTap: () {
-                    // TODO goto event detail
-                  },
+                  onTap: () => context.goNamed(
+                    RouteNames.eventDetail,
+                    pathParameters: {'id': events[index].id},
+                    queryParameters: {
+                      'name': events[index].name,
+                      'heroImageTag': heroImageTag,
+                      'heroImageUrl': events[index].images[0].image,
+                    },
+                  ),
                   event: events[index],
+                  heroImageTag: heroImageTag,
                 );
               },
             );

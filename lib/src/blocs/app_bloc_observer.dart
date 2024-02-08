@@ -8,7 +8,7 @@ class AppBlocObserver extends BlocObserver {
   // void onEvent(Bloc bloc, Object? event) {
   //   super.onEvent(bloc, event);
   //   if (kDebugMode) {
-  //     print('${bloc.runtimeType} $event');
+  //     debugPrint('${bloc.runtimeType} $event');
   //   }
   // }
 
@@ -16,7 +16,7 @@ class AppBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
     if (kDebugMode) {
-      print('${bloc.runtimeType} $error $stackTrace');
+      debugPrint('${bloc.runtimeType} $error $stackTrace');
     }
   }
 
@@ -24,7 +24,7 @@ class AppBlocObserver extends BlocObserver {
   // void onChange(BlocBase bloc, Change change) {
   //   super.onChange(bloc, change);
   //   if (kDebugMode) {
-  //     print('${bloc.runtimeType} $change');
+  //     debugPrint('${bloc.runtimeType} $change');
   //   }
   // }
 
@@ -32,7 +32,7 @@ class AppBlocObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     if (kDebugMode) {
-      print('${bloc.runtimeType} $transition');
+      debugPrint('${bloc.runtimeType} $transition');
     }
   }
 }

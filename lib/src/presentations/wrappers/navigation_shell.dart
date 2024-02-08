@@ -73,7 +73,7 @@ class _NavigationShell extends StatelessWidget {
               onDestinationSelected: _goBranch,
             ),
             const VerticalDivider(width: 1, thickness: 1),
-            Flexible(child: navigationShell),
+            Flexible(child: ResponsivePadding(child: navigationShell)),
           ],
         ),
       ),

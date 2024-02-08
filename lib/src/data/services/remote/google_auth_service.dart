@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/data/models/auth/new_auth_model.dart';
 import 'package:backtix_app/src/data/models/user/user_model.dart';
@@ -20,6 +22,9 @@ class GoogleAuthService {
         );
 
   final GoogleSignIn _googleSignIn;
+
+  static final bool supported =
+      Platform.isAndroid || Platform.isIOS || Platform.isMacOS || kIsWeb;
 
   Future<Either<Exception, Either<NewAuthModel, UserModel>>>
       signInOrSignUp() async {
@@ -56,7 +61,7 @@ class GoogleAuthService {
   }
 
   Future<void> signOut() async {
-    if (await _googleSignIn.isSignedIn()) {
+    if (supported && await _googleSignIn.isSignedIn()) {
       await _googleSignIn.signOut();
     }
   }

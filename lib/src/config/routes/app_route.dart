@@ -1,5 +1,7 @@
+import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/config/routes/router_notifier.dart';
+import 'package:backtix_app/src/presentations/pages/event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/home_page.dart';
 import 'package:backtix_app/src/presentations/pages/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/onboarding_page.dart';
@@ -8,29 +10,30 @@ import 'package:backtix_app/src/presentations/pages/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/search_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/splash_page.dart';
 import 'package:backtix_app/src/presentations/wrappers/navigation_shell.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoute {
-  AppRoute() : _goRouter = AppRoute.init();
+  AppRoute({required AuthBloc authBloc}) : _authBloc = authBloc;
 
-  final GoRouter _goRouter;
+  final AuthBloc _authBloc;
 
-  GoRouter get goRouter => _goRouter;
+  GoRouter get goRouter => init();
 
   static final rootNavigatorKey = GlobalKey<NavigatorState>();
 
-  static GoRouter init() {
-    final RouterNotifier routerNotifier = RouterNotifier();
+  GoRouter init() {
+    final RouterNotifier routerNotifier = RouterNotifier(authBloc: _authBloc);
 
     return GoRouter(
-      debugLogDiagnostics: true,
+      debugLogDiagnostics: kDebugMode,
       navigatorKey: rootNavigatorKey,
       redirect: routerNotifier.redirect,
-      initialLocation: '/splash',
+      initialLocation: '/',
       routes: [
         GoRoute(
-          path: '/splash',
+          path: '/',
           name: RouteNames.splash,
           builder: (_, __) => const SplashPage(),
           routes: [
@@ -77,6 +80,20 @@ class AppRoute {
                     return const NoTransitionPage(child: HomePage());
                   },
                   routes: [
+                    GoRoute(
+                      name: RouteNames.eventDetail,
+                      path: '${RouteNames.eventDetail}/:id',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        final queryParams = state.uri.queryParameters;
+                        return EventDetailPage(
+                          id: state.pathParameters['id'] ?? '',
+                          name: queryParams['name'],
+                          heroImageTag: queryParams['heroImageTag'],
+                          heroImageUrl: queryParams['heroImageUrl'],
+                        );
+                      },
+                    ),
                     GoRoute(
                       name: RouteNames.eventSearch,
                       path: '${RouteNames.eventSearch}/:search',

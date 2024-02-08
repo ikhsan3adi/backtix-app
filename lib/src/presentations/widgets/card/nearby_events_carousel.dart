@@ -1,5 +1,6 @@
-import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
+
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/user/user_model.dart';
@@ -8,6 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class NearbyEventsCarousel extends StatelessWidget {
@@ -20,8 +22,6 @@ class NearbyEventsCarousel extends StatelessWidget {
     final user = context.watch<UserModel>();
 
     if (!user.isUserLocationSet) {
-      context.read<AuthBloc>().add(const AuthEvent.updateUserDetails());
-
       return Container(
         height: 150,
         margin: const EdgeInsets.only(left: 16, right: 16),
@@ -111,14 +111,17 @@ class NearbyEventsCarousel extends StatelessWidget {
                 events.length,
                 (index) {
                   return _EventCard(
-                    onTap: () {
-                      // TODO goto event detail
-                    },
-                    event: events[index],
-                    margin: EdgeInsets.only(
-                      left: 16,
-                      right: index == events.length - 1 ? 16 : 0,
+                    onTap: () => context.goNamed(
+                      RouteNames.eventDetail,
+                      pathParameters: {'id': events[index].id},
+                      queryParameters: {
+                        'name': events[index].name,
+                        'heroImageTag': events[index].id,
+                        'heroImageUrl': events[index].images[0].image,
+                      },
                     ),
+                    event: events[index],
+                    margin: const EdgeInsets.only(left: 16),
                     height: 300,
                   );
                 },
@@ -146,6 +149,13 @@ class _EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateStart = DateFormat('dd/MM/y').format(event.date.toLocal());
+    final dateEnd = event.endDate == null
+        ? ''
+        : ' - ${DateFormat('dd/MM/y').format(event.endDate!.toLocal())}';
+
+    final dateText = '$dateStart$dateEnd';
+
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: Container(
@@ -165,7 +175,10 @@ class _EventCard extends StatelessWidget {
             SizedBox(
               height: height,
               width: double.infinity,
-              child: CustomNetworkImage(src: event.images[0].image),
+              child: Hero(
+                tag: event.id,
+                child: CustomNetworkImage(src: event.images[0].image),
+              ),
             ),
             Container(
               height: height,
@@ -180,7 +193,7 @@ class _EventCard extends StatelessWidget {
                     Colors.black54.withBlue(50).withGreen(30),
                     Colors.black87.withBlue(50).withGreen(30),
                   ],
-                  stops: const [0, 0.5, 0.6, 0.7, 1],
+                  stops: const [0, 0.35, 0.6, 0.7, 1],
                 ),
               ),
             ),
@@ -210,9 +223,7 @@ class _EventCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          DateFormat('dd/MM/y').format(event.date.toLocal()),
-                        ),
+                        Text(dateText),
                         const SizedBox(width: 8),
                         const FaIcon(
                           FontAwesomeIcons.clock,
@@ -220,7 +231,7 @@ class _EventCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         const SizedBox(width: 4),
-                        Text(DateFormat.Hms().format(event.date.toLocal())),
+                        Text(DateFormat.Hm().format(event.date.toLocal())),
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -241,27 +252,50 @@ class _EventCard extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: CustomBadge(
-                margin: const EdgeInsets.all(8),
-                borderColor: event.ticketAvailable
-                    ? Colors.greenAccent
-                    : Colors.redAccent,
-                fillColor: event.ticketAvailable
-                    ? Colors.black54.withGreen(50)
-                    : Colors.black54.withRed(50),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      event.ticketAvailable ? 'Available' : 'Sold out',
-                      style: context.textTheme.labelSmall?.copyWith(
-                        color: event.ticketAvailable
-                            ? Colors.greenAccent
-                            : Colors.redAccent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomBadge(
+                    margin: const EdgeInsets.all(8),
+                    borderColor: Colors.white,
+                    fillColor: Colors.black54,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints.loose(
+                        const Size.fromWidth(150),
+                      ),
+                      child: MarqueeWidget(
+                        child: Text(
+                          '@${event.user?.username ?? 'Unknown'}',
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  CustomBadge(
+                    margin: const EdgeInsets.all(8),
+                    borderColor: event.ticketAvailable
+                        ? Colors.greenAccent
+                        : Colors.redAccent,
+                    fillColor: event.ticketAvailable
+                        ? Colors.black54.withGreen(50)
+                        : Colors.black54.withRed(50),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          event.ticketAvailable ? 'Available' : 'Sold out',
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: event.ticketAvailable
+                                ? Colors.greenAccent
+                                : Colors.redAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
