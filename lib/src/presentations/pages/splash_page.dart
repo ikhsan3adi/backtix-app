@@ -13,9 +13,8 @@ class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
   void splashing(BuildContext context) {
-    OnboardingState state = context.read<OnboardingCubit>().state;
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      OnboardingState state = context.read<OnboardingCubit>().state;
       Future.delayed(const Duration(seconds: 3), () async {
         return state.maybeWhen(
           finished: () => context.goNamed(RouteNames.login),
@@ -28,43 +27,41 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     splashing(context);
-    return Scaffold(body: _buildBody(context));
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return Column(
-      children: [
-        const Spacer(),
-        Expanded(
-          flex: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              Expanded(
-                flex: 2,
-                child: SvgPicture.asset('assets/images/logo.svg'),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  'BACKTIX',
-                  style: context.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
+    return Scaffold(
+      body: Column(
+        children: [
+          const Spacer(),
+          Expanded(
+            flex: 2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                Expanded(
+                  flex: 2,
+                  child: SvgPicture.asset('assets/images/logo.svg'),
                 ),
-              ),
-            ],
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'BACKTIX',
+                    style: context.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Center(
-            child: SpinKitFadingFour(color: context.colorScheme.primary),
-          ),
-        )
-      ],
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: SpinKitFadingFour(color: context.colorScheme.primary),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
