@@ -1,4 +1,3 @@
-
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
