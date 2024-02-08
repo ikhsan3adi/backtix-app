@@ -1,7 +1,7 @@
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
-import 'package:backtix_app/src/data/models/event/event_filters.dart';
+import 'package:backtix_app/src/data/models/event/event_filter.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/data/models/user/user_model.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
@@ -253,7 +253,7 @@ class _FilterChips extends StatelessWidget {
                 },
               ),
             ),
-            ...EventFilters.filters.map(
+            ...EventFilter.filters.map(
               (e) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 6),
@@ -262,7 +262,7 @@ class _FilterChips extends StatelessWidget {
                       EventFilterType.location => query.location == e.filter,
                       EventFilterType.category =>
                         query.categories?.contains(e.filter) ?? false,
-                      _ => false,
+                      EventFilterType.keyword => query.search == e.filter,
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -296,7 +296,14 @@ class _FilterChips extends StatelessWidget {
                               ),
                             ),
                           );
-                        default:
+                        case EventFilterType.keyword:
+                          return bloc.add(
+                            event.copyWith(
+                              query: event.query.copyWith(
+                                search: value ? e.filter : null,
+                              ),
+                            ),
+                          );
                       }
                     },
                   ),
