@@ -109,17 +109,19 @@ class NearbyEventsCarousel extends StatelessWidget {
               return List.generate(
                 events.length,
                 (index) {
+                  final heroImageTag = '${events[index].id}_nearby';
                   return _EventCard(
                     onTap: () => context.goNamed(
                       RouteNames.eventDetail,
                       pathParameters: {'id': events[index].id},
                       queryParameters: {
                         'name': events[index].name,
-                        'heroImageTag': events[index].id,
+                        'heroImageTag': heroImageTag,
                         'heroImageUrl': events[index].images[0].image,
                       },
                     ),
                     event: events[index],
+                    heroImageTag: heroImageTag,
                     margin: const EdgeInsets.only(left: 16),
                     height: 300,
                   );
@@ -139,12 +141,14 @@ class _EventCard extends StatelessWidget {
     this.margin,
     this.onTap,
     this.height,
+    this.heroImageTag,
   });
 
   final EventModel event;
   final EdgeInsetsGeometry? margin;
   final VoidCallback? onTap;
   final double? height;
+  final String? heroImageTag;
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +179,7 @@ class _EventCard extends StatelessWidget {
               height: height,
               width: double.infinity,
               child: Hero(
-                tag: event.id,
+                tag: heroImageTag ?? event.id,
                 child: CustomNetworkImage(src: event.images[0].image),
               ),
             ),
@@ -187,12 +191,11 @@ class _EventCard extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.transparent,
                     Colors.black12.withBlue(50).withGreen(30),
                     Colors.black54.withBlue(50).withGreen(30),
                     Colors.black87.withBlue(50).withGreen(30),
                   ],
-                  stops: const [0, 0.35, 0.6, 0.7, 1],
+                  stops: const [0, 0.35, 0.7, 1],
                 ),
               ),
             ),
@@ -254,24 +257,26 @@ class _EventCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomBadge(
-                    margin: const EdgeInsets.all(8),
-                    borderColor: Colors.white,
-                    fillColor: Colors.black54,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints.loose(
-                        const Size.fromWidth(150),
-                      ),
-                      child: MarqueeWidget(
-                        child: Text(
-                          '@${event.user?.username ?? 'Unknown'}',
-                          style: context.textTheme.labelSmall?.copyWith(
-                            color: Colors.white,
+                  event.user?.username == null
+                      ? const SizedBox()
+                      : CustomBadge(
+                          margin: const EdgeInsets.all(8),
+                          borderColor: Colors.white,
+                          fillColor: Colors.black54,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints.loose(
+                              const Size.fromWidth(150),
+                            ),
+                            child: MarqueeWidget(
+                              child: Text(
+                                '@${event.user?.username ?? 'unknown'}',
+                                style: context.textTheme.labelSmall?.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                   CustomBadge(
                     margin: const EdgeInsets.all(8),
                     borderColor: event.ticketAvailable

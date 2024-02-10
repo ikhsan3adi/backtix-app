@@ -126,7 +126,6 @@ class _SliverAppBarState extends State<_SliverAppBar> {
                   'BACKTIX',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 5,
                     color: context.colorScheme.primary,
                   ),
                 )
@@ -392,7 +391,7 @@ class _OtherEventList extends StatelessWidget {
                         color: context.isDark
                             ? Colors.grey[800]
                             : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Center(child: NotFoundWidget()),
                     ),
@@ -426,8 +425,15 @@ class _OtherEventList extends StatelessWidget {
           orElse: () {
             return SliverList.separated(
               itemCount: 2,
-              separatorBuilder: (_, __) => const SizedBox(height: 4),
-              itemBuilder: (_, __) => Shimmer(child: Container(height: 150)),
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              itemBuilder: (_, __) => Container(
+                height: 120,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Shimmer(),
+              ),
             );
           },
         );

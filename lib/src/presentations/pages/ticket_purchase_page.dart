@@ -93,9 +93,7 @@ class _TicketList extends StatelessWidget {
                   }
                   return SliverList.separated(
                     itemCount: state.event?.tickets?.length,
-                    separatorBuilder: (_, __) => const SizedBox(
-                      height: 8,
-                    ),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (_, index) {
                       return TicketPurchaseTicketCard(
                         ticket: state.event!.tickets![index],
@@ -104,7 +102,7 @@ class _TicketList extends StatelessWidget {
                   );
                 },
                 orElse: () {
-                  return SliverToBoxAdapter(
+                  return SliverFillRemaining(
                     child: Center(
                       child: SpinKitFadingFour(
                         color: context.colorScheme.primary,
