@@ -13,7 +13,7 @@ class TransactionModel with _$TransactionModel {
     required TransactionStatus status,
     String? token,
     @JsonKey(name: 'redirect_url') String? redirectUrl,
-    @JsonKey(name: 'error_messages') @Default([]) List<String>? errorMessages,
+    @JsonKey(name: 'error_messages') List<String>? errorMessages,
   }) = _TransactionModel;
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) =>

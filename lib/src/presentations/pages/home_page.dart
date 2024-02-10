@@ -261,7 +261,7 @@ class _FilterChips extends StatelessWidget {
                     selected: switch (e.type) {
                       EventFilterType.location => query.location == e.filter,
                       EventFilterType.category =>
-                        query.categories?.contains(e.filter) ?? false,
+                        query.categories.contains(e.filter),
                       EventFilterType.keyword => query.search == e.filter,
                     },
                     shape: RoundedRectangleBorder(
@@ -283,7 +283,7 @@ class _FilterChips extends StatelessWidget {
                             return bloc.add(
                               event.copyWith(
                                 query: event.query.copyWith(
-                                  categories: [...?query.categories, e.filter],
+                                  categories: [...query.categories, e.filter],
                                 ),
                               ),
                             );
@@ -291,7 +291,7 @@ class _FilterChips extends StatelessWidget {
                           return bloc.add(
                             event.copyWith(
                               query: event.query.copyWith(
-                                categories: [...?query.categories]
+                                categories: [...query.categories]
                                   ..remove(e.filter),
                               ),
                             ),
