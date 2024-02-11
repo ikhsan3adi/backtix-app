@@ -404,7 +404,7 @@ class _OtherEventList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 //! Avoid hero tag conflict
-                final heroImageTag = '${events[index].id}_other';
+                final heroImageTag = UniqueKey();
                 return EventListTile(
                   onTap: () => context.goNamed(
                     RouteNames.eventDetail,

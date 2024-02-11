@@ -109,7 +109,7 @@ class NearbyEventsCarousel extends StatelessWidget {
               return List.generate(
                 events.length,
                 (index) {
-                  final heroImageTag = '${events[index].id}_nearby';
+                  final heroImageTag = UniqueKey();
                   return _EventCard(
                     onTap: () => context.goNamed(
                       RouteNames.eventDetail,
@@ -148,7 +148,7 @@ class _EventCard extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final VoidCallback? onTap;
   final double? height;
-  final String? heroImageTag;
+  final Object? heroImageTag;
 
   @override
   Widget build(BuildContext context) {

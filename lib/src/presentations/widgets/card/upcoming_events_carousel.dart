@@ -61,16 +61,18 @@ class UpcomingEventsCarousel extends StatelessWidget {
               return List.generate(
                 events.length,
                 (index) {
+                  final heroImageTag = UniqueKey();
                   return _EventCard(
                     onTap: () => context.goNamed(
                       RouteNames.eventDetail,
                       pathParameters: {'id': events[index].id},
                       queryParameters: {
                         'name': events[index].name,
-                        'heroImageTag': events[index].id,
+                        'heroImageTag': heroImageTag,
                         'heroImageUrl': events[index].images[0].image,
                       },
                     ),
+                    heroImageTag: heroImageTag,
                     event: events[index],
                     margin: const EdgeInsets.only(left: 16),
                     height: 300,
@@ -91,12 +93,14 @@ class _EventCard extends StatelessWidget {
     this.margin,
     this.onTap,
     this.height,
+    this.heroImageTag,
   });
 
   final EventModel event;
   final EdgeInsetsGeometry? margin;
   final VoidCallback? onTap;
   final double? height;
+  final Object? heroImageTag;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +131,7 @@ class _EventCard extends StatelessWidget {
               height: height,
               width: double.infinity,
               child: Hero(
-                tag: event.id,
+                tag: heroImageTag ?? event.id,
                 child: CustomNetworkImage(src: event.images[0].image),
               ),
             ),

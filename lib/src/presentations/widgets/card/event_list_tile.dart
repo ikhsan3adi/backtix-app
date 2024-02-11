@@ -15,7 +15,7 @@ class EventListTile extends StatelessWidget {
 
   final EventModel event;
   final VoidCallback? onTap;
-  final String? heroImageTag;
+  final Object? heroImageTag;
 
   @override
   Widget build(BuildContext context) {
