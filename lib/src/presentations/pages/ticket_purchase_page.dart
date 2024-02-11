@@ -39,31 +39,31 @@ class TicketPurchasePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Ticket Order'),
-      ),
-      body: Column(
-        children: [
-          const Expanded(child: _TicketList()),
-          ConstrainedBox(
-            constraints: BoxConstraints.loose(const Size.fromHeight(324)),
-            child: Container(
-              margin: const EdgeInsets.only(
-                left: 16,
-                top: 8,
-                right: 16,
-                bottom: 100,
+    return ResponsivePadding(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Ticket Order'),
+        ),
+        body: Column(
+          children: [
+            const Expanded(child: _TicketList()),
+            ConstrainedBox(
+              constraints: BoxConstraints.loose(const Size.fromHeight(324)),
+              child: Container(
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  top: 8,
+                  right: 16,
+                  bottom: 100,
+                ),
+                child: const _PaymentMethodWidget(),
               ),
-              child: const _PaymentMethodWidget(),
             ),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: ResponsivePadding(
-        child: Container(
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Container(
           height: 72,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: const _BottomWidget(),

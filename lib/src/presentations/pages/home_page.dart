@@ -382,20 +382,13 @@ class _OtherEventList extends StatelessWidget {
             final events = state.events.skip(5).toList();
             if (events.isEmpty) {
               return SliverToBoxAdapter(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: context.isDark
-                            ? Colors.grey[800]
-                            : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(child: NotFoundWidget()),
-                    ),
-                  ],
+                child: Container(
+                  height: 180,
+                  decoration: BoxDecoration(
+                    color: context.isDark ? Colors.grey[800] : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(child: NotFoundWidget()),
                 ),
               );
             }

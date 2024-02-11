@@ -22,7 +22,9 @@ class SearchEventPage extends StatelessWidget {
         return GetIt.I<EventSearchCubit>()
           ..getEvents(EventQuery(search: keyword, ongoingOnly: false));
       },
-      child: Scaffold(body: _SearchEventPage(keyword: keyword)),
+      child: Scaffold(
+        body: ResponsivePadding(child: _SearchEventPage(keyword: keyword)),
+      ),
     );
   }
 }
