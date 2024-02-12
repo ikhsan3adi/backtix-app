@@ -404,7 +404,7 @@ class _OtherEventList extends StatelessWidget {
                     pathParameters: {'id': events[index].id},
                     queryParameters: {
                       'name': events[index].name,
-                      'heroImageTag': heroImageTag,
+                      'heroImageTag': heroImageTag.toString(),
                       'heroImageUrl': events[index].images[0].image,
                     },
                   ),
