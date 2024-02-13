@@ -29,7 +29,7 @@ class _NetworkErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusCode = error.response?.statusCode ?? 0;
-    final message = error.response?.data['message'] ?? error.message;
+    final message = error.response?.data['message'] ?? 'An error has occurred';
 
     return AlertDialog(
       titleTextStyle: context.textTheme.headlineSmall?.copyWith(
