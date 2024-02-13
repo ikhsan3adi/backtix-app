@@ -73,13 +73,13 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
-      final currentState = (state as _Authenticated);
+      final currentState = state.mapOrNull(authenticated: (s) => s);
 
-      if (currentState.auth.refreshToken == null) {
+      if (currentState?.auth.refreshToken == null) {
         return emit(const AuthState.unauthenticated());
       }
 
-      await _authService.logoutUser(currentState.auth.refreshToken!);
+      await _authService.logoutUser(currentState!.auth.refreshToken!);
     } finally {
       _dioClient.deleteAccessTokenHeader();
       await _googleAuthService.signOut();
