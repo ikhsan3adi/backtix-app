@@ -61,20 +61,22 @@ class TicketPurchaseCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            ticket?.name ?? purchase.ticketId,
-                            style: context.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
+                          MarqueeWidget(
+                            child: Text(
+                              ticket?.name ?? purchase.ticketId,
+                              style: context.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                           _StatusBadge(purchase: purchase),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Expanded(
                             child: Column(
@@ -93,7 +95,8 @@ class TicketPurchaseCard extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color: context.theme.disabledColor),
+                                      color: context.theme.disabledColor,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -148,7 +151,7 @@ class _StatusBadge extends StatelessWidget {
             _ => null,
           }
         : switch (purchase.status) {
-            TicketPurchaseStatus.pending => Colors.orange,
+            TicketPurchaseStatus.pending => context.theme.disabledColor,
             TicketPurchaseStatus.completed => Colors.green,
             TicketPurchaseStatus.cancelled => Colors.red,
           };
@@ -160,7 +163,7 @@ class _StatusBadge extends StatelessWidget {
             _ => null,
           }
         : switch (purchase.status) {
-            TicketPurchaseStatus.pending => Colors.orangeAccent,
+            TicketPurchaseStatus.pending => context.theme.disabledColor,
             TicketPurchaseStatus.completed => Colors.greenAccent,
             TicketPurchaseStatus.cancelled => Colors.redAccent,
           };
@@ -183,7 +186,10 @@ class _StatusBadge extends StatelessWidget {
           )
         : Text(
             purchase.status.toString(),
-            style: TextStyle(fontSize: 9, color: foregroundColor),
+            style: TextStyle(
+              fontSize: 10,
+              color: foregroundColor,
+            ),
           );
   }
 

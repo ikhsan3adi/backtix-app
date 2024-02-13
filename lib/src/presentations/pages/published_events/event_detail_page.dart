@@ -2,7 +2,7 @@ import 'package:backtix_app/src/blocs/events/published_event_detail/published_ev
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
-import 'package:backtix_app/src/presentations/pages/my_tickets/order_ticket_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_order_page.dart';
 import 'package:backtix_app/src/presentations/pages/webview_page.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -66,7 +66,7 @@ class EventDetailPage extends StatelessWidget {
           onPressed: state.maybeMap(
             loaded: (state) => state.event.isEnded
                 ? null
-                : () async => await OrderTicketPage.show(
+                : () async => await TicketOrderPage.show(
                       context,
                       eventId: state.event.id,
                     ),

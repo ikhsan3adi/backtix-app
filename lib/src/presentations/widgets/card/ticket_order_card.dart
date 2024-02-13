@@ -9,8 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:intl/intl.dart';
 
-class TicketPurchaseTicketCard extends StatelessWidget {
-  const TicketPurchaseTicketCard({
+class TicketOrderCard extends StatelessWidget {
+  const TicketOrderCard({
     super.key,
     required this.ticket,
   });

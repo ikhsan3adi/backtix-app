@@ -1,5 +1,6 @@
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
+import 'package:backtix_app/src/data/models/event/event_status_enum.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchases_by_event_model.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
@@ -40,12 +41,34 @@ class PurchasesWithEventCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+          Container(
             padding: const EdgeInsets.all(8.0),
-            child: _PurchasesEventCard(
-              onEventTap: onEventTap,
-              event: event,
-              heroImageTag: eventHeroImageTag,
+            color: event.status == EventStatus.cancelled
+                ? context.colorScheme.errorContainer
+                : null,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (event.status == EventStatus.cancelled) ...[
+                  Text(
+                    'Event cancelled!',
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: context.colorScheme.error,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                ],
+                ClipRRect(
+                  clipBehavior: Clip.hardEdge,
+                  borderRadius: BorderRadius.circular(8),
+                  child: _PurchasesEventCard(
+                    onEventTap: onEventTap,
+                    event: event,
+                    heroImageTag: eventHeroImageTag,
+                  ),
+                ),
+              ],
             ),
           ),
           ExpansionTile(
