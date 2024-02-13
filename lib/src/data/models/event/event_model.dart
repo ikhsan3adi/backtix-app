@@ -25,7 +25,7 @@ class EventModel with _$EventModel {
     required DateTime createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
-    required List<EventImageModel> images,
+    @Default([]) List<EventImageModel> images,
     List<TicketModel>? tickets,
     UserModel? user,
   }) = _EventModel;
