@@ -126,7 +126,6 @@ class _SliverAppBarState extends State<_SliverAppBar> {
                   'BACKTIX',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 5,
                     color: context.colorScheme.primary,
                   ),
                 )
@@ -261,7 +260,7 @@ class _FilterChips extends StatelessWidget {
                     selected: switch (e.type) {
                       EventFilterType.location => query.location == e.filter,
                       EventFilterType.category =>
-                        query.categories?.contains(e.filter) ?? false,
+                        query.categories.contains(e.filter),
                       EventFilterType.keyword => query.search == e.filter,
                     },
                     shape: RoundedRectangleBorder(
@@ -283,7 +282,7 @@ class _FilterChips extends StatelessWidget {
                             return bloc.add(
                               event.copyWith(
                                 query: event.query.copyWith(
-                                  categories: [...?query.categories, e.filter],
+                                  categories: [...query.categories, e.filter],
                                 ),
                               ),
                             );
@@ -291,7 +290,7 @@ class _FilterChips extends StatelessWidget {
                           return bloc.add(
                             event.copyWith(
                               query: event.query.copyWith(
-                                categories: [...?query.categories]
+                                categories: [...query.categories]
                                   ..remove(e.filter),
                               ),
                             ),
@@ -383,20 +382,13 @@ class _OtherEventList extends StatelessWidget {
             final events = state.events.skip(5).toList();
             if (events.isEmpty) {
               return SliverToBoxAdapter(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 180,
-                      decoration: BoxDecoration(
-                        color: context.isDark
-                            ? Colors.grey[800]
-                            : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(child: NotFoundWidget()),
-                    ),
-                  ],
+                child: Container(
+                  height: 180,
+                  decoration: BoxDecoration(
+                    color: context.isDark ? Colors.grey[800] : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Center(child: NotFoundWidget()),
                 ),
               );
             }
@@ -405,14 +397,14 @@ class _OtherEventList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 //! Avoid hero tag conflict
-                final heroImageTag = '${events[index].id}_other';
+                final heroImageTag = UniqueKey();
                 return EventListTile(
                   onTap: () => context.goNamed(
                     RouteNames.eventDetail,
                     pathParameters: {'id': events[index].id},
                     queryParameters: {
                       'name': events[index].name,
-                      'heroImageTag': heroImageTag,
+                      'heroImageTag': heroImageTag.toString(),
                       'heroImageUrl': events[index].images[0].image,
                     },
                   ),
@@ -426,8 +418,15 @@ class _OtherEventList extends StatelessWidget {
           orElse: () {
             return SliverList.separated(
               itemCount: 2,
-              separatorBuilder: (_, __) => const SizedBox(height: 4),
-              itemBuilder: (_, __) => Shimmer(child: Container(height: 150)),
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              itemBuilder: (_, __) => Container(
+                height: 120,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Shimmer(),
+              ),
             );
           },
         );

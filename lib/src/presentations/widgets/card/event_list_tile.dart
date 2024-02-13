@@ -15,7 +15,7 @@ class EventListTile extends StatelessWidget {
 
   final EventModel event;
   final VoidCallback? onTap;
-  final String? heroImageTag;
+  final Object? heroImageTag;
 
   @override
   Widget build(BuildContext context) {
@@ -214,16 +214,11 @@ class _TicketAvailableBadge extends StatelessWidget {
     return CustomBadge(
       margin: const EdgeInsets.all(4),
       borderColor: context.isDark ? colorDarkTheme : color,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            text,
-            style: context.textTheme.labelSmall?.copyWith(
-              color: context.isDark ? colorDarkTheme : color,
-            ),
-          ),
-        ],
+      child: Text(
+        text,
+        style: context.textTheme.labelSmall?.copyWith(
+          color: context.isDark ? colorDarkTheme : color,
+        ),
       ),
     );
   }

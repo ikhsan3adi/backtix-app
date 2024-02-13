@@ -55,7 +55,7 @@ class TicketPurchaseBloc
     );
 
     return result.fold(
-      (e) => emit(TicketPurchaseState.loaded(null, error: e)),
+      (e) => emit(TicketPurchaseState.loaded(previousState.event, error: e)),
       (orderResult) async {
         if (orderResult.transaction.status == TransactionStatus.pending) {
           final result = await _paymentService.startPaymentFlow(

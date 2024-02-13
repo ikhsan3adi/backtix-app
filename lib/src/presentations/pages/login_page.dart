@@ -22,6 +22,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
+        backgroundColor: Colors.transparent,
         actions: const [
           ThemeToggleIconButton(),
         ],

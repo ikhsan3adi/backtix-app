@@ -7,7 +7,7 @@ part 'event_image_model.g.dart';
 class EventImageModel with _$EventImageModel {
   const factory EventImageModel({
     required int id,
-    required String description,
+    @Default('') String description,
     required String image,
   }) = _EventImageModel;
 

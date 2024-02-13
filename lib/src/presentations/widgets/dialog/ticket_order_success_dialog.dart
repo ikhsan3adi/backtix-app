@@ -17,28 +17,28 @@ class TicketOrderSuccessDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            FaIcon(
-              FontAwesomeIcons.circleCheck,
-              size: 64,
-              color: context.isDark ? Colors.greenAccent : Colors.green,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Payment successful',
-              style: context.textTheme.headlineMedium,
-            ),
-          ],
+    return ResponsivePadding(
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FaIcon(
+                FontAwesomeIcons.circleCheck,
+                size: 64,
+                color: context.isDark ? Colors.greenAccent : Colors.green,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Payment successful',
+                style: context.textTheme.headlineMedium,
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SizedBox(
-        height: 100,
-        child: ResponsivePadding(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: SizedBox(
+          height: 100,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,

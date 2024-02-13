@@ -28,134 +28,130 @@ class TicketPurchaseTicketCard extends StatelessWidget {
 
     final isAvailable = ticket.status == TicketStatus.available;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          BlocBuilder<CreateTicketOrderCubit, CreateTicketOrderState>(
-            builder: (context, order) {
-              final bloc = context.read<CreateTicketOrderCubit>();
+    return Row(
+      children: [
+        BlocBuilder<CreateTicketOrderCubit, CreateTicketOrderState>(
+          builder: (context, order) {
+            final bloc = context.read<CreateTicketOrderCubit>();
 
-              return Checkbox.adaptive(
-                value: isAvailable ? order.hasTicketId(ticket.id) : false,
-                onChanged:
-                    isAvailable ? (_) => bloc.selectTicket(ticket) : null,
-              );
-            },
-          ),
-          Container(
-            width: 100,
-            height: 100,
-            margin: const EdgeInsets.all(1),
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: context.theme.disabledColor,
-                strokeAlign: BorderSide.strokeAlignOutside,
-              ),
-              borderRadius: BorderRadius.circular(8),
+            return Checkbox.adaptive(
+              value: isAvailable ? order.hasTicketId(ticket.id) : false,
+              onChanged: isAvailable ? (_) => bloc.selectTicket(ticket) : null,
+            );
+          },
+        ),
+        Container(
+          width: 100,
+          height: 100,
+          margin: const EdgeInsets.all(1),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: context.theme.disabledColor,
+              strokeAlign: BorderSide.strokeAlignOutside,
             ),
-            child: ticket.image == null
-                ? const Center(child: TicketImagePlaceholder())
-                : CustomNetworkImage(
-                    src: ticket.image!,
-                    small: true,
-                  ),
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: DefaultTextStyle.merge(
-              style: const TextStyle(fontWeight: FontWeight.w500),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
+          child: ticket.image == null
+              ? const Center(child: TicketImagePlaceholder())
+              : CustomNetworkImage(
+                  src: ticket.image!,
+                  small: true,
+                ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: DefaultTextStyle.merge(
+            style: const TextStyle(fontWeight: FontWeight.w500),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        ticket.name,
+                        style: context.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        Constant.toSimpleCurrency(ticket.price),
+                        style: context.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: context.colorScheme.primary,
+                        ),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.calendarDay,
+                      size: 14,
+                      color: context.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(dateText),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        FaIcon(
+                          FontAwesomeIcons.ticket,
+                          size: 14,
+                          color: context.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text('Stock: ${ticket.currentStock}'),
+                      ],
+                    ),
+                    if (isAvailable)
+                      _QuantityInput(ticket: ticket)
+                    else
+                      CustomBadge(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 3,
+                          vertical: 1.5,
+                        ),
+                        borderColor: switch (ticket.status) {
+                          TicketStatus.notOpenedYet => Colors.orange,
+                          TicketStatus.available => Colors.green,
+                          _ => Colors.red,
+                        },
                         child: Text(
-                          ticket.name,
-                          style: context.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          Constant.toSimpleCurrency(ticket.price),
-                          style: context.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: context.colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.calendarDay,
-                        size: 14,
-                        color: context.colorScheme.primary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(dateText),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.ticket,
-                            size: 14,
-                            color: context.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 4),
-                          Text('Stock: ${ticket.currentStock}'),
-                        ],
-                      ),
-                      if (isAvailable)
-                        _QuantityInput(ticket: ticket)
-                      else
-                        CustomBadge(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 3,
-                            vertical: 1.5,
-                          ),
-                          borderColor: switch (ticket.status) {
-                            TicketStatus.notOpenedYet => Colors.orange,
-                            TicketStatus.available => Colors.green,
-                            _ => Colors.red,
-                          },
-                          child: Text(
-                            ticket.status.toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: switch (ticket.status) {
-                                TicketStatus.notOpenedYet => Colors.orange,
-                                TicketStatus.available => Colors.green,
-                                _ => Colors.red,
-                              },
-                            ),
+                          ticket.status.toString(),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: switch (ticket.status) {
+                              TicketStatus.notOpenedYet => Colors.orange,
+                              TicketStatus.available => Colors.green,
+                              _ => Colors.red,
+                            },
                           ),
                         ),
-                    ],
-                  ),
-                ],
-              ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

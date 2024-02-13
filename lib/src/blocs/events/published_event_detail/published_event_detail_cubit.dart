@@ -18,9 +18,9 @@ class PublishedEventDetailCubit extends Cubit<PublishedEventDetailState> {
 
     final result = await _eventRepository.getPublishedEventDetail(id);
 
-    result.fold(
-      (l) => emit(PublishedEventDetailState.error(l)),
-      (r) => emit(PublishedEventDetailState.loaded(r)),
+    return result.fold(
+      (err) => emit(PublishedEventDetailState.error(err)),
+      (event) => emit(PublishedEventDetailState.loaded(event)),
     );
   }
 }

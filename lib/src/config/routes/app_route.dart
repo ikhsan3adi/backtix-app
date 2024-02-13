@@ -4,11 +4,14 @@ import 'package:backtix_app/src/config/routes/router_notifier.dart';
 import 'package:backtix_app/src/presentations/pages/event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/home_page.dart';
 import 'package:backtix_app/src/presentations/pages/login_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_tickets_history_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_tickets_page.dart';
 import 'package:backtix_app/src/presentations/pages/onboarding_page.dart';
 import 'package:backtix_app/src/presentations/pages/otp_activation_page.dart';
 import 'package:backtix_app/src/presentations/pages/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/search_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/splash_page.dart';
+import 'package:backtix_app/src/presentations/pages/ticket_purchase_detail_page.dart';
 import 'package:backtix_app/src/presentations/wrappers/navigation_shell.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -75,7 +78,7 @@ class AppRoute {
               routes: [
                 GoRoute(
                   name: RouteNames.home,
-                  path: '/home',
+                  path: '/${RouteNames.home}',
                   pageBuilder: (_, __) {
                     return const NoTransitionPage(child: HomePage());
                   },
@@ -103,6 +106,33 @@ class AppRoute {
                           keyword: state.pathParameters['search'] ?? '',
                         );
                       },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: RouteNames.myTickets,
+                  path: '/${RouteNames.myTickets}',
+                  pageBuilder: (_, __) {
+                    return const NoTransitionPage(child: MyTicketsPage());
+                  },
+                  routes: [
+                    GoRoute(
+                      name: RouteNames.myTicketDetail,
+                      path: '${RouteNames.myTicketDetail}/:uid',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) => TicketPurchaseDetailPage(
+                        uid: state.pathParameters['uid'] ?? '',
+                      ),
+                    ),
+                    GoRoute(
+                      name: RouteNames.myTicketsHistory,
+                      path: RouteNames.myTicketsHistory,
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, __) => const MyTicketsHistoryPage(),
                     ),
                   ],
                 ),

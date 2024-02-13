@@ -86,7 +86,7 @@ class PublishedEventsBloc
     );
 
     final newQueries = query.copyWith(
-      page: hasReachedMax ? query.page : (query.page ?? 0) + 1,
+      page: hasReachedMax ? query.page : query.page + 1,
     );
 
     final result = await _eventRepository.getPublishedEvents(newQueries);

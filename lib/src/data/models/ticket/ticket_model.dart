@@ -1,3 +1,4 @@
+import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ticket_model.freezed.dart';
@@ -33,6 +34,7 @@ class TicketModel with _$TicketModel {
     required DateTime purchaseDeadline,
     required DateTime createdAt,
     DateTime? updatedAt,
+    EventModel? event,
   }) = _TicketModel;
 
   TicketStatus get status {

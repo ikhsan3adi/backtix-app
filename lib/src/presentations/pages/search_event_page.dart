@@ -22,7 +22,9 @@ class SearchEventPage extends StatelessWidget {
         return GetIt.I<EventSearchCubit>()
           ..getEvents(EventQuery(search: keyword, ongoingOnly: false));
       },
-      child: Scaffold(body: _SearchEventPage(keyword: keyword)),
+      child: Scaffold(
+        body: ResponsivePadding(child: _SearchEventPage(keyword: keyword)),
+      ),
     );
   }
 }
@@ -226,7 +228,7 @@ class _FilterChips extends StatelessWidget {
                     selected: switch (e.type) {
                       EventFilterType.location => query.location == e.filter,
                       EventFilterType.category =>
-                        query.categories?.contains(e.filter) ?? false,
+                        query.categories.contains(e.filter),
                       EventFilterType.keyword => query.search == e.filter,
                     },
                     shape: RoundedRectangleBorder(
@@ -242,12 +244,11 @@ class _FilterChips extends StatelessWidget {
                         case EventFilterType.category:
                           if (value) {
                             return bloc.getEvents(query.copyWith(
-                              categories: [...?query.categories, e.filter],
+                              categories: [...query.categories, e.filter],
                             ));
                           }
                           return bloc.getEvents(query.copyWith(
-                            categories: [...?query.categories]
-                              ..remove(e.filter),
+                            categories: [...query.categories]..remove(e.filter),
                           ));
                         case EventFilterType.keyword:
                           return bloc.getEvents(query.copyWith(

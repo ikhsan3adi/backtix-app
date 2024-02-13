@@ -21,16 +21,14 @@ class AuthInterceptor extends Interceptor {
 
     if (statusCode == 401) {
       // If a 401 response is received, refresh the access token
-      if (await _authHelper.refreshAccessToken() == null) {
-        return handler.next(err);
+      if (await _authHelper.refreshAccessToken() != null) {
+        // Repeat the request with the updated header
+        return handler.resolve(
+          await _dio.fetch(
+            err.requestOptions.copyWith(headers: _dio.options.headers),
+          ),
+        );
       }
-
-      // Repeat the request with the updated header
-      return handler.resolve(
-        await _dio.fetch(
-          err.requestOptions.copyWith(headers: _dio.options.headers),
-        ),
-      );
     } else if (statusCode == 403 && message == 'UNACTIVATED') {
       // If a UNACTIVATED response is received, set user to unactivated
       _authHelper.deactivateUser();

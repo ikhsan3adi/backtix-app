@@ -392,7 +392,10 @@ class _EventInfoState extends State<_EventInfo> {
                   const SizedBox(height: 10),
                   ...List.generate(
                     event.tickets?.length ?? 0,
-                    (i) => EventDetailTicketCard(ticket: event.tickets![i]),
+                    (i) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: EventDetailTicketCard(ticket: event.tickets![i]),
+                    ),
                   ),
                 ];
               },
