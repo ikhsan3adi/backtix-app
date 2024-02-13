@@ -398,7 +398,7 @@ class _OtherEventList extends StatelessWidget {
               itemBuilder: (_, index) {
                 //! Avoid hero tag conflict
                 final heroImageTag = UniqueKey();
-                return EventListTile(
+                return PublishedEventCard(
                   onTap: () => context.goNamed(
                     RouteNames.eventDetail,
                     pathParameters: {'id': events[index].id},

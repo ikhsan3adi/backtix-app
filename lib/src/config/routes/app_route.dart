@@ -11,7 +11,7 @@ import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_page.d
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_purchase_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/home_page.dart';
-import 'package:backtix_app/src/presentations/pages/published_events/search_event_page.dart';
+import 'package:backtix_app/src/presentations/pages/published_events/search_published_event_page.dart';
 import 'package:backtix_app/src/presentations/wrappers/navigation_shell.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -102,7 +102,7 @@ class AppRoute {
                       path: '${RouteNames.eventSearch}/:search',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, state) {
-                        return SearchEventPage(
+                        return SearchPublishedEventPage(
                           keyword: state.pathParameters['search'] ?? '',
                         );
                       },

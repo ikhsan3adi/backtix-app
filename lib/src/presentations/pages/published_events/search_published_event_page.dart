@@ -10,8 +10,8 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class SearchEventPage extends StatelessWidget {
-  const SearchEventPage({super.key, required this.keyword});
+class SearchPublishedEventPage extends StatelessWidget {
+  const SearchPublishedEventPage({super.key, required this.keyword});
 
   final String keyword;
 
@@ -294,7 +294,7 @@ class _EventList extends StatelessWidget {
               itemCount: state.events.length,
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
-                return EventListTile(
+                return PublishedEventCard(
                   onTap: () => context.pushNamed(
                     RouteNames.eventDetail,
                     pathParameters: {'id': state.events[index].id},

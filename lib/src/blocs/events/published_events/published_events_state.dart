@@ -13,5 +13,5 @@ class PublishedEventsState with _$PublishedEventsState {
     @Default(false) bool? hasReachedMax,
     DioException? error,
     @Default(false) bool? refreshNearbyEvents,
-  }) = PublishedEventsLoaded;
+  }) = _Loaded;
 }
