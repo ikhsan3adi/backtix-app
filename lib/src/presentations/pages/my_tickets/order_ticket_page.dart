@@ -10,8 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_it/get_it.dart';
 
-class TicketPurchasePage extends StatelessWidget {
-  const TicketPurchasePage({super.key});
+class OrderTicketPage extends StatelessWidget {
+  const OrderTicketPage({super.key});
 
   static Future<void> show(
     BuildContext context, {
@@ -32,7 +32,7 @@ class TicketPurchasePage extends StatelessWidget {
             create: (_) => CreateTicketOrderCubit(),
           ),
         ],
-        child: const TicketPurchasePage(),
+        child: const OrderTicketPage(),
       ),
     );
   }
