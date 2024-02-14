@@ -308,7 +308,7 @@ class _FilterChips extends StatelessWidget {
                   ),
                 );
               },
-            ).toList(),
+            ),
           ],
         );
       },
@@ -397,14 +397,14 @@ class _OtherEventList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 //! Avoid hero tag conflict
-                final heroImageTag = UniqueKey();
+                final heroImageTag = UniqueKey().toString();
                 return PublishedEventCard(
                   onTap: () => context.goNamed(
                     RouteNames.eventDetail,
                     pathParameters: {'id': events[index].id},
                     queryParameters: {
                       'name': events[index].name,
-                      'heroImageTag': heroImageTag.toString(),
+                      'heroImageTag': heroImageTag,
                       'heroImageUrl': events[index].images[0].image,
                     },
                   ),

@@ -123,7 +123,7 @@ class _PurchasesList extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 final eventWithPurchases = state.purchasesWithEvent[index];
-                final heroImageTag = UniqueKey();
+                final heroImageTag = UniqueKey().toString();
                 return PurchasesWithEventCard(
                   eventWithPurchases: eventWithPurchases,
                   eventHeroImageTag: heroImageTag,
@@ -132,7 +132,7 @@ class _PurchasesList extends StatelessWidget {
                     pathParameters: {'id': eventWithPurchases.event.id},
                     queryParameters: {
                       'name': eventWithPurchases.event.name,
-                      'heroImageTag': heroImageTag.toString(),
+                      'heroImageTag': heroImageTag,
                       'heroImageUrl': eventWithPurchases.event.images[0].image,
                     },
                   ),

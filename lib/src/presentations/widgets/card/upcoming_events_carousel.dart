@@ -61,14 +61,14 @@ class UpcomingEventsCarousel extends StatelessWidget {
               return List.generate(
                 events.length,
                 (index) {
-                  final heroImageTag = UniqueKey();
+                  final heroImageTag = UniqueKey().toString();
                   return _EventCard(
                     onTap: () => context.goNamed(
                       RouteNames.eventDetail,
                       pathParameters: {'id': events[index].id},
                       queryParameters: {
                         'name': events[index].name,
-                        'heroImageTag': heroImageTag.toString(),
+                        'heroImageTag': heroImageTag,
                         'heroImageUrl': events[index].images[0].image,
                       },
                     ),

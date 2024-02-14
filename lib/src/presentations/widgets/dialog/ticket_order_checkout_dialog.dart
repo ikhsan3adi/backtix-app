@@ -144,7 +144,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
                               ),
                             ],
                           );
-                        }).toList(),
+                        }),
                         TableRow(
                           decoration: BoxDecoration(
                             border: Border(

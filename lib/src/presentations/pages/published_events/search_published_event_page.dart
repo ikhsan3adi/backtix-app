@@ -259,7 +259,7 @@ class _FilterChips extends StatelessWidget {
                   ),
                 );
               },
-            ).toList(),
+            ),
           ],
         );
       },
