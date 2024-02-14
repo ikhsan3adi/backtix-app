@@ -9,5 +9,5 @@ class EventSearchState with _$EventSearchState {
     required EventQuery query,
     @Default(false) bool? hasReachedMax,
     DioException? error,
-  }) = EventSearchLoaded;
+  }) = _Loaded;
 }

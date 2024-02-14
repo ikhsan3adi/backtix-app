@@ -42,6 +42,8 @@ class EventSearchCubit extends Cubit<EventSearchState> {
   }
 
   Future<void> getMoreEvents() async {
+    if (state is! _Loaded) return;
+
     final (previousEvents, query, hasReachedMax) = state.maybeMap(
       loaded: (state) => (
         state.events,

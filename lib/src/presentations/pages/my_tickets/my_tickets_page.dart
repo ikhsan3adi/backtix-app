@@ -157,18 +157,15 @@ class _FilterChips extends StatelessWidget {
         final query = loadedState == null
             ? lastQuery
             : loadedState.query.copyWith(page: 0);
-        final event = GetMyTicketPurchasesEvent(query.copyWith(page: 0));
 
         return switch (_purchasesType) {
           _TicketPurchasesType.upcoming => _upcomingPurchasesFilterChips(
               query,
               bloc,
-              event,
             ),
           _TicketPurchasesType.refund => _refundPurchasesFilterChips(
               query,
               bloc,
-              event,
             ),
         };
       },
@@ -178,7 +175,6 @@ class _FilterChips extends StatelessWidget {
   Widget _upcomingPurchasesFilterChips(
     TicketPurchaseQuery query,
     MyTicketPurchasesBloc bloc,
-    GetMyTicketPurchasesEvent event,
   ) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
@@ -191,8 +187,8 @@ class _FilterChips extends StatelessWidget {
         return FilterChip(
           selected: query.status == filter,
           onSelected: (s) {
-            return bloc.add(event.copyWith(
-              query: event.query.copyWith(status: s ? filter : null),
+            return bloc.add(MyTicketPurchasesEvent.getMyTicketPurchases(
+              query.copyWith(status: s ? filter : null),
             ));
           },
           label: Text(filter.toString()),
@@ -207,7 +203,6 @@ class _FilterChips extends StatelessWidget {
   Widget _refundPurchasesFilterChips(
     TicketPurchaseQuery query,
     MyTicketPurchasesBloc bloc,
-    GetMyTicketPurchasesEvent event,
   ) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
@@ -220,8 +215,8 @@ class _FilterChips extends StatelessWidget {
         return FilterChip(
           selected: query.refundStatus == filter,
           onSelected: (s) {
-            return bloc.add(event.copyWith(
-              query: event.query.copyWith(refundStatus: s ? filter : null),
+            return bloc.add(MyTicketPurchasesEvent.getMyTicketPurchases(
+              query.copyWith(refundStatus: s ? filter : null),
             ));
           },
           label: Text(filter.toString()),

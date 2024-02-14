@@ -4,7 +4,7 @@ part of 'my_ticket_purchases_bloc.dart';
 class MyTicketPurchasesEvent with _$MyTicketPurchasesEvent {
   const factory MyTicketPurchasesEvent.getMyTicketPurchases(
     TicketPurchaseQuery query,
-  ) = GetMyTicketPurchasesEvent;
+  ) = _Get;
 
   const factory MyTicketPurchasesEvent.getMoreTicketPurchases() = _GetMore;
 }

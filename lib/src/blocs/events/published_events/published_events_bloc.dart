@@ -70,6 +70,8 @@ class PublishedEventsBloc
     _GetMore event,
     Emitter<PublishedEventsState> emit,
   ) async {
+    if (state is! _Loaded) return;
+
     final (
       previousPublishedEvents,
       previousNearbyEvents,

@@ -9,5 +9,5 @@ class MyTicketPurchasesState with _$MyTicketPurchasesState {
     required TicketPurchaseQuery query,
     @Default(false) bool? hasReachedMax,
     DioException? error,
-  }) = MyTicketPurchasesLoaded;
+  }) = _Loaded;
 }

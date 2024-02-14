@@ -14,12 +14,12 @@ class MyTicketPurchasesBloc
   final TicketRepository _ticketRepository;
 
   MyTicketPurchasesBloc(this._ticketRepository) : super(const _Initial()) {
-    on<GetMyTicketPurchasesEvent>(_getMyTicketPurchases);
+    on<_Get>(_getMyTicketPurchases);
     on<_GetMore>(_getMoreTicketPurchases);
   }
 
   Future<void> _getMyTicketPurchases(
-    GetMyTicketPurchasesEvent event,
+    _Get event,
     Emitter<MyTicketPurchasesState> emit,
   ) async {
     final previousPurchases = state.maybeMap(
@@ -52,6 +52,8 @@ class MyTicketPurchasesBloc
     _GetMore event,
     Emitter<MyTicketPurchasesState> emit,
   ) async {
+    if (state is! _Loaded) return;
+
     final (previousPurchases, query, hasReachedMax) = state.maybeMap(
       loaded: (state) => (
         state.purchasesWithEvent,
