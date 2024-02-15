@@ -22,4 +22,26 @@ class TicketPurchaseRefundCubit extends Cubit<TicketPurchaseRefundState> {
       (purchase) => emit(TicketPurchaseRefundState.success(purchase)),
     );
   }
+
+  Future<void> acceptTicketRefund(String uid) async {
+    emit(const TicketPurchaseRefundState.loading());
+
+    final result = await _ticketRepository.acceptTicketRefund(uid);
+
+    return result.fold(
+      (err) => emit(TicketPurchaseRefundState.failed(err)),
+      (purchase) => emit(TicketPurchaseRefundState.success(purchase)),
+    );
+  }
+
+  Future<void> rejectTicketRefund(String uid) async {
+    emit(const TicketPurchaseRefundState.loading());
+
+    final result = await _ticketRepository.rejectTicketRefund(uid);
+
+    return result.fold(
+      (err) => emit(TicketPurchaseRefundState.failed(err)),
+      (purchase) => emit(TicketPurchaseRefundState.success(purchase)),
+    );
+  }
 }

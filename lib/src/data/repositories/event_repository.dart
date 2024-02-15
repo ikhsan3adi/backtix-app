@@ -45,4 +45,23 @@ class EventRepository {
       (error, _) => error as DioException,
     ).run();
   }
+
+  Future<Either<DioException, List<EventModel>>> getMyEvents(
+    EventQuery query,
+  ) async {
+    return await TaskEither.tryCatch(
+      () async {
+        final response = await _eventService.getMyEvents(query);
+        return response.data;
+      },
+      (error, _) => error as DioException,
+    ).run();
+  }
+
+  Future<Either<DioException, EventModel>> getMyEventDetail(String id) async {
+    return await TaskEither.tryCatch(
+      () async => (await _eventService.getMyEventDetail(id)).data,
+      (error, _) => error as DioException,
+    ).run();
+  }
 }

@@ -20,7 +20,10 @@ class EventDetailPage extends StatelessWidget {
     this.name,
     this.heroImageTag,
     this.heroImageUrl,
+    this.isPublishedEvent = true,
   });
+
+  final bool isPublishedEvent;
 
   final String id;
   final String? name;
@@ -30,8 +33,13 @@ class EventDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          GetIt.I<PublishedEventDetailCubit>()..getPublishedEventDetail(id),
+      create: (_) {
+        if (isPublishedEvent) {
+          return GetIt.I<PublishedEventDetailCubit>()
+            ..getPublishedEventDetail(id);
+        }
+        return GetIt.I<PublishedEventDetailCubit>()..getMyEventDetail(id);
+      },
       child: Builder(builder: (context) {
         return Scaffold(
           body: _EventDetailPage(
@@ -39,6 +47,7 @@ class EventDetailPage extends StatelessWidget {
             name: name,
             heroImageTag: heroImageTag,
             heroImageUrl: heroImageUrl,
+            isPublishedEvent: isPublishedEvent,
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
@@ -49,7 +58,43 @@ class EventDetailPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(child: _ctaButton),
+                  if (isPublishedEvent)
+                    Expanded(child: _ctaButton)
+                  else ...[
+                    Expanded(
+                      child: FilledButton.tonal(
+                        onPressed: () {
+                          // TODO goto ticket refund request
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: context.colorScheme.errorContainer,
+                        ),
+                        child: Text(
+                          'Ticket refund request',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: context.colorScheme.onErrorContainer,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () {
+                          // TODO goto ticket sales
+                        },
+                        icon: const FaIcon(
+                          FontAwesomeIcons.ticket,
+                          size: 18,
+                        ),
+                        label: const Text(
+                          'Ticket sales',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -91,12 +136,15 @@ class _EventDetailPage extends StatefulWidget {
     this.name,
     this.heroImageTag,
     this.heroImageUrl,
+    required this.isPublishedEvent,
   });
 
   final String id;
   final String? name;
   final Object? heroImageTag;
   final String? heroImageUrl;
+
+  final bool isPublishedEvent;
 
   @override
   State<_EventDetailPage> createState() => _EventDetailPageState();
@@ -134,8 +182,10 @@ class _EventDetailPageState extends State<_EventDetailPage> {
       child: RefreshIndicator.adaptive(
         onRefresh: () async {
           final bloc = context.read<PublishedEventDetailCubit>();
-          bloc.state.mapOrNull(loaded: (state) async {
-            await bloc.getPublishedEventDetail(widget.id);
+          await bloc.state.mapOrNull(loaded: (state) async {
+            widget.isPublishedEvent
+                ? await bloc.getPublishedEventDetail(widget.id)
+                : await bloc.getMyEventDetail(widget.id);
           });
         },
         child: CustomScrollView(
@@ -157,19 +207,47 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                 },
               ),
               leading: ValueListenableBuilder(
-                  valueListenable: _isAppBarExpanded,
-                  builder: (_, isExpanded, __) {
-                    return IconButton(
-                      style: IconButton.styleFrom(
-                        backgroundColor: isExpanded ? Colors.black38 : null,
+                valueListenable: _isAppBarExpanded,
+                builder: (_, isExpanded, __) {
+                  return IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: isExpanded ? Colors.black38 : null,
+                    ),
+                    onPressed: () => context.pop(),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: isExpanded ? Colors.white : null,
+                    ),
+                  );
+                },
+              ),
+              actions: widget.isPublishedEvent
+                  ? null
+                  : [
+                      SizedBox(
+                        height: kToolbarHeight,
+                        width: kToolbarHeight,
+                        child: ValueListenableBuilder(
+                          valueListenable: _isAppBarExpanded,
+                          builder: (_, isExpanded, __) {
+                            return IconButton(
+                              onPressed: () {
+                                // TODO goto edit event page
+                              },
+                              tooltip: 'Edit',
+                              style: IconButton.styleFrom(
+                                backgroundColor:
+                                    isExpanded ? Colors.black38 : null,
+                              ),
+                              icon: Icon(
+                                Icons.edit,
+                                color: isExpanded ? Colors.white : null,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      onPressed: () => context.pop(),
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: isExpanded ? Colors.white : null,
-                      ),
-                    );
-                  }),
+                    ],
               flexibleSpace: FlexibleSpaceBar(
                 background: EventDetailImagesCarousel(
                   heroImageTag: widget.heroImageTag,

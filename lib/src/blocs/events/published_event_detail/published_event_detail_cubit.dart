@@ -23,4 +23,15 @@ class PublishedEventDetailCubit extends Cubit<PublishedEventDetailState> {
       (event) => emit(PublishedEventDetailState.loaded(event)),
     );
   }
+
+  Future<void> getMyEventDetail(String id) async {
+    emit(const PublishedEventDetailState.loading());
+
+    final result = await _eventRepository.getMyEventDetail(id);
+
+    return result.fold(
+      (err) => emit(PublishedEventDetailState.error(err)),
+      (event) => emit(PublishedEventDetailState.loaded(event)),
+    );
+  }
 }

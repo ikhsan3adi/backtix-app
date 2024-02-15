@@ -6,6 +6,8 @@ import 'package:backtix_app/src/presentations/pages/app_start/splash_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/my_event_detail_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/my_events_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_history_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_purchase_detail_page.dart';
@@ -133,6 +135,33 @@ class AppRoute {
                       path: RouteNames.myTicketsHistory,
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, __) => const MyTicketsHistoryPage(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: RouteNames.myEvents,
+                  path: '/${RouteNames.myEvents}',
+                  pageBuilder: (_, __) {
+                    return const NoTransitionPage(child: MyEventsPage());
+                  },
+                  routes: [
+                    GoRoute(
+                      name: RouteNames.myEventDetail,
+                      path: '${RouteNames.myEventDetail}/:id',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        final queryParams = state.uri.queryParameters;
+                        return MyEventDetailPage(
+                          id: state.pathParameters['id'] ?? '',
+                          name: queryParams['name'],
+                          heroImageTag: queryParams['heroImageTag'],
+                          heroImageUrl: queryParams['heroImageUrl'],
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -2,6 +2,7 @@ export 'badge/custom_badge.dart';
 export 'button/theme_toggle_icon_button.dart';
 export 'card/event_detail_ticket_card.dart';
 export 'card/load_new_list_data_widget.dart';
+export 'card/my_event_card.dart';
 export 'card/nearby_events_carousel.dart';
 export 'card/not_found_widget.dart';
 export 'card/published_event_card.dart';

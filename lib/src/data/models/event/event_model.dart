@@ -30,6 +30,10 @@ class EventModel with _$EventModel {
     UserModel? user,
   }) = _EventModel;
 
+  bool get isOnGoing {
+    return isEnded ? false : date.toLocal().isBefore(DateTime.now().toLocal());
+  }
+
   bool get isEnded {
     return endDate?.toLocal().isBefore(DateTime.now().toLocal()) ?? false;
   }

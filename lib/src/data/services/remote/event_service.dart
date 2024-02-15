@@ -24,4 +24,14 @@ abstract class EventService {
   Future<HttpResponse<EventModel>> getPublishedEventDetail(
     @Path('id') String id,
   );
+
+  @GET('events/my')
+  Future<HttpResponse<List<EventModel>>> getMyEvents(
+    @Queries() EventQuery? query,
+  );
+
+  @GET('events/my/{id}')
+  Future<HttpResponse<EventModel>> getMyEventDetail(
+    @Path('id') String id,
+  );
 }

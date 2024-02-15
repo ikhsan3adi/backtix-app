@@ -12,4 +12,7 @@ class RouteNames {
   static const String myTickets = 'myTickets';
   static const String myTicketsHistory = 'myTickets/history';
   static const String myTicketDetail = 'myTickets/detail';
+
+  static const String myEvents = 'myEvents';
+  static const String myEventDetail = 'myEvents/detail';
 }
