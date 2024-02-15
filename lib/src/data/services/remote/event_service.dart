@@ -9,18 +9,18 @@ part 'event_service.g.dart';
 abstract class EventService {
   factory EventService(Dio dio, {String? baseUrl}) = _EventService;
 
-  @GET('event')
+  @GET('events')
   Future<HttpResponse<List<EventModel>>> getPublishedEvents(
     @Queries() EventQuery? query,
   );
 
-  @GET('event/nearby')
+  @GET('events/nearby')
   Future<HttpResponse<List<EventModel>>> getNearbyPublishedEvents([
     @Query('count') int? count,
     @Query('distance') int? distance,
   ]);
 
-  @GET('event/{id}')
+  @GET('events/{id}')
   Future<HttpResponse<EventModel>> getPublishedEventDetail(
     @Path('id') String id,
   );

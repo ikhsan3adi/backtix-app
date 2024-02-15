@@ -10,7 +10,7 @@ import 'package:fpdart/fpdart.dart';
 class TicketRepository {
   final TicketService _ticketService;
 
-  TicketRepository(this._ticketService);
+  const TicketRepository(this._ticketService);
 
   Future<Either<DioException, TicketOrderModel>> createTicketOrder(
     CreateTicketOrderModel order,

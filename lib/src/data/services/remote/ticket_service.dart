@@ -12,22 +12,22 @@ part 'ticket_service.g.dart';
 abstract class TicketService {
   factory TicketService(Dio dio, {String? baseUrl}) = _TicketService;
 
-  @POST('purchase/ticket')
+  @POST('purchases/ticket')
   Future<HttpResponse<TicketOrderModel>> createTicketOrder(
     @Body() CreateTicketOrderModel order,
   );
 
-  @GET('purchase/ticket/my')
+  @GET('purchases/ticket/my')
   Future<HttpResponse<List<TicketPurchasesByEventModel>>> getMyTicketPurchases(
     @Queries() TicketPurchaseQuery? query,
   );
 
-  @GET('purchase/ticket/my/{uid}')
+  @GET('purchases/ticket/my/{uid}')
   Future<HttpResponse<TicketPurchaseModel>> getMyTicketPurchase(
     @Path('uid') String uid,
   );
 
-  @POST('purchase/{uid}/refund')
+  @POST('purchases/{uid}/refund')
   Future<HttpResponse<TicketPurchaseModel>> refundTicketPurchase(
     @Path('uid') String uid,
   );
