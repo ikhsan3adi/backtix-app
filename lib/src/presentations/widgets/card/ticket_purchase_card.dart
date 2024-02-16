@@ -61,16 +61,19 @@ class TicketPurchaseCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          MarqueeWidget(
-                            child: Text(
-                              ticket?.name ?? purchase.ticketId,
-                              style: context.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
+                          Expanded(
+                            child: MarqueeWidget(
+                              child: Text(
+                                ticket?.name ?? purchase.ticketId,
+                                style: context.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          const SizedBox(width: 8),
                           _StatusBadge(purchase: purchase),
                         ],
                       ),
