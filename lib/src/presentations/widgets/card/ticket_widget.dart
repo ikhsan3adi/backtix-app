@@ -145,6 +145,21 @@ class _TicketInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              const Expanded(child: Text('User')),
+              Flexible(
+                child: Text(
+                  '@${purchase.user?.username ?? 'Unknown'}',
+                  maxLines: 1,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               const Expanded(child: Text('Purchase date')),
               Expanded(
                 child: Text(

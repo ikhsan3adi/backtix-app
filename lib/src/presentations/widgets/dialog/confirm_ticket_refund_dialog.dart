@@ -112,6 +112,21 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      const Expanded(child: Text('User')),
+                      Flexible(
+                        child: Text(
+                          '@${ticketPurchase.user?.username ?? 'Unknown'}',
+                          maxLines: 1,
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       const Text('UID'),
                       const SizedBox(width: 16),
                       Flexible(
