@@ -58,7 +58,7 @@ class MyTicketPurchasesBloc
       loaded: (state) => (
         state.purchasesWithEvent,
         state.query,
-        state.hasReachedMax ?? false,
+        state.hasReachedMax,
       ),
       orElse: () {
         return (

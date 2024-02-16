@@ -100,7 +100,7 @@ class _SearchEventPageState extends State<_SearchEventPage> {
                     fillOverscroll: true,
                     hasScrollBody: false,
                     child: LoadNewListDataWidget(
-                      reachedMax: state.hasReachedMax ?? false,
+                      reachedMax: state.hasReachedMax,
                     ),
                   );
                 },

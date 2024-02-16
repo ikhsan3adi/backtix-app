@@ -10,7 +10,7 @@ class PublishedEventsState with _$PublishedEventsState {
     List<EventModel> events,
     List<EventModel> nearbyEvents, {
     required EventQuery query,
-    @Default(false) bool? hasReachedMax,
+    @Default(false) bool hasReachedMax,
     DioException? error,
     @Default(false) bool? refreshNearbyEvents,
   }) = _Loaded;

@@ -7,7 +7,7 @@ class MyTicketPurchasesState with _$MyTicketPurchasesState {
   const factory MyTicketPurchasesState.loaded(
     List<TicketPurchasesByEventModel> purchasesWithEvent, {
     required TicketPurchaseQuery query,
-    @Default(false) bool? hasReachedMax,
+    @Default(false) bool hasReachedMax,
     DioException? error,
   }) = _Loaded;
 }

@@ -82,7 +82,7 @@ class PublishedEventsBloc
         state.events,
         state.nearbyEvents,
         state.query,
-        state.hasReachedMax ?? false,
+        state.hasReachedMax,
       ),
       orElse: () => (<EventModel>[], <EventModel>[], const EventQuery(), false),
     );

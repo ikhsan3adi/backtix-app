@@ -7,7 +7,7 @@ class MyEventsState with _$MyEventsState {
   const factory MyEventsState.loaded(
     List<EventModel> events, {
     required EventQuery query,
-    @Default(false) bool? hasReachedMax,
+    @Default(false) bool hasReachedMax,
     DioException? error,
   }) = _Loaded;
 }

@@ -48,7 +48,7 @@ class EventSearchCubit extends Cubit<EventSearchState> {
       loaded: (state) => (
         state.events,
         state.query,
-        state.hasReachedMax ?? false,
+        state.hasReachedMax,
       ),
       orElse: () => (<EventModel>[], null, false),
     );

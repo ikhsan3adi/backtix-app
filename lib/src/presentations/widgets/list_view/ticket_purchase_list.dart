@@ -76,7 +76,7 @@ class _TicketPurchaseListState extends State<TicketPurchaseList> {
                     fillOverscroll: true,
                     hasScrollBody: false,
                     child: LoadNewListDataWidget(
-                      reachedMax: state.hasReachedMax ?? false,
+                      reachedMax: state.hasReachedMax,
                     ),
                   );
                 },

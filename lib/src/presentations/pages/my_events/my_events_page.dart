@@ -108,7 +108,7 @@ class _MyEventsPageState extends State<_MyEventsPage> {
                   fillOverscroll: true,
                   hasScrollBody: false,
                   child: LoadNewListDataWidget(
-                    reachedMax: state.hasReachedMax ?? false,
+                    reachedMax: state.hasReachedMax,
                   ),
                 );
               },

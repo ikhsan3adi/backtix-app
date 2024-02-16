@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       fillOverscroll: true,
                       hasScrollBody: false,
                       child: LoadNewListDataWidget(
-                        reachedMax: state.hasReachedMax ?? false,
+                        reachedMax: state.hasReachedMax,
                       ),
                     );
                   },

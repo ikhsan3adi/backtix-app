@@ -57,7 +57,7 @@ class MyEventsBloc extends Bloc<MyEventsEvent, MyEventsState> {
       loaded: (state) => (
         state.events,
         state.query,
-        state.hasReachedMax ?? false,
+        state.hasReachedMax,
       ),
       orElse: () => (<EventModel>[], const EventQuery(), false),
     );
