@@ -12,7 +12,7 @@ import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchase_detail/my_ticket_purchase_detail_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchases/my_ticket_purchases_bloc.dart';
-import 'package:backtix_app/src/blocs/tickets/ticket_purchase/ticket_purchase_bloc.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_purchase_refund/ticket_purchase_refund_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
@@ -113,8 +113,8 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerFactory<EventSearchCubit>(
     () => EventSearchCubit(GetIt.I<EventRepository>()),
   );
-  GetIt.I.registerFactory<TicketPurchaseBloc>(
-    () => TicketPurchaseBloc(
+  GetIt.I.registerFactory<TicketOrderBloc>(
+    () => TicketOrderBloc(
       GetIt.I<TicketRepository>(),
       GetIt.I<EventRepository>(),
       GetIt.I<PaymentService>(),

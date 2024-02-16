@@ -1,5 +1,5 @@
 import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_order_cubit.dart';
-import 'package:backtix_app/src/blocs/tickets/ticket_purchase/ticket_purchase_bloc.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
@@ -12,7 +12,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
   static Future<bool?> show(
     BuildContext context, {
     required CreateTicketOrderCubit createOrderCubit,
-    required TicketPurchaseBloc ticketPurchaseBloc,
+    required TicketOrderBloc ticketPurchaseBloc,
   }) {
     return showDialog<bool>(
       useSafeArea: true,
@@ -38,7 +38,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             sliver: SliverList.list(
               children: [
-                BlocListener<TicketPurchaseBloc, TicketPurchaseState>(
+                BlocListener<TicketOrderBloc, TicketOrderState>(
                   listener: (context, state) {
                     state.mapOrNull(
                       loaded: (state) async {
@@ -185,8 +185,8 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
                     final order = context.read<CreateTicketOrderCubit>().state;
                     if (order.purchases.isEmpty) return;
 
-                    context.read<TicketPurchaseBloc>().add(
-                          TicketPurchaseEvent.createTicketOrder(order),
+                    context.read<TicketOrderBloc>().add(
+                          TicketOrderEvent.createTicketOrder(order),
                         );
                   },
                   child: const Padding(
