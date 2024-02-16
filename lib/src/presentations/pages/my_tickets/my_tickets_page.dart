@@ -147,7 +147,13 @@ class _FilterChips extends StatelessWidget {
         ),
     };
 
-    return BlocBuilder<MyTicketPurchasesBloc, MyTicketPurchasesState>(
+    return BlocConsumer<MyTicketPurchasesBloc, MyTicketPurchasesState>(
+      listener: (context, state) => state.mapOrNull(loaded: (state) async {
+        if (state.error != null) {
+          return await ErrorDialog.show(context, state.error!);
+        }
+        return null;
+      }),
       builder: (context, state) {
         final bloc = context.read<MyTicketPurchasesBloc>();
         final loadedState = state.mapOrNull(loaded: (s) {
