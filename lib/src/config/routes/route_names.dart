@@ -10,9 +10,13 @@ class RouteNames {
   static const String eventDetail = 'event/detail';
 
   static const String myTickets = 'myTickets';
-  static const String myTicketsHistory = 'myTickets/history';
-  static const String myTicketDetail = 'myTickets/detail';
+  static const String myTicketsHistory = 'myTicketsHistory';
+  static const String myTicketDetail = 'myTicketDetail';
 
   static const String myEvents = 'myEvents';
-  static const String myEventDetail = 'myEvents/detail';
+  static const String myEventDetail = 'myEventDetail';
+  static const String eventTicketSales = 'ticketSales';
+  static const String eventTicketRefundRequest = 'ticketRefundRequest';
+  static const String eventTicketSalesDetail = 'eventTicketSalesDetail';
+  static const String salesByTicket = 'salesByTicket';
 }

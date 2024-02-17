@@ -10,13 +10,28 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 class ConfirmTicketRefundDialog extends StatelessWidget {
-  const ConfirmTicketRefundDialog({super.key, required this.ticketPurchase});
+  const ConfirmTicketRefundDialog({
+    super.key,
+    required this.ticketPurchase,
+    required this.confirmText,
+    required this.onConfirm,
+    required this.titleText,
+    required this.buttonText,
+  });
 
   final TicketPurchaseModel ticketPurchase;
+  final String confirmText;
+  final String buttonText;
+  final String titleText;
+  final Future<void> Function(TicketPurchaseRefundCubit) onConfirm;
 
   static Future<bool?> show(
     BuildContext context, {
     required TicketPurchaseModel ticketPurchase,
+    String titleText = 'Refund Confirmation',
+    String confirmText = 'Are you sure you want to refund the ticket?',
+    String buttonText = 'Confirm & Refund',
+    required Future<void> Function(TicketPurchaseRefundCubit) onConfirm,
   }) async {
     return await showDialog<bool>(
       context: context,
@@ -24,7 +39,13 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
       builder: (_) {
         return BlocProvider(
           create: (_) => GetIt.I<TicketPurchaseRefundCubit>(),
-          child: ConfirmTicketRefundDialog(ticketPurchase: ticketPurchase),
+          child: ConfirmTicketRefundDialog(
+            ticketPurchase: ticketPurchase,
+            confirmText: confirmText,
+            titleText: titleText,
+            onConfirm: onConfirm,
+            buttonText: buttonText,
+          ),
         );
       },
     );
@@ -36,7 +57,7 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
     final event = ticketPurchase.ticket!.event!;
 
     return AlertDialog(
-      title: const Text('Refund Confirmation'),
+      title: Text(titleText),
       content:
           BlocBuilder<TicketPurchaseRefundCubit, TicketPurchaseRefundState>(
         builder: (context, state) {
@@ -96,11 +117,10 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(child: Text('Purchase date')),
-                      Expanded(
+                      const Expanded(child: Text('User')),
+                      Flexible(
                         child: Text(
-                          DateFormat('HH:mm:ss dd/MM/y')
-                              .format(ticketPurchase.createdAt.toLocal()),
+                          '@${ticketPurchase.user?.username ?? 'Unknown'}',
                           maxLines: 1,
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.ellipsis,
@@ -112,10 +132,11 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(child: Text('User')),
-                      Flexible(
+                      const Expanded(child: Text('Purchase date')),
+                      Expanded(
                         child: Text(
-                          '@${ticketPurchase.user?.username ?? 'Unknown'}',
+                          DateFormat('HH:mm:ss dd/MM/y')
+                              .format(ticketPurchase.createdAt.toLocal()),
                           maxLines: 1,
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.ellipsis,
@@ -146,7 +167,7 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Are you sure you want to refund the ticket?',
+                    confirmText,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: context.colorScheme.error,
@@ -184,9 +205,9 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
               onPressed: state.maybeMap(
                 loading: (_) => null,
                 success: (_) => null,
-                orElse: () => () => context
-                    .read<TicketPurchaseRefundCubit>()
-                    .refundTicketPurchase(ticketPurchase.uid),
+                orElse: () => () async => await onConfirm(
+                      context.read<TicketPurchaseRefundCubit>(),
+                    ),
               ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: context.colorScheme.error,
@@ -196,7 +217,7 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
                   state.maybeMap(
-                    orElse: () => 'Confirm & Refund',
+                    orElse: () => buttonText,
                     loading: (_) => 'Loading...',
                   ),
                   style: TextStyle(

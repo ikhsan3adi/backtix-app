@@ -6,8 +6,11 @@ import 'package:backtix_app/src/presentations/pages/app_start/splash_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_refund_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_sales_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/my_event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/my_events_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/sales_by_ticket_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_history_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_purchase_detail_page.dart';
@@ -124,7 +127,7 @@ class AppRoute {
                   routes: [
                     GoRoute(
                       name: RouteNames.myTicketDetail,
-                      path: '${RouteNames.myTicketDetail}/:uid',
+                      path: 'detail/:uid',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, state) => TicketPurchaseDetailPage(
                         uid: state.pathParameters['uid'] ?? '',
@@ -132,7 +135,7 @@ class AppRoute {
                     ),
                     GoRoute(
                       name: RouteNames.myTicketsHistory,
-                      path: RouteNames.myTicketsHistory,
+                      path: 'history',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, __) => const MyTicketsHistoryPage(),
                     ),
@@ -151,7 +154,7 @@ class AppRoute {
                   routes: [
                     GoRoute(
                       name: RouteNames.myEventDetail,
-                      path: '${RouteNames.myEventDetail}/:id',
+                      path: 'detail/:id',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, state) {
                         final queryParams = state.uri.queryParameters;
@@ -162,6 +165,41 @@ class AppRoute {
                           heroImageUrl: queryParams['heroImageUrl'],
                         );
                       },
+                      routes: [
+                        GoRoute(
+                          name: RouteNames.eventTicketSales,
+                          path: 'sales',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (_, state) => EventTicketSalesPage(
+                            eventId: state.pathParameters['id'] ?? '',
+                          ),
+                        ),
+                        GoRoute(
+                          name: RouteNames.eventTicketRefundRequest,
+                          path: 'refunds',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (_, state) => EventTicketRefundPage(
+                            eventId: state.pathParameters['id'] ?? '',
+                          ),
+                        ),
+                        GoRoute(
+                          name: RouteNames.eventTicketSalesDetail,
+                          path: 'purchases/:uid',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (_, state) => TicketPurchaseDetailPage(
+                            uid: state.pathParameters['uid'] ?? '',
+                            asEventOwner: true,
+                          ),
+                        ),
+                        GoRoute(
+                          name: RouteNames.salesByTicket,
+                          path: 'tickets/:ticketId/sales',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (_, state) => SalesByTicketPage(
+                            ticketId: state.pathParameters['ticketId'] ?? '',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -3,6 +3,7 @@ import 'package:backtix_app/src/data/models/purchase/ticket_order_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_query.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchases_by_event_model.dart';
+import 'package:backtix_app/src/data/models/ticket/ticket_purchases_by_ticket_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -27,8 +28,30 @@ abstract class TicketService {
     @Path('uid') String uid,
   );
 
+  @GET('events/{id}/purchases')
+  Future<HttpResponse<List<TicketPurchaseModel>>> getTicketPurchasesByEvent(
+    @Path('id') String eventId,
+    @Queries() TicketPurchaseQuery query,
+  );
+
+  @GET('tickets/{id}/purchases')
+  Future<HttpResponse<TicketPurchasesByTicketModel>> getTicketPurchasesByTicket(
+    @Path('id') String ticketId,
+    @Queries() TicketPurchaseQuery query,
+  );
+
   @POST('purchases/{uid}/refund')
   Future<HttpResponse<TicketPurchaseModel>> refundTicketPurchase(
+    @Path('uid') String uid,
+  );
+
+  @PATCH('purchases/{uid}/refund')
+  Future<HttpResponse<TicketPurchaseModel>> acceptTicketRefund(
+    @Path('uid') String uid,
+  );
+
+  @DELETE('purchases/{uid}/refund')
+  Future<HttpResponse<TicketPurchaseModel>> rejectTicketRefund(
     @Path('uid') String uid,
   );
 }

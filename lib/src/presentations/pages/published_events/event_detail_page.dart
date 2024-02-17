@@ -1,5 +1,6 @@
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_order_page.dart';
@@ -63,9 +64,10 @@ class EventDetailPage extends StatelessWidget {
                   else ...[
                     Expanded(
                       child: FilledButton.tonal(
-                        onPressed: () {
-                          // TODO goto ticket refund request
-                        },
+                        onPressed: () => context.goNamed(
+                          RouteNames.eventTicketRefundRequest,
+                          pathParameters: {'id': id},
+                        ),
                         style: FilledButton.styleFrom(
                           backgroundColor: context.colorScheme.errorContainer,
                         ),
@@ -81,9 +83,10 @@ class EventDetailPage extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: FilledButton.icon(
-                        onPressed: () {
-                          // TODO goto ticket sales
-                        },
+                        onPressed: () => context.goNamed(
+                          RouteNames.eventTicketSales,
+                          pathParameters: {'id': id},
+                        ),
                         icon: const FaIcon(
                           FontAwesomeIcons.ticket,
                           size: 18,
@@ -263,7 +266,10 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                 top: 16,
                 bottom: 100,
               ),
-              sliver: _EventInfo(name: widget.name),
+              sliver: _EventInfo(
+                name: widget.name,
+                isPublishedEvent: widget.isPublishedEvent,
+              ),
             ),
           ],
         ),
@@ -273,8 +279,9 @@ class _EventDetailPageState extends State<_EventDetailPage> {
 }
 
 class _EventInfo extends StatefulWidget {
-  const _EventInfo({this.name});
+  const _EventInfo({this.name, required this.isPublishedEvent});
   final String? name;
+  final bool isPublishedEvent;
 
   @override
   State<_EventInfo> createState() => _EventInfoState();
@@ -468,11 +475,21 @@ class _EventInfoState extends State<_EventInfo> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ...List.generate(
-                    event.tickets?.length ?? 0,
-                    (i) => Padding(
+                  ...event.tickets!.map(
+                    (ticket) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: EventDetailTicketCard(ticket: event.tickets![i]),
+                      child: EventDetailTicketCard(
+                        ticket: ticket,
+                        onTap: widget.isPublishedEvent
+                            ? null
+                            : () => context.goNamed(
+                                  RouteNames.salesByTicket,
+                                  pathParameters: {
+                                    'id': event.id,
+                                    'ticketId': ticket.id,
+                                  },
+                                ),
+                      ),
                     ),
                   ),
                 ];

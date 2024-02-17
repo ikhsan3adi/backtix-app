@@ -10,10 +10,12 @@ import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/event_ticket_sales/event_ticket_sales_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchase_detail/my_ticket_purchase_detail_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchases/my_ticket_purchases_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_purchase_refund/ticket_purchase_refund_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_sales/ticket_sales_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
@@ -132,6 +134,12 @@ Future<void> initializeDependencies() async {
 
   GetIt.I.registerFactory<MyEventsBloc>(
     () => MyEventsBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<EventTicketSalesCubit>(
+    () => EventTicketSalesCubit(GetIt.I<TicketRepository>()),
+  );
+  GetIt.I.registerFactory<TicketSalesCubit>(
+    () => TicketSalesCubit(GetIt.I<TicketRepository>()),
   );
 }
 
