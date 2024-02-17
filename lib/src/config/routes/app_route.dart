@@ -154,7 +154,7 @@ class AppRoute {
                   routes: [
                     GoRoute(
                       name: RouteNames.myEventDetail,
-                      path: 'detail/:id',
+                      path: ':id',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, state) {
                         final queryParams = state.uri.queryParameters;
