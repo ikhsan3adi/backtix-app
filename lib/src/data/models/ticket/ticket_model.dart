@@ -48,6 +48,17 @@ class TicketModel with _$TicketModel {
     return TicketStatus.available;
   }
 
+  static TicketModel dummyTicket = TicketModel(
+    id: '0',
+    name: '-',
+    price: 0,
+    stock: 0,
+    currentStock: 0,
+    salesOpenDate: DateTime(2024),
+    purchaseDeadline: DateTime(2024, 12, 31),
+    createdAt: DateTime(2024),
+  );
+
   factory TicketModel.fromJson(Map<String, dynamic> json) =>
       _$TicketModelFromJson(json);
 }
