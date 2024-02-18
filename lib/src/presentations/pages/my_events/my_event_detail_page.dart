@@ -3,15 +3,9 @@ import 'package:backtix_app/src/presentations/pages/published_events/event_detai
 class MyEventDetailPage extends EventDetailPage {
   const MyEventDetailPage({
     super.key,
-    required String id,
-    String? name,
-    Object? heroImageTag,
-    String? heroImageUrl,
-  }) : super(
-          id: id,
-          name: name,
-          heroImageTag: heroImageTag,
-          heroImageUrl: heroImageUrl,
-          isPublishedEvent: false,
-        );
+    required super.id,
+    super.name,
+    super.heroImageTag,
+    super.heroImageUrl,
+  }) : super(isPublishedEvent: false);
 }
