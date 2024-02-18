@@ -179,8 +179,8 @@ class _SalesByTicketState extends State<_SalesByTicket> {
   Widget get _loadMoreDataWidget {
     return BlocConsumer<TicketSalesCubit, TicketSalesState>(
       listener: (context, state) => state.mapOrNull(loaded: (s) async {
-        if (s.error != null) {
-          return await ErrorDialog.show(context, s.error!);
+        if (s.exception != null) {
+          return await ErrorDialog.show(context, s.exception!);
         }
         return null;
       }),

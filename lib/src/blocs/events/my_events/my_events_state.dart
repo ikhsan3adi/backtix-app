@@ -8,6 +8,6 @@ class MyEventsState with _$MyEventsState {
     List<EventModel> events, {
     required EventQuery query,
     @Default(false) bool hasReachedMax,
-    DioException? error,
+    Exception? exception,
   }) = _Loaded;
 }

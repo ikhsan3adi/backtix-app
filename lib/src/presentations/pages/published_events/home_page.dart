@@ -370,8 +370,8 @@ class _OtherEventList extends StatelessWidget {
       listener: (_, state) {
         state.mapOrNull(
           loaded: (state) {
-            if (state.error != null) {
-              ErrorDialog.show(context, state.error!);
+            if (state.exception != null) {
+              ErrorDialog.show(context, state.exception!);
             }
           },
         );

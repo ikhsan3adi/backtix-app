@@ -8,6 +8,6 @@ class TicketPurchaseRefundState with _$TicketPurchaseRefundState {
     TicketPurchaseModel ticketPurchase,
   ) = _Success;
   const factory TicketPurchaseRefundState.failed(
-    DioException exception,
+    Exception exception,
   ) = _Failed;
 }

@@ -154,8 +154,8 @@ class _TicketPurchasesListState extends State<_TicketPurchasesList> {
   Widget get _loadMoreDataWidget {
     return BlocConsumer<EventTicketSalesCubit, EventTicketSalesState>(
       listener: (context, state) => state.mapOrNull(loaded: (s) async {
-        if (s.error != null) {
-          return await ErrorDialog.show(context, s.error!);
+        if (s.exception != null) {
+          return await ErrorDialog.show(context, s.exception!);
         }
         return null;
       }),

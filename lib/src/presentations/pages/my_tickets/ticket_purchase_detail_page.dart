@@ -127,7 +127,7 @@ class _TicketPurchaseDetail extends StatelessWidget {
               return state.map(
                 error: (state) => _errorWidget(
                   context,
-                  exception: state.exception,
+                  exception: state.exception as DioException,
                 ),
                 loading: (_) => _loadingWidget(context),
                 loaded: (state) {

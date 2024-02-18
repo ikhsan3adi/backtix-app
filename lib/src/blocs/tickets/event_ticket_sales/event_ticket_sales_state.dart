@@ -9,6 +9,6 @@ class EventTicketSalesState with _$EventTicketSalesState {
     required TicketPurchaseQuery query,
     required String eventId,
     @Default(false) bool hasReachedMax,
-    DioException? error,
+    Exception? exception,
   }) = _Loaded;
 }

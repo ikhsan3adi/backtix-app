@@ -352,8 +352,8 @@ class _BottomWidget extends StatelessWidget {
             listener: (_, state) {
               state.mapOrNull(
                 loaded: (state) async {
-                  if (state.error != null) {
-                    return await ErrorDialog.show(context, state.error!);
+                  if (state.exception != null) {
+                    return await ErrorDialog.show(context, state.exception!);
                   }
                   if (state.orderSuccess ?? false) {
                     return Navigator.pop(context);

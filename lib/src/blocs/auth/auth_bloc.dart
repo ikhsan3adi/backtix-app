@@ -57,7 +57,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
         if (e.response?.statusCode == 401) {
           return emit(const AuthState.unauthenticated());
         }
-        return emit(AuthState.unauthenticated(error: e));
+        return emit(AuthState.unauthenticated(exception: e));
       },
       (user) {
         return emit(AuthState.authenticated(

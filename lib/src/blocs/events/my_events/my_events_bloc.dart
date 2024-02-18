@@ -2,7 +2,6 @@ import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/data/repositories/event_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'my_events_bloc.freezed.dart';
@@ -34,7 +33,7 @@ class MyEventsBloc extends Bloc<MyEventsEvent, MyEventsState> {
       (e) {
         return emit(MyEventsState.loaded(
           previousEvents,
-          error: e,
+          exception: e,
           query: event.query,
         ));
       },
@@ -72,7 +71,7 @@ class MyEventsBloc extends Bloc<MyEventsEvent, MyEventsState> {
       (e) {
         return emit(MyEventsState.loaded(
           previousEvents,
-          error: e,
+          exception: e,
           query: newQueries,
           hasReachedMax: true,
         ));

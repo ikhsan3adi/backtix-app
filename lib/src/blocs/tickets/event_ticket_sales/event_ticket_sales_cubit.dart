@@ -2,7 +2,6 @@ import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_query.dart';
 import 'package:backtix_app/src/data/repositories/ticket_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'event_ticket_sales_cubit.freezed.dart';
@@ -30,7 +29,7 @@ class EventTicketSalesCubit extends Cubit<EventTicketSalesState> {
     return result.fold(
       (e) => emit(EventTicketSalesState.loaded(
         previousPurchases,
-        error: e,
+        exception: e,
         eventId: eventId,
         query: query,
       )),
@@ -70,7 +69,7 @@ class EventTicketSalesCubit extends Cubit<EventTicketSalesState> {
     return result.fold(
       (e) => emit(EventTicketSalesState.loaded(
         previousPurchases,
-        error: e,
+        exception: e,
         query: newQueries,
         eventId: eventId,
         hasReachedMax: true,

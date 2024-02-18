@@ -8,6 +8,6 @@ class MyTicketPurchasesState with _$MyTicketPurchasesState {
     List<TicketPurchasesByEventModel> purchasesWithEvent, {
     required TicketPurchaseQuery query,
     @Default(false) bool hasReachedMax,
-    DioException? error,
+    Exception? exception,
   }) = _Loaded;
 }

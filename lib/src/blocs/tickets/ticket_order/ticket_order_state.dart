@@ -7,6 +7,6 @@ class TicketOrderState with _$TicketOrderState {
   const factory TicketOrderState.loaded(
     EventModel? event, {
     @Default(false) bool? orderSuccess,
-    Exception? error,
+    Exception? exception,
   }) = _Loaded;
 }
