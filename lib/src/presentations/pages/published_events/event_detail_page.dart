@@ -1,8 +1,8 @@
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_order_page.dart';
 import 'package:backtix_app/src/presentations/pages/webview_page.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
