@@ -87,6 +87,7 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
   void dispose() {
     _otpController.dispose();
     _resendCount.dispose();
+    _formKey.currentState?.dispose();
     super.dispose();
   }
 
@@ -100,6 +101,7 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
           CustomTextFormField(
             controller: _otpController,
             keyboardType: TextInputType.number,
+            debounce: true,
             validator: Validatorless.multiple([
               Validatorless.number('Value not a number'),
               Validatorless.required('OTP required'),
