@@ -40,8 +40,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     borderSide: const BorderSide(width: 2),
   );
 
-  late final InputBorder inputBorder;
-
   Debouncer? _debouncer;
   String? _errorText;
 
@@ -52,16 +50,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    inputBorder = inputBorderBase.copyWith(
-      borderSide: inputBorderBase.borderSide.copyWith(
-        color: context.colorScheme.onSurface,
-      ),
-    );
-  }
-
-  @override
   void dispose() {
     _debouncer?.dispose();
     super.dispose();
@@ -69,6 +57,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final inputBorder = inputBorderBase.copyWith(
+      borderSide: inputBorderBase.borderSide.copyWith(
+        color: context.colorScheme.onSurface,
+      ),
+    );
+
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: widget.controller,
