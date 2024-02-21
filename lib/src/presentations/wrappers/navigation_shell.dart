@@ -1,7 +1,6 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
-import 'package:backtix_app/src/data/models/user/user_model.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,27 +18,22 @@ class NavigationShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AuthBloc>().state.mapOrNull(
-          authenticated: (s) => s.user,
-        );
+    final user = context.watch<AuthBloc>().user;
 
-    return RepositoryProvider<UserModel>(
-      create: (_) => user ?? UserModel.dummyUser,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => GetIt.I<PublishedEventsBloc>()
-              ..add(
-                PublishedEventsEvent.getPublishedEvents(
-                  const EventQuery(),
-                  isUserLocationSet: user?.isUserLocationSet,
-                  refreshNearbyEvents: true,
-                ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => GetIt.I<PublishedEventsBloc>()
+            ..add(
+              PublishedEventsEvent.getPublishedEvents(
+                const EventQuery(),
+                isUserLocationSet: user?.isUserLocationSet,
+                refreshNearbyEvents: true,
               ),
-          ),
-        ],
-        child: _NavigationShell(navigationShell: navigationShell),
-      ),
+            ),
+        ),
+      ],
+      child: _NavigationShell(navigationShell: navigationShell),
     );
   }
 }

@@ -241,9 +241,7 @@ class _BalancePaymentCard extends StatelessWidget {
       builder: (context, order) {
         final bloc = context.read<CreateTicketOrderCubit>();
         final bool selected = order.paymentMethod == PaymentMethod.balance;
-        final balance = context.watch<AuthBloc>().state.mapOrNull(
-              authenticated: (s) => s.user.balance?.balance,
-            );
+        final balance = context.watch<AuthBloc>().user?.balance?.balance;
 
         final foregroundColor = context.isDark
             ? null

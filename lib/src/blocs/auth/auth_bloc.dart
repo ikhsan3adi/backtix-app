@@ -29,6 +29,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     on<_UpdateUserDetails>(_updateUserDetails);
   }
 
+  UserModel? get user => _currentUser;
+
+  UserModel? _currentUser;
+
   /// Refresh user detail after [_refreshAt] times [_addAuthentication] called
   int _counter = 0;
   final int _refreshAt = 3;
@@ -43,6 +47,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
     if (_counter < _refreshAt && currentUser != null) {
       _counter++;
+      _currentUser = currentUser;
       return emit(AuthState.authenticated(
         user: currentUser,
         auth: event.newAuth,
@@ -55,11 +60,13 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     return result.fold(
       (e) {
         if (e.response?.statusCode == 401) {
+          _currentUser = null;
           return emit(const AuthState.unauthenticated());
         }
         return emit(AuthState.unauthenticated(exception: e));
       },
       (user) {
+        _currentUser = user;
         return emit(AuthState.authenticated(
           user: user,
           auth: event.newAuth,
@@ -81,6 +88,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
       await _authService.logoutUser(currentState!.auth.refreshToken!);
     } finally {
+      _currentUser = null;
       _dioClient.deleteAccessTokenHeader();
       await _googleAuthService.signOut();
       emit(const AuthState.unauthenticated());
@@ -94,6 +102,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     final currentState = (state as _Authenticated);
 
     if (event.user != null) {
+      _currentUser = event.user;
       return emit(
         AuthState.authenticated(user: event.user!, auth: currentState.auth),
       );
@@ -104,6 +113,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     return result.fold(
       (_) => null,
       (user) {
+        _currentUser = user;
         return emit(AuthState.authenticated(
           user: user,
           auth: currentState.auth,
@@ -115,8 +125,10 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   @override
   AuthState? fromJson(Map<String, dynamic> json) {
     if (json['authenticated']) {
+      final user = UserModel.fromJson(json['user']);
+      _currentUser = user;
       return AuthState.authenticated(
-        user: UserModel.fromJson(json['user']),
+        user: user,
         auth: NewAuthModel.fromJson(json['auth']),
       );
     }
