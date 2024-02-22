@@ -144,7 +144,7 @@ class _TicketPurchaseDetail extends StatelessWidget {
                     ),
                     sliver: SliverList.list(
                       children: [
-                        ticketWidget,
+                        UnconstrainedBox(child: ticketWidget),
                         asEventOwner
                             ? _EventOwnerButtons(purchase: ticketPurchase)
                             : _Buttons(

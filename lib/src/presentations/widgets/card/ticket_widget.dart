@@ -17,64 +17,67 @@ class TicketWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipBehavior: Clip.hardEdge,
-      clipper: TicketClipper(
-        holeRadius: 35,
-        top: 431,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: context.colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
+    return ConstrainedBox(
+      constraints: BoxConstraints.loose(const Size.fromWidth(450)),
+      child: ClipPath(
+        clipBehavior: Clip.hardEdge,
+        clipper: TicketClipper(
+          holeRadius: 35,
+          top: 431,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 32),
-            QrImageView(
-              data: ticketPurchase.uid,
-              size: 350,
-              backgroundColor: Colors.transparent,
-              errorCorrectionLevel: QrErrorCorrectLevel.M,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
+        child: Container(
+          decoration: BoxDecoration(
+            color: context.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 32),
+              QrImageView(
+                data: ticketPurchase.uid,
+                size: 350,
+                backgroundColor: Colors.transparent,
+                errorCorrectionLevel: QrErrorCorrectLevel.M,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                ),
+                dataModuleStyle: QrDataModuleStyle(
+                  color: context.colorScheme.onSurface,
+                  dataModuleShape: QrDataModuleShape.square,
+                ),
+                eyeStyle: QrEyeStyle(
+                  color: context.colorScheme.onSurface,
+                  eyeShape: QrEyeShape.square,
+                ),
               ),
-              dataModuleStyle: QrDataModuleStyle(
-                color: context.colorScheme.onSurface,
-                dataModuleShape: QrDataModuleShape.square,
-              ),
-              eyeStyle: QrEyeStyle(
-                color: context.colorScheme.onSurface,
-                eyeShape: QrEyeShape.square,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              child: MarqueeWidget(
-                child: Text(
-                  'UID: ${ticketPurchase.uid}',
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: context.textTheme.bodySmall?.copyWith(
-                    color: context.theme.disabledColor,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: MarqueeWidget(
+                  child: Text(
+                    'UID: ${ticketPurchase.uid}',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: context.theme.disabledColor,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const DashedDivider(
-              margin: EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
+              const DashedDivider(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-              child: _TicketInfo(purchase: ticketPurchase),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+                child: _TicketInfo(purchase: ticketPurchase),
+              ),
+            ],
+          ),
         ),
       ),
     );
