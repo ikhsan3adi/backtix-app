@@ -56,7 +56,10 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
     final ticket = ticketPurchase.ticket!;
     final event = ticketPurchase.ticket!.event!;
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
+      titleTextStyle: context.textTheme.headlineSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+      ),
       title: Text(titleText),
       content:
           BlocBuilder<TicketPurchaseRefundCubit, TicketPurchaseRefundState>(
