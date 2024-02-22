@@ -6,8 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class TicketOrderSuccessDialog extends StatelessWidget {
   const TicketOrderSuccessDialog({super.key});
 
-  static Future<void> show(BuildContext context) {
-    return showModalBottomSheet(
+  static Future<void> show(BuildContext context) async {
+    return await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -38,13 +38,14 @@ class TicketOrderSuccessDialog extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: SizedBox(
-          height: 100,
+          height: 72,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 8,
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: FilledButton(

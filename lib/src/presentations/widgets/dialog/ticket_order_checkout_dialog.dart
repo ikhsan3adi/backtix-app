@@ -2,7 +2,6 @@ import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_
 import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
-import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,8 +12,8 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
     BuildContext context, {
     required CreateTicketOrderCubit createOrderCubit,
     required TicketOrderBloc ticketPurchaseBloc,
-  }) {
-    return showDialog<bool>(
+  }) async {
+    return await showDialog<bool>(
       useSafeArea: true,
       context: context,
       builder: (_) => MultiBlocProvider(
@@ -42,12 +41,6 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
                   listener: (context, state) {
                     state.mapOrNull(
                       loaded: (state) async {
-                        if (state.exception != null) {
-                          return await ErrorDialog.show(
-                            context,
-                            state.exception!,
-                          );
-                        }
                         if (state.orderSuccess != null) {
                           return Navigator.pop(context, state.orderSuccess);
                         }

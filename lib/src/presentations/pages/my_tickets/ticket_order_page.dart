@@ -353,9 +353,6 @@ class _BottomWidget extends StatelessWidget {
                   if (state.exception != null) {
                     return await ErrorDialog.show(context, state.exception!);
                   }
-                  if (state.orderSuccess ?? false) {
-                    return Navigator.pop(context);
-                  }
                 },
               );
             },
