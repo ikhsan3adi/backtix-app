@@ -11,6 +11,7 @@ class CustomTextFormField extends StatefulWidget {
     this.onChanged,
     this.maxLines,
     this.minLines,
+    this.maxLength,
     this.readOnly = false,
     this.obscureText = false,
     this.keyboardType,
@@ -23,7 +24,7 @@ class CustomTextFormField extends StatefulWidget {
   final void Function(String?)? onChanged;
   final String? Function(String?)? validator;
   final VoidCallback? onTap;
-  final int? maxLines, minLines;
+  final int? maxLines, minLines, maxLength;
   final bool readOnly, obscureText;
   final TextInputType? keyboardType;
   final InputDecoration? decoration;
@@ -82,6 +83,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       validator: widget.debounce ? (_) => _errorText : widget.validator,
       maxLines: widget.obscureText ? 1 : widget.maxLines,
       minLines: widget.minLines,
+      maxLength: widget.maxLength,
       obscureText: widget.obscureText,
       onTap: widget.onTap,
       readOnly: widget.readOnly,
