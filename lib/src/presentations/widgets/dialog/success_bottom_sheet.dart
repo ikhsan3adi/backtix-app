@@ -3,17 +3,22 @@ import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class TicketOrderSuccessDialog extends StatelessWidget {
-  const TicketOrderSuccessDialog({super.key});
+class SuccessBottomSheet extends StatelessWidget {
+  const SuccessBottomSheet({super.key, required this.text});
 
-  static Future<void> show(BuildContext context) async {
+  static Future<void> show(
+    BuildContext context, {
+    String text = 'Success',
+  }) async {
     return await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => const TicketOrderSuccessDialog(),
+      builder: (_) => SuccessBottomSheet(text: text),
     );
   }
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class TicketOrderSuccessDialog extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Payment successful',
+                text,
                 style: context.textTheme.headlineMedium,
               ),
             ],

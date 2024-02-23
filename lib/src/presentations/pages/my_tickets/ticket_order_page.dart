@@ -371,7 +371,10 @@ class _BottomWidget extends StatelessWidget {
                     );
 
                     if ((result ?? false) && context.mounted) {
-                      await TicketOrderSuccessDialog.show(context);
+                      await SuccessBottomSheet.show(
+                        context,
+                        text: 'Payment successful',
+                      );
                       if (context.mounted) {
                         return Navigator.pop(context, result);
                       }
