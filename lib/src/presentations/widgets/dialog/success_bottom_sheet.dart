@@ -37,6 +37,7 @@ class SuccessBottomSheet extends StatelessWidget {
               Text(
                 text,
                 style: context.textTheme.headlineMedium,
+                textAlign: TextAlign.center,
               ),
             ],
           ),

@@ -7,7 +7,7 @@ class ErrorDialog {
     BuildContext context,
     Exception error,
   ) {
-    return showDialog(
+    return showAdaptiveDialog(
       context: context,
       useSafeArea: true,
       builder: (_) {

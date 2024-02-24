@@ -33,7 +33,7 @@ class ConfirmTicketRefundDialog extends StatelessWidget {
     String buttonText = 'Confirm & Refund',
     required Future<void> Function(TicketPurchaseRefundCubit) onConfirm,
   }) async {
-    return await showDialog<bool>(
+    return await showAdaptiveDialog<bool>(
       context: context,
       useSafeArea: true,
       builder: (_) {

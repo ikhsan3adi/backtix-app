@@ -5,7 +5,7 @@ class DiscardChangesDialog extends StatelessWidget {
   const DiscardChangesDialog({super.key});
 
   static Future<bool?> show(BuildContext context) {
-    return showDialog<bool>(
+    return showAdaptiveDialog<bool>(
       useSafeArea: true,
       context: context,
       builder: (_) => const DiscardChangesDialog(),

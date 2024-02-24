@@ -13,7 +13,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
     required CreateTicketOrderCubit createOrderCubit,
     required TicketOrderBloc ticketPurchaseBloc,
   }) async {
-    return await showDialog<bool>(
+    return await showAdaptiveDialog<bool>(
       useSafeArea: true,
       context: context,
       builder: (_) => MultiBlocProvider(

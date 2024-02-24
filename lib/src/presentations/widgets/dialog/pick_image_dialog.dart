@@ -10,7 +10,7 @@ class PickImageDialog extends StatelessWidget {
     BuildContext context, {
     bool withShowButton = true,
   }) async {
-    return await showDialog<int>(
+    return await showAdaptiveDialog<int>(
       context: context,
       useSafeArea: true,
       builder: (_) => PickImageDialog(withShowButton: withShowButton),

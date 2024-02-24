@@ -8,7 +8,7 @@ class SimpleLoadingDialog extends StatelessWidget {
 
   static void show(BuildContext context) async {
     _isLoading = true;
-    return await showDialog<void>(
+    return await showAdaptiveDialog<void>(
       useRootNavigator: false,
       barrierDismissible: false,
       context: context,

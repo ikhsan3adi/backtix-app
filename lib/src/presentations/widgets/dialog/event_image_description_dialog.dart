@@ -11,7 +11,7 @@ class EventImageDescriptionDialog extends StatefulWidget {
   final String? description;
 
   static Future<String?> show(BuildContext context, {String? description}) {
-    return showDialog<String>(
+    return showAdaptiveDialog<String>(
       context: context,
       builder: (_) => EventImageDescriptionDialog(description: description),
     );

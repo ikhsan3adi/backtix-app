@@ -17,7 +17,7 @@ class TicketFormDialog extends StatefulWidget {
     NewTicketWithImage? old,
     FutureOr<void> Function()? onDelete,
   }) async {
-    return await showDialog<NewTicketWithImage>(
+    return await showAdaptiveDialog<NewTicketWithImage>(
       context: context,
       builder: (_) => TicketFormDialog(old: old, onDelete: onDelete),
     );
