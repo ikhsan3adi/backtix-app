@@ -107,33 +107,36 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.black54,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 6,
-                          ),
-                          margin: const EdgeInsets.all(8),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints.loose(
-                              Size.fromWidth(context.width * .72),
-                            ),
-                            child: MarqueeWidget(
-                              pauseDuration: const Duration(seconds: 2),
-                              child: ValueListenableBuilder(
-                                valueListenable: _indexNotifier,
-                                builder: (_, index, __) {
-                                  return Text(
-                                    images[index].description,
-                                    style: const TextStyle(color: Colors.white),
-                                  );
-                                },
+                        ValueListenableBuilder(
+                          valueListenable: _indexNotifier,
+                          builder: (_, index, __) {
+                            if (images[index].description.trim().isEmpty) {
+                              return const SizedBox();
+                            }
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.black54,
                               ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 6,
+                              ),
+                              margin: const EdgeInsets.all(8),
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints.loose(
+                                  Size.fromWidth(context.width * .72),
+                                ),
+                                child: MarqueeWidget(
+                                  pauseDuration: const Duration(seconds: 2),
+                                  child: Text(
+                                    images[index].description.trim(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         Container(
                           decoration: BoxDecoration(
