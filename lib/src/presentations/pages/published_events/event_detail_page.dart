@@ -318,7 +318,37 @@ class _EventInfoState extends State<_EventInfo> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 12),
+            state.maybeWhen(
+              loaded: (event) => Row(
+                children: [
+                  const Text('Categories:  '),
+                  Flexible(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      height: 30,
+                      child: ListView.separated(
+                        itemCount: event.categories.length,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (_, __) => const SizedBox(width: 6),
+                        itemBuilder: (_, index) {
+                          final category = event.categories[index];
+                          return Chip(
+                            label: Text(
+                              category,
+                              style: context.textTheme.labelMedium,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              orElse: () => const SizedBox(height: 12),
+            ),
             ...state.maybeMap(
               orElse: () => _loadingWidget,
               loaded: (state) {

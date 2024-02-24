@@ -15,6 +15,7 @@ class EventModel with _$EventModel {
     required String id,
     required String name,
     required String description,
+    @Default([]) List<String> categories,
     required DateTime date,
     DateTime? endDate,
     required String location,
