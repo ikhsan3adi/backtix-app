@@ -213,23 +213,23 @@ class _StatusBadge extends StatelessWidget {
         ? Colors.red
         : event.isOnGoing || event.status != EventStatus.published
             ? switch (event.status) {
-                EventStatus.draft => Colors.yellow,
+                EventStatus.draft => Colors.orange,
                 EventStatus.published => Colors.green,
                 EventStatus.cancelled => Colors.red,
                 EventStatus.rejected => Colors.red,
               }
-            : Colors.yellowAccent;
+            : Colors.orange;
 
     final colorDarkTheme = event.isEnded
         ? Colors.redAccent
         : event.isOnGoing || event.status != EventStatus.published
             ? switch (event.status) {
-                EventStatus.draft => Colors.yellowAccent,
+                EventStatus.draft => Colors.orangeAccent,
                 EventStatus.published => Colors.greenAccent,
                 EventStatus.cancelled => Colors.redAccent,
                 EventStatus.rejected => Colors.redAccent,
               }
-            : Colors.yellowAccent;
+            : Colors.orangeAccent;
 
     return isDark ? colorDarkTheme : color;
   }
