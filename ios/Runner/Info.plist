@@ -53,5 +53,7 @@
 	<string>Flutter requires access to microphone.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Flutter requires access to camera.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open.</string>
 </dict>
 </plist>

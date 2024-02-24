@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:nominatim_geocoding/nominatim_geocoding.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -33,6 +34,8 @@ Future<void> main() async {
             ? HydratedStorage.webStorageDirectory
             : await getApplicationDocumentsDirectory(),
       );
+
+      await NominatimGeocoding.init(reqCacheNum: 20);
 
       await initializeDependencies();
 
