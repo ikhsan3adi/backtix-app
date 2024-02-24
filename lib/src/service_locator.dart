@@ -33,8 +33,13 @@ import 'package:backtix_app/src/data/services/remote/user_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:midtrans_sdk/midtrans_sdk.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 Future<void> initializeDependencies() async {
+  GetIt.I.registerSingletonAsync<PackageInfo>(
+    () async => await PackageInfo.fromPlatform(),
+  );
+
   GetIt.I.registerSingleton<ThemeModeCubit>(ThemeModeCubit());
   GetIt.I.registerSingleton<OnboardingCubit>(OnboardingCubit());
 

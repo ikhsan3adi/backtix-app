@@ -1,7 +1,16 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart' show dotenv;
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+PackageInfo _packageInfo = GetIt.I<PackageInfo>();
 
 class Constant {
+  static String appName = _packageInfo.appName;
+  static String packageName = _packageInfo.packageName;
+  static String version = _packageInfo.version;
+  static String buildNumber = _packageInfo.buildNumber;
+
   static String apiBaseUrl = dotenv.env['API_BASE_URL']!;
 
   static String googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
