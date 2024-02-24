@@ -26,9 +26,8 @@ class MyEventsPage extends StatelessWidget {
         child: const _MyEventsPage(),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // TODO goto create event page
-        },
+        foregroundColor: context.colorScheme.primary,
+        onPressed: () => context.goNamed(RouteNames.createNewEvent),
         label: const Text('New Event'),
         icon: const Icon(Icons.add),
       ),

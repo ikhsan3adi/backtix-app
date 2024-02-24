@@ -6,6 +6,8 @@ import 'package:backtix_app/src/presentations/pages/app_start/splash_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
+import 'package:backtix_app/src/presentations/pages/location_picker_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/create_new_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_refund_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_sales_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/my_event_detail_page.dart';
@@ -152,6 +154,25 @@ class AppRoute {
                     return const NoTransitionPage(child: MyEventsPage());
                   },
                   routes: [
+                    GoRoute(
+                      name: RouteNames.locationPicker,
+                      path: 'pickLocation',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        final lat = state.uri.queryParameters['latitude'];
+                        final lng = state.uri.queryParameters['longitude'];
+                        return LocationPickerPage(
+                          latitude: lat != null ? double.tryParse(lat) : null,
+                          longitude: lng != null ? double.tryParse(lng) : null,
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      name: RouteNames.createNewEvent,
+                      path: 'new',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, __) => const CreateNewEventPage(),
+                    ),
                     GoRoute(
                       name: RouteNames.myEventDetail,
                       path: ':id',

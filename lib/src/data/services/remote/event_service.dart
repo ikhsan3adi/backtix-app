@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:dio/dio.dart';
@@ -34,4 +36,21 @@ abstract class EventService {
   Future<HttpResponse<EventModel>> getMyEventDetail(
     @Path('id') String id,
   );
+
+  @POST('events')
+  @MultiPart()
+  Future<HttpResponse<EventModel>> createNewEvent({
+    @Part(name: 'event') required List<MultipartFile> eventImageFiles,
+    @Part(name: 'ticket') required List<MultipartFile> ticketImageFiles,
+    @Part() required String name,
+    @Part() required String description,
+    @Part() required String date,
+    @Part() String? endDate,
+    @Part() required String location,
+    @Part() double? latitude,
+    @Part() double? longitude,
+    @Part() required List<String> categories,
+    @Part() required List<String> imageDescriptions,
+    @Part() required List<Map<String, dynamic>> tickets,
+  });
 }

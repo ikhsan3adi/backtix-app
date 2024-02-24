@@ -1,5 +1,7 @@
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
+import 'package:backtix_app/src/data/models/event/new_event_model.dart';
+import 'package:backtix_app/src/data/models/event/update_event_model.dart';
 import 'package:backtix_app/src/data/services/remote/event_service.dart';
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
@@ -61,6 +63,42 @@ class EventRepository {
   Future<Either<DioException, EventModel>> getMyEventDetail(String id) async {
     return await TaskEither.tryCatch(
       () async => (await _eventService.getMyEventDetail(id)).data,
+      (error, _) => error as DioException,
+    ).run();
+  }
+
+  Future<Either<DioException, EventModel>> createNewEvent(
+    NewEventModel newEvent,
+  ) async {
+    return await TaskEither.tryCatch(
+      () async {
+        final response = await _eventService.createNewEvent(
+          eventImageFiles: newEvent.eventImageFiles
+              .map((e) => MultipartFile.fromBytes(
+                    e.readAsBytesSync(),
+                    filename: e.path.split('/').last,
+                  ))
+              .toList(),
+          ticketImageFiles: newEvent.ticketImageFiles
+              .map((e) => MultipartFile.fromBytes(
+                    e.readAsBytesSync(),
+                    filename: e.path.split('/').last,
+                  ))
+              .toList(),
+          name: newEvent.name,
+          description: newEvent.description,
+          date: newEvent.date.toIso8601String(),
+          endDate: newEvent.endDate?.toIso8601String(),
+          location: newEvent.location,
+          latitude: newEvent.latitude,
+          longitude: newEvent.longitude,
+          categories: newEvent.categories,
+          imageDescriptions: newEvent.imageDescriptions,
+          tickets: newEvent.tickets.map((e) => e.toJson()).toList(),
+        );
+
+        return response.data;
+      },
       (error, _) => error as DioException,
     ).run();
   }

@@ -19,4 +19,6 @@ class RouteNames {
   static const String eventTicketRefundRequest = 'ticketRefundRequest';
   static const String eventTicketSalesDetail = 'eventTicketSalesDetail';
   static const String salesByTicket = 'salesByTicket';
+  static const String createNewEvent = 'createNewEvent';
+  static const String locationPicker = 'locationPicker';
 }
