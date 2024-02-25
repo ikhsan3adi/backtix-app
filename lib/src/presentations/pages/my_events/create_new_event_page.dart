@@ -72,7 +72,9 @@ class _NewEventFormState extends State<_NewEventForm> {
   final _categoryController = TextEditingController();
 
   final _coords = ValueNotifier<LatLng?>(null);
-  final _dateRange = ValueNotifier<DateTimeRange?>(null);
+  final _dateRange = ValueNotifier<({DateTime? start, DateTime? end})>(
+    (start: null, end: null),
+  );
 
   /// [String] category, [bool] selected
   final _categories = ValueNotifier<List<({String category, bool selected})>>(
@@ -290,10 +292,9 @@ class _NewEventFormState extends State<_NewEventForm> {
                     final startDate = await pickDateTime(context);
                     if (startDate == null) return;
 
-                    _dateRange.value = DateTimeRange(
+                    _dateRange.value = (
                       start: startDate,
-                      end: _dateRange.value?.end ??
-                          startDate.add(const Duration(days: 1)),
+                      end: _dateRange.value.end,
                     );
                   },
                   children: [
@@ -306,10 +307,10 @@ class _NewEventFormState extends State<_NewEventForm> {
                           valueListenable: _dateRange,
                           builder: (context, dateRange, _) {
                             return Text(
-                              dateRange == null
+                              dateRange.start == null
                                   ? 'Start date'
                                   : _dateFormat.format(
-                                      _dateRange.value!.start.toLocal(),
+                                      _dateRange.value.start!.toLocal(),
                                     ),
                             );
                           },
@@ -350,10 +351,9 @@ class _NewEventFormState extends State<_NewEventForm> {
                     final endDate = await pickDateTime(context);
                     if (endDate == null) return;
 
-                    _dateRange.value = DateTimeRange(
+                    _dateRange.value = (
+                      start: _dateRange.value.start,
                       end: endDate,
-                      start: _dateRange.value?.start ??
-                          endDate.subtract(const Duration(days: 1)),
                     );
                   },
                   children: [
@@ -366,10 +366,10 @@ class _NewEventFormState extends State<_NewEventForm> {
                           valueListenable: _dateRange,
                           builder: (context, dateRange, _) {
                             return Text(
-                              dateRange == null
+                              dateRange.end == null
                                   ? 'End date'
                                   : _dateFormat.format(
-                                      _dateRange.value!.end.toLocal(),
+                                      _dateRange.value.end!.toLocal(),
                                     ),
                             );
                           },
@@ -559,7 +559,7 @@ class _NewEventFormState extends State<_NewEventForm> {
             SimpleLoadingDialog.hide(context);
             await SuccessBottomSheet.show(
               context,
-              text: 'Event submitted',
+              text: 'Event submitted\nWait for approval',
             );
             if (context.mounted) return context.pop();
             return;
@@ -595,7 +595,7 @@ class _NewEventFormState extends State<_NewEventForm> {
   void _submit(BuildContext context) {
     _categoryController.clear();
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    if (_dateRange.value == null) {
+    if (_dateRange.value.start == null) {
       context.showSimpleTextSnackBar('Event start date required');
       return;
     }
@@ -619,8 +619,8 @@ class _NewEventFormState extends State<_NewEventForm> {
     final newEvent = NewEventModel(
       name: _nameController.value.text,
       description: _descriptionController.value.text,
-      date: _dateRange.value!.start,
-      endDate: _dateRange.value?.end,
+      date: _dateRange.value.start!,
+      endDate: _dateRange.value.end,
       location: _locationController.value.text,
       latitude: _coords.value?.latitude,
       longitude: _coords.value?.longitude,
