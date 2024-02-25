@@ -11,11 +11,15 @@ class MyEventCard extends StatelessWidget {
     super.key,
     required this.event,
     this.onTap,
+    this.onEdit,
+    this.onDelete,
     this.heroImageTag,
   });
 
   final EventModel event;
   final VoidCallback? onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
   final Object? heroImageTag;
 
   @override
@@ -159,23 +163,21 @@ class MyEventCard extends StatelessWidget {
         PopupMenuButton(
           itemBuilder: (_) => [
             PopupMenuItem(
+              onTap: onEdit,
               child: const ListTile(
                 title: Text('Edit'),
                 trailing: Icon(Icons.edit),
               ),
-              onTap: () {
-                // TODO goto edit event page
-              },
             ),
             if (event.status != EventStatus.published)
               PopupMenuItem(
+                onTap: onDelete,
                 child: ListTile(
                   title: const Text('Delete'),
                   trailing: const Icon(Icons.delete_forever),
                   textColor: context.colorScheme.error,
                   iconColor: context.colorScheme.error,
                 ),
-                onTap: () {},
               ),
           ],
         ),

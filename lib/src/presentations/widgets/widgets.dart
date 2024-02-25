@@ -15,6 +15,7 @@ export 'card/ticket_purchase_card.dart';
 export 'card/ticket_sales_card.dart';
 export 'card/ticket_widget.dart';
 export 'card/upcoming_events_carousel.dart';
+export 'dialog/confirm_dialog.dart';
 export 'dialog/confirm_ticket_refund_dialog.dart';
 export 'dialog/discard_changes_dialog.dart';
 export 'dialog/error_dialog.dart';

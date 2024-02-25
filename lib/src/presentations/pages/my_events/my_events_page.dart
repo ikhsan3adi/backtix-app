@@ -316,6 +316,8 @@ class _EventList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final heroImageTag = UniqueKey().toString();
                 return MyEventCard(
+                  event: events[index],
+                  heroImageTag: heroImageTag,
                   onTap: () => context.goNamed(
                     RouteNames.myEventDetail,
                     pathParameters: {'id': events[index].id},
@@ -325,8 +327,13 @@ class _EventList extends StatelessWidget {
                       'heroImageUrl': events[index].images[0].image,
                     },
                   ),
-                  event: events[index],
-                  heroImageTag: heroImageTag,
+                  onDelete: () async {
+                    final confirm = await ConfirmDialog.show(context);
+                    if (!context.mounted || !(confirm ?? false)) return;
+                    context
+                        .read<MyEventsBloc>()
+                        .add(MyEventsEvent.deleteEvent(events[index].id));
+                  },
                 );
               },
             );

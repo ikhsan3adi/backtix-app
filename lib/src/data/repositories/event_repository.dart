@@ -102,4 +102,11 @@ class EventRepository {
       (error, _) => error as DioException,
     ).run();
   }
+
+  Future<Either<DioException, EventModel>> deleteEvent(String id) async {
+    return await TaskEither.tryCatch(
+      () async => (await _eventService.deleteEvent(id)).data,
+      (error, _) => error as DioException,
+    ).run();
+  }
 }

@@ -53,4 +53,7 @@ abstract class EventService {
     @Part() required List<String> imageDescriptions,
     @Part() required List<Map<String, dynamic>> tickets,
   });
+
+  @DELETE('events/{id}')
+  Future<HttpResponse<EventModel>> deleteEvent(@Path('id') String id);
 }
