@@ -25,6 +25,7 @@ export 'dialog/simple_loading_dialog.dart';
 export 'dialog/success_bottom_sheet.dart';
 export 'dialog/ticket_form_dialog.dart';
 export 'dialog/ticket_order_checkout_dialog.dart';
+export 'dialog/toast.dart';
 export 'field/event_search_bar.dart';
 export 'form/custom_text_form_field.dart';
 export 'image/custom_file_image.dart';

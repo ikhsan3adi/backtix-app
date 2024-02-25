@@ -10,7 +10,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -327,7 +326,8 @@ class _Buttons extends StatelessWidget {
                       },
                     ).then((refunded) {
                       if (refunded ?? false) {
-                        Fluttertoast.showToast(
+                        Toast.show(
+                          context,
                           msg: 'Refund request successful',
                         );
                         context.pop(true);
@@ -380,7 +380,8 @@ class _EventOwnerButtons extends StatelessWidget {
                     },
                   ).then((success) {
                     if (success ?? false) {
-                      Fluttertoast.showToast(
+                      Toast.show(
+                        context,
                         msg: 'Accept refund request successful',
                       );
                       context.pop(true);
@@ -419,7 +420,8 @@ class _EventOwnerButtons extends StatelessWidget {
                     },
                   ).then((success) {
                     if (success ?? false) {
-                      Fluttertoast.showToast(
+                      Toast.show(
+                        context,
                         msg: 'Successfully refused refund request',
                       );
                       context.pop(true);

@@ -367,7 +367,10 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
           FilledButton(
             onPressed: () {
               if (!(_formKey.currentState?.validate() ?? false)) return;
-              if (_salesOpenDate.value == null) return;
+              if (_salesOpenDate.value == null) {
+                Toast.show(context, msg: 'Date required');
+                return;
+              }
 
               return Navigator.pop(
                 context,

@@ -10,7 +10,6 @@ import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -50,18 +49,18 @@ class RegisterPage extends StatelessWidget {
                   state.whenOrNull(
                     success: (user, auth, isRegistered) {
                       if (auth != null && (isRegistered)) {
-                        Fluttertoast.showToast(msg: 'User has been registered');
+                        Toast.show(context, msg: 'User has been registered');
                         return context
                             .read<AuthBloc>()
                             .add(AuthEvent.authenticate(newAuth: auth));
                       } else if (user != null) {
-                        Fluttertoast.showToast(msg: 'User register successful');
+                        Toast.show(context, msg: 'User register successful');
                         return context.goNamed(
                           RouteNames.login,
                           queryParameters: {'username': user.username},
                         );
                       }
-                      Fluttertoast.showToast(msg: 'Sign up failed, try again');
+                      Toast.show(context, msg: 'Sign up failed, try again');
                     },
                     error: (error) => ErrorDialog.show(context, error),
                   );
