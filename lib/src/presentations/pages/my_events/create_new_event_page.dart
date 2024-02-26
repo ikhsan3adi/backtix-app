@@ -257,6 +257,7 @@ class _NewEventFormState extends State<_NewEventForm> {
 
           // SUBMIT BUTTON
           _submitButton,
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -688,6 +689,8 @@ class _EventImagesForm extends StatelessWidget {
                               context,
                               FileImage(images[index].file),
                               useSafeArea: true,
+                              doubleTapZoomable: true,
+                              swipeDismissible: true,
                             );
                             return;
                           }

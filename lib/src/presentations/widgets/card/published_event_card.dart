@@ -167,12 +167,17 @@ class PublishedEventCard extends StatelessWidget {
                               : Colors.red,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          event.location,
-                          style: TextStyle(
-                            color: event.isEnded
-                                ? context.theme.disabledColor
-                                : null,
+                        Flexible(
+                          child: Text(
+                            event.location,
+                            style: TextStyle(
+                              color: event.isEnded
+                                  ? context.theme.disabledColor
+                                  : null,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 2,
                           ),
                         ),
                       ],

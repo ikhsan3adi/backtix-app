@@ -444,20 +444,27 @@ class _EventInfoState extends State<_EventInfo> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.locationDot,
-                                size: 18,
-                                color: event.isEnded
-                                    ? context.theme.disabledColor
-                                    : Colors.red,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(event.location),
-                            ],
+                          Expanded(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.locationDot,
+                                  size: 18,
+                                  color: event.isEnded
+                                      ? context.theme.disabledColor
+                                      : Colors.red,
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    event.location,
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           if (event.isLatLongSet)
                             Padding(

@@ -72,10 +72,11 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
 
               return Stack(
                 alignment: Alignment.center,
+                fit: StackFit.expand,
                 children: [
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: widget.height,
+                      height: widget.height + 72,
                       enableInfiniteScroll: false,
                       padEnds: false,
                       viewportFraction: 1,
@@ -94,9 +95,12 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
                             doubleTapZoomable: true,
                             swipeDismissible: true,
                           ),
-                          child: CustomNetworkImage(
-                            src: images[index].image,
-                            cached: index < 5,
+                          child: AspectRatio(
+                            aspectRatio: 2,
+                            child: CustomNetworkImage(
+                              src: images[index].image,
+                              cached: index < 5,
+                            ),
                           ),
                         );
                       },
