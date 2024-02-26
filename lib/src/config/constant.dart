@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' show dotenv;
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -16,8 +17,10 @@ class Constant {
   static String googleClientId = dotenv.env['GOOGLE_CLIENT_ID']!;
   static String googleServerClientId = dotenv.env['GOOGLE_SERVER_CLIENT_ID']!;
 
-  static String midtransClientKey = dotenv.env['MIDTRANS_CLIENT_KEY']!;
   static String midtransMerchantBaseUrl = dotenv.env['MIDTRANS_MERCHANT_BASE_URL']!;
+  static String midtransClientKey = kDebugMode
+      ? dotenv.env['MIDTRANS_CLIENT_KEY_SANDBOX']!
+      : dotenv.env['MIDTRANS_CLIENT_KEY']!;
 
   static String googleMapsUrlFromLatLong({
     required double lat,

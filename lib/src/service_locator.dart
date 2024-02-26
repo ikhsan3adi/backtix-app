@@ -32,6 +32,7 @@ import 'package:backtix_app/src/data/services/remote/payment_service.dart';
 import 'package:backtix_app/src/data/services/remote/ticket_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:midtrans_sdk/midtrans_sdk.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -179,6 +180,7 @@ Future<void> initPaymentService() async {
       colorPrimaryDark: const Color(0xFF21767C),
       colorSecondary: const Color(0xFF40C4FF),
     ),
+    enableLog: kDebugMode,
   );
 
   final sdk = await MidtransSDK.init(config: config);
