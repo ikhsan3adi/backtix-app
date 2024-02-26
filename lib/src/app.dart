@@ -14,6 +14,7 @@ class App extends StatelessWidget {
     return BlocBuilder<ThemeModeCubit, ThemeMode>(
       builder: (_, themeMode) {
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           title: 'BackTix',
           theme: appTheme.lightTheme,
           darkTheme: appTheme.darkTheme,
