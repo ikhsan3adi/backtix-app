@@ -18,7 +18,7 @@ class TicketWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints.loose(const Size.fromWidth(450)),
+      constraints: const BoxConstraints(maxWidth: 450),
       child: ClipPath(
         clipBehavior: Clip.hardEdge,
         clipper: TicketClipper(
