@@ -70,52 +70,59 @@ class _MyEventsPageState extends State<_MyEventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      controller: _controller,
-      slivers: [
-        SliverAppBar(
-          pinned: true,
-          floating: true,
-          centerTitle: true,
-          title: const Text('My Events'),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: SizedBox(
-              height: 50,
-              child: _FilterChips(),
+    return RefreshIndicator.adaptive(
+      onRefresh: () async {
+        final bloc = context.read<MyEventsBloc>();
+        bloc.state.mapOrNull(loaded: (state) {
+          bloc.add(MyEventsEvent.getMyEvents(state.query.copyWith(page: 0)));
+        });
+      },
+      child: CustomScrollView(
+        controller: _controller,
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            floating: true,
+            centerTitle: true,
+            title: const Text('My Events'),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: SizedBox(
+                height: 50,
+                child: _FilterChips(),
+              ),
             ),
           ),
-        ),
-        const SliverPadding(
-          padding: EdgeInsets.only(left: 16, top: 4, right: 16),
-          sliver: _EventList(),
-        ),
-        BlocBuilder<MyEventsBloc, MyEventsState>(
-          builder: (context, state) {
-            /// If list is not scrollable, get more data immediately
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_controller.position.maxScrollExtent <= 0) {
-                context
-                    .read<MyEventsBloc>()
-                    .add(const MyEventsEvent.getMoreMyEvents());
-              }
-            });
+          const SliverPadding(
+            padding: EdgeInsets.only(left: 16, top: 4, right: 16),
+            sliver: _EventList(),
+          ),
+          BlocBuilder<MyEventsBloc, MyEventsState>(
+            builder: (context, state) {
+              /// If list is not scrollable, get more data immediately
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_controller.position.maxScrollExtent <= 0) {
+                  context
+                      .read<MyEventsBloc>()
+                      .add(const MyEventsEvent.getMoreMyEvents());
+                }
+              });
 
-            return state.maybeMap(
-              loaded: (state) {
-                return SliverFillRemaining(
-                  fillOverscroll: true,
-                  hasScrollBody: false,
-                  child: LoadNewListDataWidget(
-                    reachedMax: state.hasReachedMax,
-                  ),
-                );
-              },
-              orElse: () => const SliverToBoxAdapter(),
-            );
-          },
-        ),
-      ],
+              return state.maybeMap(
+                loaded: (state) {
+                  return SliverFillRemaining(
+                    fillOverscroll: true,
+                    child: LoadNewListDataWidget(
+                      reachedMax: state.hasReachedMax,
+                    ),
+                  );
+                },
+                orElse: () => const SliverToBoxAdapter(),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

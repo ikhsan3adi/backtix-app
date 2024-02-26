@@ -89,6 +89,7 @@ class _NewEventFormState extends State<_NewEventForm> {
     _descriptionController.dispose();
     _locationController.dispose();
     _categoryController.dispose();
+    _coords.dispose();
     _dateRange.dispose();
     _categories.dispose();
     _formKey.currentState?.dispose();
@@ -554,9 +555,9 @@ class _NewEventFormState extends State<_NewEventForm> {
       height: 72,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: BlocConsumer<CreateEventBloc, CreateEventState>(
-        listener: (context, state) => state.mapOrNull(
-          loading: (s) => SimpleLoadingDialog.show(context),
-          success: (s) async {
+        listener: (context, state) => state.whenOrNull(
+          loading: () => SimpleLoadingDialog.show(context),
+          success: (_) async {
             SimpleLoadingDialog.hide(context);
             await SuccessBottomSheet.show(
               context,
@@ -565,11 +566,11 @@ class _NewEventFormState extends State<_NewEventForm> {
             if (context.mounted) return context.pop();
             return;
           },
-          error: (s) async {
+          error: (exception) async {
             SimpleLoadingDialog.hide(context);
             return await ErrorDialog.show(
               context,
-              s.exception,
+              exception,
             );
           },
         ),
