@@ -1,5 +1,6 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/data/models/event/event_filter.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
@@ -124,7 +125,7 @@ class _SliverAppBarState extends State<_SliverAppBar> {
           leading: hideSearchBar ? const ThemeToggleIconButton() : null,
           title: hideSearchBar
               ? Text(
-                  'BACKTIX',
+                  Constant.appName.toUpperCase(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: context.colorScheme.primary,
