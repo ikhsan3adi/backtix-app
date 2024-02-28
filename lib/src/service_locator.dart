@@ -3,6 +3,7 @@ import 'dart:ui' show Color;
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/auth/auth_helper.dart';
 import 'package:backtix_app/src/blocs/events/create_event/create_event_bloc.dart';
+import 'package:backtix_app/src/blocs/events/edit_event/edit_event_bloc.dart';
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
 import 'package:backtix_app/src/blocs/events/my_events/my_events_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
@@ -150,6 +151,9 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<CreateEventBloc>(
     () => CreateEventBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<EditEventBloc>(
+    () => EditEventBloc(GetIt.I<EventRepository>()),
   );
 }
 

@@ -13,7 +13,9 @@ class EventImagePickerPreview extends StatelessWidget {
     this.onTap,
     this.onDescriptionTap,
     this.onRemove,
+    this.onUndo,
     this.size = 120,
+    this.isDeleted = false,
   });
 
   /// Used on edit form
@@ -23,9 +25,12 @@ class EventImagePickerPreview extends StatelessWidget {
   final String? description;
   final VoidCallback? onTap;
   final VoidCallback? onRemove;
+  final VoidCallback? onUndo;
   final VoidCallback? onDescriptionTap;
 
   final double size;
+
+  final bool isDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +43,8 @@ class EventImagePickerPreview extends StatelessWidget {
           imageFile: imageFile,
           imageUrl: imageUrl,
           onRemove: onRemove,
+          onUndo: onUndo,
+          isDeleted: isDeleted,
         ),
         const SizedBox(height: 8),
         if (description == null)
@@ -93,6 +100,8 @@ class _Image extends StatelessWidget {
     required this.imageFile,
     required this.imageUrl,
     required this.onRemove,
+    this.onUndo,
+    this.isDeleted = false,
   });
 
   final String? imageUrl;
@@ -101,6 +110,9 @@ class _Image extends StatelessWidget {
   final double size;
   final VoidCallback? onTap;
   final VoidCallback? onRemove;
+  final VoidCallback? onUndo;
+
+  final bool isDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +139,18 @@ class _Image extends StatelessWidget {
               imageFile != null
                   ? CustomFileImage(file: imageFile!, small: true)
                   : CustomNetworkImage(src: imageUrl!, small: true),
+              if (isDeleted && imageFile == null)
+                Container(
+                  color: context.theme.disabledColor.withOpacity(0.6),
+                  child: Center(
+                    child: Text(
+                      'Removed',
+                      style: context.textTheme.labelLarge?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -139,14 +163,21 @@ class _Image extends StatelessWidget {
             width: 36,
             height: 36,
             child: IconButton.filled(
-              onPressed: onRemove,
+              onPressed: isDeleted ? onUndo : onRemove,
               icon: Icon(
-                Icons.delete_forever,
+                isDeleted ? Icons.undo_outlined : Icons.delete_forever,
                 color: context.colorScheme.onError,
                 size: 20,
               ),
+              tooltip: isDeleted
+                  ? imageFile == null
+                      ? 'Undo'
+                      : 'Revert'
+                  : 'Delete',
               style: IconButton.styleFrom(
-                backgroundColor: context.colorScheme.error.withOpacity(0.5),
+                backgroundColor: isDeleted
+                    ? context.colorScheme.primary.withOpacity(0.5)
+                    : context.colorScheme.error.withOpacity(0.5),
               ),
             ),
           ),

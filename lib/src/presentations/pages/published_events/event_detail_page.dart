@@ -234,9 +234,10 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                           valueListenable: _isAppBarExpanded,
                           builder: (_, isExpanded, __) {
                             return IconButton(
-                              onPressed: () {
-                                // TODO goto edit event page
-                              },
+                              onPressed: () => context.goNamed(
+                                RouteNames.editEvent,
+                                pathParameters: {'id': widget.id},
+                              ),
                               tooltip: 'Edit',
                               style: IconButton.styleFrom(
                                 backgroundColor:

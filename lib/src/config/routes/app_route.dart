@@ -8,6 +8,7 @@ import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dar
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/location_picker_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/create_new_event_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/edit_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_refund_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_sales_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/my_event_detail_page.dart';
@@ -172,6 +173,14 @@ class AppRoute {
                       path: 'new',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, __) => const CreateNewEventPage(),
+                    ),
+                    GoRoute(
+                      name: RouteNames.editEvent,
+                      path: ':id/edit',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) => EditEventPage(
+                        eventId: state.pathParameters['id'] ?? '',
+                      ),
                     ),
                     GoRoute(
                       name: RouteNames.myEventDetail,

@@ -54,6 +54,22 @@ abstract class EventService {
     @Part() required List<Map<String, dynamic>> tickets,
   });
 
+  @PATCH('events/{id}')
+  @MultiPart()
+  Future<HttpResponse<EventModel>> updateEvent(
+    @Path('id') String id, {
+    @Part(name: 'event') List<MultipartFile>? eventImageFiles,
+    @Part() String? name,
+    @Part() String? description,
+    @Part() String? date,
+    @Part() String? endDate,
+    @Part() String? location,
+    @Part() double? latitude,
+    @Part() double? longitude,
+    @Part() List<String>? categories,
+    @Part() List<Map<String, dynamic>>? images,
+  });
+
   @DELETE('events/{id}')
   Future<HttpResponse<EventModel>> deleteEvent(@Path('id') String id);
 }

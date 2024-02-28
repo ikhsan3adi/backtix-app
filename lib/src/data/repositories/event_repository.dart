@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/data/models/event/new_event_model.dart';
@@ -95,6 +97,37 @@ class EventRepository {
           categories: newEvent.categories,
           imageDescriptions: newEvent.imageDescriptions,
           tickets: newEvent.tickets.map((e) => e.toJson()).toList(),
+        );
+
+        return response.data;
+      },
+      (error, _) => error as DioException,
+    ).run();
+  }
+
+  Future<Either<DioException, EventModel>> updateEvent(
+    String eventId,
+    UpdateEventModel updatedEvent,
+  ) async {
+    return await TaskEither.tryCatch(
+      () async {
+        final response = await _eventService.updateEvent(
+          eventId,
+          eventImageFiles: updatedEvent.eventImageFiles
+              .map((e) => MultipartFile.fromBytes(
+                    e.readAsBytesSync(),
+                    filename: e.path.split(Platform.pathSeparator).last,
+                  ))
+              .toList(),
+          name: updatedEvent.name,
+          description: updatedEvent.description,
+          date: updatedEvent.date?.toIso8601String(),
+          endDate: updatedEvent.endDate?.toIso8601String(),
+          location: updatedEvent.location,
+          latitude: updatedEvent.latitude,
+          longitude: updatedEvent.longitude,
+          categories: updatedEvent.categories,
+          images: updatedEvent.images.map((e) => e.toJson()).toList(),
         );
 
         return response.data;

@@ -334,6 +334,10 @@ class _EventList extends StatelessWidget {
                       'heroImageUrl': events[index].images[0].image,
                     },
                   ),
+                  onEdit: () => context.goNamed(
+                    RouteNames.editEvent,
+                    pathParameters: {'id': events[index].id},
+                  ),
                   onDelete: () async {
                     final confirm = await ConfirmDialog.show(context);
                     if (!context.mounted || !(confirm ?? false)) return;
