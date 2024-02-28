@@ -757,7 +757,7 @@ class _EventTicketsForm extends StatelessWidget {
                   imageFile: state.tickets[index].file,
                   ticket: state.tickets[index].ticket,
                   onTap: () async {
-                    final newTicket = await TicketFormDialog.show(
+                    final newTicket = await CreateTicketDialog.show(
                       context,
                       old: state.tickets[index],
                       onDelete: () {
@@ -778,7 +778,7 @@ class _EventTicketsForm extends StatelessWidget {
               AddTicketCard(
                 size: cardHeight - 25,
                 onTap: () async {
-                  final newTicket = await TicketFormDialog.show(context);
+                  final newTicket = await CreateTicketDialog.show(context);
                   if (newTicket == null || !context.mounted) return;
                   context.read<EventTicketsFormCubit>().addTicket(newTicket);
                 },

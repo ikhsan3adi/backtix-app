@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:validatorless/validatorless.dart';
 
-class TicketFormDialog extends StatefulWidget {
-  const TicketFormDialog({super.key, this.old, this.onDelete});
+class CreateTicketDialog extends StatefulWidget {
+  const CreateTicketDialog({super.key, this.old, this.onDelete});
 
   static Future<NewTicketWithImage?> show(
     BuildContext context, {
@@ -19,7 +19,7 @@ class TicketFormDialog extends StatefulWidget {
   }) async {
     return await showAdaptiveDialog<NewTicketWithImage>(
       context: context,
-      builder: (_) => TicketFormDialog(old: old, onDelete: onDelete),
+      builder: (_) => CreateTicketDialog(old: old, onDelete: onDelete),
     );
   }
 
@@ -27,10 +27,10 @@ class TicketFormDialog extends StatefulWidget {
   final FutureOr<void> Function()? onDelete;
 
   @override
-  State<TicketFormDialog> createState() => _TicketFormDialogState();
+  State<CreateTicketDialog> createState() => _CreateTicketDialogState();
 }
 
-class _TicketFormDialogState extends State<TicketFormDialog> {
+class _CreateTicketDialogState extends State<CreateTicketDialog> {
   final DateFormat _dateFormat = DateFormat('dd/MM/y HH:mm');
   final _debouncer = Debouncer();
 
@@ -194,6 +194,7 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
             controller: _priceController,
             debounce: true,
             debouncer: _debouncer,
+            keyboardType: TextInputType.number,
             validator: Validatorless.multiple([
               Validatorless.number('Value is not a number'),
               Validatorless.numbersBetweenInterval(
@@ -381,7 +382,7 @@ class _TicketFormDialogState extends State<TicketFormDialog> {
                     price: num.parse(_priceController.value.text),
                     stock: int.parse(_stockController.value.text),
                     hasImage: _imageFile.value != null,
-                    salesOpenDate: _salesOpenDate.value,
+                    salesOpenDate: _salesOpenDate.value!,
                     purchaseDeadline: _salesEndDate.value,
                   )
                 ),
