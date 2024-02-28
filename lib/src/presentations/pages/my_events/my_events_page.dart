@@ -235,7 +235,10 @@ class _FilterChips extends StatelessWidget {
                     label: Text(status.toString()),
                     onSelected: (v) {
                       return bloc.add(MyEventsEvent.getMyEvents(
-                        query.copyWith(status: v ? status : null),
+                        query.copyWith(
+                          status: v ? status : null,
+                          ongoingOnly: status == EventStatus.published,
+                        ),
                       ));
                     },
                     shape: RoundedRectangleBorder(
