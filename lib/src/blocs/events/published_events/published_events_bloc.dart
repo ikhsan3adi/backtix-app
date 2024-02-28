@@ -1,7 +1,6 @@
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/data/repositories/event_repository.dart';
-import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -47,7 +46,7 @@ class PublishedEventsBloc
         return emit(PublishedEventsState.loaded(
           previousPublishedEvents,
           previousNearbyEvents,
-          error: e,
+          exception: e,
           query: event.query,
           refreshNearbyEvents: event.refreshNearbyEvents,
         ));
@@ -82,7 +81,7 @@ class PublishedEventsBloc
         state.events,
         state.nearbyEvents,
         state.query,
-        state.hasReachedMax ?? false,
+        state.hasReachedMax,
       ),
       orElse: () => (<EventModel>[], <EventModel>[], const EventQuery(), false),
     );
@@ -98,7 +97,7 @@ class PublishedEventsBloc
         return emit(PublishedEventsState.loaded(
           previousPublishedEvents,
           previousNearbyEvents,
-          error: e,
+          exception: e,
           query: newQueries,
           hasReachedMax: true,
         ));

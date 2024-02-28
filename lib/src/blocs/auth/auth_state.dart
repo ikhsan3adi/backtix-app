@@ -10,6 +10,6 @@ class AuthState with _$AuthState {
   }) = _Authenticated;
 
   const factory AuthState.unauthenticated({
-    Exception? error,
+    Exception? exception,
   }) = _Unauthenticated;
 }

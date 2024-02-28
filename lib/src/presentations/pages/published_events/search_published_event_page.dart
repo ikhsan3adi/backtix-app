@@ -1,8 +1,8 @@
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filter.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,7 +100,7 @@ class _SearchEventPageState extends State<_SearchEventPage> {
                     fillOverscroll: true,
                     hasScrollBody: false,
                     child: LoadNewListDataWidget(
-                      reachedMax: state.hasReachedMax ?? false,
+                      reachedMax: state.hasReachedMax,
                     ),
                   );
                 },
@@ -276,8 +276,8 @@ class _EventList extends StatelessWidget {
       listener: (context, state) {
         state.mapOrNull(
           loaded: (state) {
-            if (state.error != null) {
-              ErrorDialog.show(context, state.error!);
+            if (state.exception != null) {
+              ErrorDialog.show(context, state.exception!);
             }
           },
         );

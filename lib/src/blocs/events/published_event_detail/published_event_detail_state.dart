@@ -5,6 +5,6 @@ class PublishedEventDetailState with _$PublishedEventDetailState {
   const factory PublishedEventDetailState.loading() = _Loading;
   const factory PublishedEventDetailState.loaded(EventModel event) = _Loaded;
   const factory PublishedEventDetailState.error(
-    DioException exception,
+    Exception exception,
   ) = _Error;
 }

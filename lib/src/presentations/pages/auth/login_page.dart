@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +54,7 @@ class LoginPage extends StatelessWidget {
                       error: (error) => ErrorDialog.show(context, error),
                     );
                   },
-                  child: _UsernameLoginForm(
+                  child: _LoginForm(
                     initialUsername: initialUsername,
                   ),
                 );
@@ -86,22 +87,24 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class _UsernameLoginForm extends StatefulWidget {
-  const _UsernameLoginForm({this.initialUsername});
+class _LoginForm extends StatefulWidget {
+  const _LoginForm({this.initialUsername});
 
   final String? initialUsername;
 
   @override
-  State<_UsernameLoginForm> createState() => _UsernameLoginFormState();
+  State<_LoginForm> createState() => _LoginFormState();
 }
 
-class _UsernameLoginFormState extends State<_UsernameLoginForm> {
+class _LoginFormState extends State<_LoginForm> {
   final _formKey = GlobalKey<FormState>();
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   final _obscurePassword = ValueNotifier(true);
+
+  final _debouncer = Debouncer();
 
   @override
   void initState() {
@@ -111,9 +114,11 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
 
   @override
   void dispose() {
+    _debouncer.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
     _obscurePassword.dispose();
+    _formKey.currentState?.dispose();
     super.dispose();
   }
 
@@ -189,6 +194,8 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
   late final formWidgets = [
     CustomTextFormField(
       controller: _usernameController,
+      debounce: true,
+      debouncer: _debouncer,
       validator: Validatorless.multiple([
         Validatorless.between(3, 16, 'Must have between 3 and 16 character'),
         Validatorless.required('Username required'),
@@ -205,6 +212,8 @@ class _UsernameLoginFormState extends State<_UsernameLoginForm> {
         return CustomTextFormField(
           controller: _passwordController,
           obscureText: value,
+          debounce: true,
+          debouncer: _debouncer,
           validator: Validatorless.multiple([
             Validatorless.between(8, 64, 'Must have minimum 8 character'),
             Validatorless.required('Password required'),

@@ -8,17 +8,16 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'ticket_purchase_bloc.freezed.dart';
-part 'ticket_purchase_event.dart';
-part 'ticket_purchase_state.dart';
+part 'ticket_order_bloc.freezed.dart';
+part 'ticket_order_event.dart';
+part 'ticket_order_state.dart';
 
-class TicketPurchaseBloc
-    extends Bloc<TicketPurchaseEvent, TicketPurchaseState> {
+class TicketOrderBloc extends Bloc<TicketOrderEvent, TicketOrderState> {
   final TicketRepository _ticketRepository;
   final EventRepository _eventRepository;
   final PaymentService _paymentService;
 
-  TicketPurchaseBloc(
+  TicketOrderBloc(
     this._ticketRepository,
     this._eventRepository,
     this._paymentService,
@@ -29,23 +28,23 @@ class TicketPurchaseBloc
 
   Future<void> _init(
     _Init event,
-    Emitter<TicketPurchaseState> emit,
+    Emitter<TicketOrderState> emit,
   ) async {
-    emit(const TicketPurchaseState.loading());
+    emit(const TicketOrderState.loading());
 
     final result = await _eventRepository.getPublishedEventDetail(
       event.eventId,
     );
 
     return result.fold(
-      (e) => emit(TicketPurchaseState.loaded(null, error: e)),
-      (event) => emit(TicketPurchaseState.loaded(event)),
+      (e) => emit(TicketOrderState.loaded(null, exception: e)),
+      (event) => emit(TicketOrderState.loaded(event)),
     );
   }
 
   Future<void> _createOrder(
     _CreateOrder event,
-    Emitter<TicketPurchaseState> emit,
+    Emitter<TicketOrderState> emit,
   ) async {
     final previousState = state.mapOrNull(loaded: (s) => s);
     if (previousState == null) return;
@@ -55,20 +54,20 @@ class TicketPurchaseBloc
     );
 
     return result.fold(
-      (e) => emit(TicketPurchaseState.loaded(previousState.event, error: e)),
+      (e) => emit(TicketOrderState.loaded(previousState.event, exception: e)),
       (orderResult) async {
         if (orderResult.transaction.status == TransactionStatus.pending) {
           final result = await _paymentService.startPaymentFlow(
             orderResult.transaction,
           );
 
-          return emit(TicketPurchaseState.loaded(
+          return emit(TicketOrderState.loaded(
             previousState.event,
             orderSuccess: result,
           ));
         }
 
-        return emit(TicketPurchaseState.loaded(
+        return emit(TicketOrderState.loaded(
           previousState.event,
           orderSuccess: true,
         ));

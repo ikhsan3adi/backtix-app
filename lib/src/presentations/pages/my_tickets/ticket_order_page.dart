@@ -1,9 +1,9 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_order_cubit.dart';
-import 'package:backtix_app/src/blocs/tickets/ticket_purchase/ticket_purchase_bloc.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/config/constant.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/purchase/payment_method_enum.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,8 +25,8 @@ class TicketOrderPage extends StatelessWidget {
       builder: (_) => MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => GetIt.I<TicketPurchaseBloc>()
-              ..add(TicketPurchaseEvent.init(eventId: eventId)),
+            create: (_) => GetIt.I<TicketOrderBloc>()
+              ..add(TicketOrderEvent.init(eventId: eventId)),
           ),
           BlocProvider(
             create: (_) => CreateTicketOrderCubit(),
@@ -82,7 +82,7 @@ class _TicketList extends StatelessWidget {
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: BlocBuilder<TicketPurchaseBloc, TicketPurchaseState>(
+          sliver: BlocBuilder<TicketOrderBloc, TicketOrderState>(
             builder: (context, state) {
               return state.maybeMap(
                 loaded: (state) {
@@ -241,9 +241,7 @@ class _BalancePaymentCard extends StatelessWidget {
       builder: (context, order) {
         final bloc = context.read<CreateTicketOrderCubit>();
         final bool selected = order.paymentMethod == PaymentMethod.balance;
-        final balance = context.watch<AuthBloc>().state.mapOrNull(
-              authenticated: (s) => s.user.balance?.balance,
-            );
+        final balance = context.watch<AuthBloc>().user?.balance?.balance;
 
         final foregroundColor = context.isDark
             ? null
@@ -348,15 +346,12 @@ class _BottomWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: BlocConsumer<TicketPurchaseBloc, TicketPurchaseState>(
+          child: BlocConsumer<TicketOrderBloc, TicketOrderState>(
             listener: (_, state) {
               state.mapOrNull(
                 loaded: (state) async {
-                  if (state.error != null) {
-                    return await ErrorDialog.show(context, state.error!);
-                  }
-                  if (state.orderSuccess ?? false) {
-                    return Navigator.pop(context);
+                  if (state.exception != null) {
+                    return await ErrorDialog.show(context, state.exception!);
                   }
                 },
               );
@@ -372,11 +367,14 @@ class _BottomWidget extends StatelessWidget {
                     final result = await TicketOrderCheckoutDialog.show(
                       context,
                       createOrderCubit: ctx.read<CreateTicketOrderCubit>(),
-                      ticketPurchaseBloc: ctx.read<TicketPurchaseBloc>(),
+                      ticketPurchaseBloc: ctx.read<TicketOrderBloc>(),
                     );
 
                     if ((result ?? false) && context.mounted) {
-                      await TicketOrderSuccessDialog.show(context);
+                      await SuccessBottomSheet.show(
+                        context,
+                        text: 'Payment successful',
+                      );
                       if (context.mounted) {
                         return Navigator.pop(context, result);
                       }

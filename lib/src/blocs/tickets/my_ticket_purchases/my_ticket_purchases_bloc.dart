@@ -2,7 +2,6 @@ import 'package:backtix_app/src/data/models/ticket/ticket_purchase_query.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchases_by_event_model.dart';
 import 'package:backtix_app/src/data/repositories/ticket_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'my_ticket_purchases_bloc.freezed.dart';
@@ -35,7 +34,7 @@ class MyTicketPurchasesBloc
       (e) {
         return emit(MyTicketPurchasesState.loaded(
           previousPurchases,
-          error: e,
+          exception: e,
           query: event.query,
         ));
       },
@@ -58,7 +57,7 @@ class MyTicketPurchasesBloc
       loaded: (state) => (
         state.purchasesWithEvent,
         state.query,
-        state.hasReachedMax ?? false,
+        state.hasReachedMax,
       ),
       orElse: () {
         return (
@@ -79,7 +78,7 @@ class MyTicketPurchasesBloc
       (e) {
         return emit(MyTicketPurchasesState.loaded(
           previousPurchases,
-          error: e,
+          exception: e,
           query: newQueries,
           hasReachedMax: true,
         ));

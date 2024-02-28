@@ -9,6 +9,6 @@ abstract class UserService {
   factory UserService(Dio dio, {String? baseUrl}) = _UserService;
 
   @NoBody()
-  @GET('user/my')
+  @GET('users/my')
   Future<HttpResponse<UserModel>> getMyDetails();
 }

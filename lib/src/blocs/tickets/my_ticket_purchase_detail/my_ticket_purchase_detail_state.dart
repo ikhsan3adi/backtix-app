@@ -7,6 +7,6 @@ class MyTicketPurchaseDetailState with _$MyTicketPurchaseDetailState {
     TicketPurchaseModel ticketPurchase,
   ) = _Loaded;
   const factory MyTicketPurchaseDetailState.error(
-    DioException exception,
+    Exception exception,
   ) = _Error;
 }

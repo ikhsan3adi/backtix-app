@@ -30,23 +30,34 @@ class TicketModel with _$TicketModel {
     required int stock,
     required int currentStock,
     String? image,
-    required DateTime salesOpenDate,
-    required DateTime purchaseDeadline,
+    DateTime? salesOpenDate,
+    DateTime? purchaseDeadline,
     required DateTime createdAt,
     DateTime? updatedAt,
     EventModel? event,
   }) = _TicketModel;
 
   TicketStatus get status {
-    if (salesOpenDate.toLocal().isAfter(DateTime.now().toLocal())) {
+    if (salesOpenDate?.toLocal().isAfter(DateTime.now()) ?? false) {
       return TicketStatus.notOpenedYet;
-    } else if (purchaseDeadline.toLocal().isBefore(DateTime.now().toLocal())) {
+    } else if (purchaseDeadline?.toLocal().isBefore(DateTime.now()) ?? false) {
       return TicketStatus.closed;
     } else if (currentStock <= 0) {
       return TicketStatus.soldOut;
     }
     return TicketStatus.available;
   }
+
+  static TicketModel dummyTicket = TicketModel(
+    id: '0',
+    name: '-',
+    price: 0,
+    stock: 0,
+    currentStock: 0,
+    salesOpenDate: DateTime(2024),
+    purchaseDeadline: DateTime(2024, 12, 31),
+    createdAt: DateTime(2024),
+  );
 
   factory TicketModel.fromJson(Map<String, dynamic> json) =>
       _$TicketModelFromJson(json);

@@ -2,17 +2,23 @@ import 'dart:ui' show Color;
 
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/auth/auth_helper.dart';
+import 'package:backtix_app/src/blocs/events/create_event/create_event_bloc.dart';
+import 'package:backtix_app/src/blocs/events/edit_event/edit_event_bloc.dart';
 import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dart';
+import 'package:backtix_app/src/blocs/events/my_events/my_events_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/blocs/login/login_bloc.dart';
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/event_ticket_sales/event_ticket_sales_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchase_detail/my_ticket_purchase_detail_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchases/my_ticket_purchases_bloc.dart';
-import 'package:backtix_app/src/blocs/tickets/ticket_purchase/ticket_purchase_bloc.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_purchase_refund/ticket_purchase_refund_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/ticket_sales/ticket_sales_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/upsert_ticket/upsert_ticket_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
@@ -28,10 +34,16 @@ import 'package:backtix_app/src/data/services/remote/payment_service.dart';
 import 'package:backtix_app/src/data/services/remote/ticket_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:midtrans_sdk/midtrans_sdk.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 Future<void> initializeDependencies() async {
+  GetIt.I.registerSingletonAsync<PackageInfo>(
+    () async => await PackageInfo.fromPlatform(),
+  );
+
   GetIt.I.registerSingleton<ThemeModeCubit>(ThemeModeCubit());
   GetIt.I.registerSingleton<OnboardingCubit>(OnboardingCubit());
 
@@ -112,8 +124,8 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerFactory<EventSearchCubit>(
     () => EventSearchCubit(GetIt.I<EventRepository>()),
   );
-  GetIt.I.registerFactory<TicketPurchaseBloc>(
-    () => TicketPurchaseBloc(
+  GetIt.I.registerFactory<TicketOrderBloc>(
+    () => TicketOrderBloc(
       GetIt.I<TicketRepository>(),
       GetIt.I<EventRepository>(),
       GetIt.I<PaymentService>(),
@@ -127,6 +139,25 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<TicketPurchaseRefundCubit>(
     () => TicketPurchaseRefundCubit(GetIt.I<TicketRepository>()),
+  );
+
+  GetIt.I.registerFactory<MyEventsBloc>(
+    () => MyEventsBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<EventTicketSalesCubit>(
+    () => EventTicketSalesCubit(GetIt.I<TicketRepository>()),
+  );
+  GetIt.I.registerFactory<TicketSalesCubit>(
+    () => TicketSalesCubit(GetIt.I<TicketRepository>()),
+  );
+  GetIt.I.registerFactory<CreateEventBloc>(
+    () => CreateEventBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<EditEventBloc>(
+    () => EditEventBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<UpsertTicketCubit>(
+    () => UpsertTicketCubit(GetIt.I<TicketRepository>()),
   );
 }
 
@@ -157,6 +188,7 @@ Future<void> initPaymentService() async {
       colorPrimaryDark: const Color(0xFF21767C),
       colorSecondary: const Color(0xFF40C4FF),
     ),
+    enableLog: kDebugMode,
   );
 
   final sdk = await MidtransSDK.init(config: config);

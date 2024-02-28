@@ -10,7 +10,7 @@ class TicketPurchaseQuery with _$TicketPurchaseQuery {
     @Default(0) int page,
     TicketPurchaseStatus? status,
     TicketPurchaseRefundStatus? refundStatus,
-    bool? used,
+    @Default(false) bool used,
   }) = _TicketPurchaseQuery;
 
   factory TicketPurchaseQuery.fromJson(Map<String, dynamic> json) =>

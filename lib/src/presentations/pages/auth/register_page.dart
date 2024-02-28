@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/auth/register_user_model.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -49,18 +49,18 @@ class RegisterPage extends StatelessWidget {
                   state.whenOrNull(
                     success: (user, auth, isRegistered) {
                       if (auth != null && (isRegistered)) {
-                        Fluttertoast.showToast(msg: 'User has been registered');
+                        Toast.show(context, msg: 'User has been registered');
                         return context
                             .read<AuthBloc>()
                             .add(AuthEvent.authenticate(newAuth: auth));
                       } else if (user != null) {
-                        Fluttertoast.showToast(msg: 'User register successful');
+                        Toast.show(context, msg: 'User register successful');
                         return context.goNamed(
                           RouteNames.login,
                           queryParameters: {'username': user.username},
                         );
                       }
-                      Fluttertoast.showToast(msg: 'Sign up failed, try again');
+                      Toast.show(context, msg: 'Sign up failed, try again');
                     },
                     error: (error) => ErrorDialog.show(context, error),
                   );
@@ -113,6 +113,8 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
 
   final _obscurePassword = ValueNotifier(true);
 
+  final _debouncer = Debouncer();
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -121,6 +123,8 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _obscurePassword.dispose();
+    _formKey.currentState?.dispose();
+    _debouncer.dispose();
     super.dispose();
   }
 
@@ -199,6 +203,8 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
   late final formWidgets = [
     CustomTextFormField(
       controller: _emailController,
+      debounce: true,
+      debouncer: _debouncer,
       validator: Validatorless.multiple([
         Validatorless.email('Value is not email'),
         Validatorless.required('Email required'),
@@ -211,12 +217,10 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
     const SizedBox(height: 8),
     CustomTextFormField(
       controller: _usernameController,
+      debounce: true,
+      debouncer: _debouncer,
       validator: Validatorless.multiple([
-        Validatorless.between(
-          3,
-          16,
-          'Must have between 3 and 16 character',
-        ),
+        Validatorless.between(3, 16, 'Must have between 3 and 16 character'),
         Validatorless.required('Username required'),
       ]),
       decoration: const InputDecoration(
@@ -227,6 +231,8 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
     const SizedBox(height: 8),
     CustomTextFormField(
       controller: _fullnameController,
+      debounce: true,
+      debouncer: _debouncer,
       validator: Validatorless.required('Full name required'),
       decoration: const InputDecoration(
         labelText: 'Enter your full name',
@@ -240,6 +246,8 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
         return CustomTextFormField(
           controller: _passwordController,
           obscureText: value,
+          debounce: true,
+          debouncer: _debouncer,
           validator: Validatorless.multiple([
             Validatorless.required('Password required'),
             Validatorless.between(8, 64, 'Must have minimum 8 character'),
@@ -270,6 +278,8 @@ class _RegisterUserFormState extends State<_RegisterUserForm> {
     CustomTextFormField(
       controller: _confirmPasswordController,
       obscureText: true,
+      debounce: true,
+      debouncer: _debouncer,
       validator: Validatorless.multiple([
         Validatorless.between(8, 64, 'Must have minimum 8 character'),
         Validatorless.required('Password confirmation required'),

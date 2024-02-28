@@ -1,7 +1,8 @@
 import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_order_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_model.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,17 +13,22 @@ import 'package:intl/intl.dart';
 class TicketOrderCard extends StatelessWidget {
   const TicketOrderCard({
     super.key,
+    this.event,
     required this.ticket,
   });
 
+  final EventModel? event;
   final TicketModel ticket;
 
   @override
   Widget build(BuildContext context) {
-    final dateStart =
-        DateFormat('dd/MM/yy').format(ticket.salesOpenDate.toLocal());
-    final dateEnd =
-        ' - ${DateFormat('dd/MM/yy').format(ticket.purchaseDeadline.toLocal())}';
+    final dateStart = (ticket.salesOpenDate ?? event?.date) == null
+        ? ''
+        : DateFormat('dd/MM/yy')
+            .format(ticket.salesOpenDate?.toLocal() ?? event!.date);
+    final dateEnd = (ticket.purchaseDeadline ?? event?.endDate) == null
+        ? ''
+        : ' - ${DateFormat('dd/MM/yy').format(ticket.purchaseDeadline?.toLocal() ?? event!.endDate!)}';
 
     final dateText = '$dateStart$dateEnd';
 

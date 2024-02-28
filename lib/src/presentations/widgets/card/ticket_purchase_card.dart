@@ -1,8 +1,8 @@
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchases/my_ticket_purchases_bloc.dart';
 import 'package:backtix_app/src/config/constant.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_status_enum.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,16 +61,19 @@ class TicketPurchaseCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          MarqueeWidget(
-                            child: Text(
-                              ticket?.name ?? purchase.ticketId,
-                              style: context.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
+                          Expanded(
+                            child: MarqueeWidget(
+                              child: Text(
+                                ticket?.name ?? purchase.ticketId,
+                                style: context.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          const SizedBox(width: 8),
                           _StatusBadge(purchase: purchase),
                         ],
                       ),

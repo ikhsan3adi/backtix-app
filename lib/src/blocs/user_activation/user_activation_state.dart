@@ -5,5 +5,5 @@ class UserActivationState with _$UserActivationState {
   const factory UserActivationState.initial() = _Initial;
   const factory UserActivationState.loading() = _Loading;
   const factory UserActivationState.success(UserModel userModel) = _Success;
-  const factory UserActivationState.error(DioException exception) = _Error;
+  const factory UserActivationState.error(Exception exception) = _Error;
 }

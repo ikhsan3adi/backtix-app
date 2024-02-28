@@ -1,5 +1,5 @@
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -167,12 +167,17 @@ class PublishedEventCard extends StatelessWidget {
                               : Colors.red,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          event.location,
-                          style: TextStyle(
-                            color: event.isEnded
-                                ? context.theme.disabledColor
-                                : null,
+                        Flexible(
+                          child: Text(
+                            event.location,
+                            style: TextStyle(
+                              color: event.isEnded
+                                  ? context.theme.disabledColor
+                                  : null,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            maxLines: 2,
                           ),
                         ),
                       ],

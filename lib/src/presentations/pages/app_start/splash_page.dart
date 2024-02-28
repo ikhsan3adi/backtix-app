@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
+import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -44,7 +45,7 @@ class SplashPage extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    'BACKTIX',
+                    Constant.appName.toUpperCase(),
                     style: context.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),

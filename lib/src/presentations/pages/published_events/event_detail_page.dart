@@ -1,7 +1,8 @@
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_order_page.dart';
 import 'package:backtix_app/src/presentations/pages/webview_page.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
@@ -20,7 +21,10 @@ class EventDetailPage extends StatelessWidget {
     this.name,
     this.heroImageTag,
     this.heroImageUrl,
+    this.isPublishedEvent = true,
   });
+
+  final bool isPublishedEvent;
 
   final String id;
   final String? name;
@@ -30,8 +34,13 @@ class EventDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          GetIt.I<PublishedEventDetailCubit>()..getPublishedEventDetail(id),
+      create: (_) {
+        if (isPublishedEvent) {
+          return GetIt.I<PublishedEventDetailCubit>()
+            ..getPublishedEventDetail(id);
+        }
+        return GetIt.I<PublishedEventDetailCubit>()..getMyEventDetail(id);
+      },
       child: Builder(builder: (context) {
         return Scaffold(
           body: _EventDetailPage(
@@ -39,6 +48,7 @@ class EventDetailPage extends StatelessWidget {
             name: name,
             heroImageTag: heroImageTag,
             heroImageUrl: heroImageUrl,
+            isPublishedEvent: isPublishedEvent,
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
@@ -49,7 +59,45 @@ class EventDetailPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(child: _ctaButton),
+                  if (isPublishedEvent)
+                    Expanded(child: _ctaButton)
+                  else ...[
+                    Expanded(
+                      child: FilledButton.tonal(
+                        onPressed: () => context.goNamed(
+                          RouteNames.eventTicketRefundRequest,
+                          pathParameters: {'id': id},
+                        ),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: context.colorScheme.errorContainer,
+                        ),
+                        child: Text(
+                          'Ticket refund request',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: context.colorScheme.onErrorContainer,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () => context.goNamed(
+                          RouteNames.eventTicketSales,
+                          pathParameters: {'id': id},
+                        ),
+                        icon: const FaIcon(
+                          FontAwesomeIcons.ticket,
+                          size: 18,
+                        ),
+                        label: const Text(
+                          'Ticket sales',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -91,12 +139,15 @@ class _EventDetailPage extends StatefulWidget {
     this.name,
     this.heroImageTag,
     this.heroImageUrl,
+    required this.isPublishedEvent,
   });
 
   final String id;
   final String? name;
   final Object? heroImageTag;
   final String? heroImageUrl;
+
+  final bool isPublishedEvent;
 
   @override
   State<_EventDetailPage> createState() => _EventDetailPageState();
@@ -134,8 +185,10 @@ class _EventDetailPageState extends State<_EventDetailPage> {
       child: RefreshIndicator.adaptive(
         onRefresh: () async {
           final bloc = context.read<PublishedEventDetailCubit>();
-          bloc.state.mapOrNull(loaded: (state) async {
-            await bloc.getPublishedEventDetail(widget.id);
+          await bloc.state.mapOrNull(loaded: (state) async {
+            widget.isPublishedEvent
+                ? await bloc.getPublishedEventDetail(widget.id)
+                : await bloc.getMyEventDetail(widget.id);
           });
         },
         child: CustomScrollView(
@@ -157,19 +210,48 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                 },
               ),
               leading: ValueListenableBuilder(
-                  valueListenable: _isAppBarExpanded,
-                  builder: (_, isExpanded, __) {
-                    return IconButton(
-                      style: IconButton.styleFrom(
-                        backgroundColor: isExpanded ? Colors.black38 : null,
+                valueListenable: _isAppBarExpanded,
+                builder: (_, isExpanded, __) {
+                  return IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: isExpanded ? Colors.black38 : null,
+                    ),
+                    onPressed: () => context.pop(),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: isExpanded ? Colors.white : null,
+                    ),
+                  );
+                },
+              ),
+              actions: widget.isPublishedEvent
+                  ? null
+                  : [
+                      SizedBox(
+                        height: kToolbarHeight,
+                        width: kToolbarHeight,
+                        child: ValueListenableBuilder(
+                          valueListenable: _isAppBarExpanded,
+                          builder: (_, isExpanded, __) {
+                            return IconButton(
+                              onPressed: () => context.goNamed(
+                                RouteNames.editEvent,
+                                pathParameters: {'id': widget.id},
+                              ),
+                              tooltip: 'Edit',
+                              style: IconButton.styleFrom(
+                                backgroundColor:
+                                    isExpanded ? Colors.black38 : null,
+                              ),
+                              icon: Icon(
+                                Icons.edit,
+                                color: isExpanded ? Colors.white : null,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      onPressed: () => context.pop(),
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: isExpanded ? Colors.white : null,
-                      ),
-                    );
-                  }),
+                    ],
               flexibleSpace: FlexibleSpaceBar(
                 background: EventDetailImagesCarousel(
                   heroImageTag: widget.heroImageTag,
@@ -185,7 +267,10 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                 top: 16,
                 bottom: 100,
               ),
-              sliver: _EventInfo(name: widget.name),
+              sliver: _EventInfo(
+                name: widget.name,
+                isPublishedEvent: widget.isPublishedEvent,
+              ),
             ),
           ],
         ),
@@ -195,8 +280,9 @@ class _EventDetailPageState extends State<_EventDetailPage> {
 }
 
 class _EventInfo extends StatefulWidget {
-  const _EventInfo({this.name});
+  const _EventInfo({this.name, required this.isPublishedEvent});
   final String? name;
+  final bool isPublishedEvent;
 
   @override
   State<_EventInfo> createState() => _EventInfoState();
@@ -233,177 +319,258 @@ class _EventInfoState extends State<_EventInfo> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 12),
-            ...state.maybeMap(
-              orElse: () => _loadingWidget,
-              loaded: (state) {
-                final event = state.event;
-                final dateStart =
-                    '${_dateFormat.format(event.date.toLocal())} $_timeZoneName';
-                final dateEnd = event.endDate == null
-                    ? ''
-                    : '${_dateFormat.format(event.endDate!.toLocal())} $_timeZoneName';
-
-                return [
-                  _eventDescription(event, context),
-                  const Divider(height: 32),
-
-                  // Event start date
-                  DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: event.isEnded ? context.theme.disabledColor : null,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    child: Row(
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.calendarDay,
-                          size: 18,
-                          color: event.isEnded
-                              ? context.theme.disabledColor
-                              : context.colorScheme.primary,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text('Start date'),
-                        const Spacer(),
-                        Text(dateStart),
-                      ],
-                    ),
-                  ),
-
-                  // Event end date
-                  if (event.endDate != null) ...[
-                    const SizedBox(height: 8),
-                    DefaultTextStyle.merge(
-                      style: TextStyle(
-                        color:
-                            event.isEnded ? context.theme.disabledColor : null,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      child: Row(
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.calendarCheck,
-                            size: 18,
-                            color: event.isEnded
-                                ? context.theme.disabledColor
-                                : context.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text('End date'),
-                          const Spacer(),
-                          Text(dateEnd),
-                        ],
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 8),
-
-                  // Event location
-                  InkWell(
-                    onTap: !event.isLatLongSet
-                        ? null
-                        : () async {
-                            await WebViewPage.showAsBottomSheet(
-                              context,
-                              url: Constant.googleMapsUrlFromLatLong(
-                                lat: event.latitude!,
-                                long: event.longitude!,
-                              ),
-                              title: event.location,
-                            );
-                          },
-                    child: DefaultTextStyle.merge(
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: event.isEnded
-                            ? context.theme.disabledColor
-                            : event.isLatLongSet
-                                ? context.colorScheme.primary
-                                : null,
-                        decoration: TextDecoration.underline,
-                        decorationColor: event.isLatLongSet
-                            ? context.colorScheme.primary
-                            : null,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.locationDot,
-                                size: 18,
-                                color: event.isEnded
-                                    ? context.theme.disabledColor
-                                    : Colors.red,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(event.location),
-                            ],
-                          ),
-                          if (event.isLatLongSet)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              child: FaIcon(
-                                FontAwesomeIcons.mapLocationDot,
-                                color: event.isEnded
-                                    ? context.theme.disabledColor
-                                    : context.colorScheme.primary,
-                              ),
+            state.maybeWhen(
+              loaded: (event) => Row(
+                children: [
+                  const Text('Categories:  '),
+                  Flexible(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      height: 30,
+                      child: ListView.separated(
+                        itemCount: event.categories.length,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (_, __) => const SizedBox(width: 6),
+                        itemBuilder: (_, index) {
+                          final category = event.categories[index];
+                          return Chip(
+                            label: Text(
+                              category,
+                              style: context.textTheme.labelMedium,
                             ),
-                        ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-
-                  // Event owner user
-                  ListTile(
-                    onTap: () {}, // TODO: goto user profile?????
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      backgroundImage: event.user?.image == null
-                          ? null
-                          : CachedNetworkImageProvider(event.user!.image!),
-                    ),
-                    title: Text(
-                      event.user?.fullname ?? 'Unknown',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    subtitle: Text(
-                      '@${event.user?.username} | ${event.user?.email}',
-                    ),
-                  ),
-                  const Divider(height: 48),
-
-                  // Tickets
-                  Text(
-                    'Tickets',
-                    style: context.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ...List.generate(
-                    event.tickets?.length ?? 0,
-                    (i) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: EventDetailTicketCard(ticket: event.tickets![i]),
-                    ),
-                  ),
-                ];
-              },
+                ],
+              ),
+              orElse: () => const SizedBox(height: 12),
+            ),
+            ...state.maybeWhen(
+              orElse: () => _loadingWidget,
+              loaded: (event) => _loadedWIdgets(context, event),
             ),
           ],
         );
       },
     );
+  }
+
+  List<Widget> _loadedWIdgets(
+    BuildContext context,
+    EventModel event,
+  ) {
+    final dateStart =
+        '${_dateFormat.format(event.date.toLocal())} $_timeZoneName';
+    final dateEnd = event.endDate == null
+        ? ''
+        : '${_dateFormat.format(event.endDate!.toLocal())} $_timeZoneName';
+
+    return [
+      _eventDescription(event, context),
+      const Divider(height: 32),
+
+      // Event start date
+      DefaultTextStyle.merge(
+        style: TextStyle(
+          color: event.isEnded ? context.theme.disabledColor : null,
+          fontWeight: FontWeight.w500,
+        ),
+        child: Row(
+          children: [
+            FaIcon(
+              FontAwesomeIcons.calendarDay,
+              size: 18,
+              color: event.isEnded
+                  ? context.theme.disabledColor
+                  : context.colorScheme.primary,
+            ),
+            const SizedBox(width: 8),
+            const Text('Start date'),
+            const Spacer(),
+            Text(dateStart),
+          ],
+        ),
+      ),
+
+      // Event end date
+      if (event.endDate != null) ...[
+        const SizedBox(height: 8),
+        DefaultTextStyle.merge(
+          style: TextStyle(
+            color: event.isEnded ? context.theme.disabledColor : null,
+            fontWeight: FontWeight.w500,
+          ),
+          child: Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.calendarCheck,
+                size: 18,
+                color: event.isEnded
+                    ? context.theme.disabledColor
+                    : context.colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              const Text('End date'),
+              const Spacer(),
+              Text(dateEnd),
+            ],
+          ),
+        ),
+      ],
+      const SizedBox(height: 8),
+
+      // Event location
+      InkWell(
+        onTap: !event.isLatLongSet
+            ? null
+            : () async {
+                await WebViewPage.showAsBottomSheet(
+                  context,
+                  url: Constant.googleMapsUrlFromLatLong(
+                    lat: event.latitude!,
+                    long: event.longitude!,
+                  ),
+                  title: event.location,
+                );
+              },
+        child: DefaultTextStyle.merge(
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: event.isEnded
+                ? context.theme.disabledColor
+                : event.isLatLongSet
+                    ? context.colorScheme.primary
+                    : null,
+            decoration: TextDecoration.underline,
+            decorationColor:
+                event.isLatLongSet ? context.colorScheme.primary : null,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.locationDot,
+                      size: 18,
+                      color: event.isEnded
+                          ? context.theme.disabledColor
+                          : Colors.red,
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        event.location,
+                        softWrap: true,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (event.isLatLongSet)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: FaIcon(
+                    FontAwesomeIcons.mapLocationDot,
+                    color: event.isEnded
+                        ? context.theme.disabledColor
+                        : context.colorScheme.primary,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+      const SizedBox(height: 8),
+
+      // Event owner user
+      ListTile(
+        onTap: () {}, // TODO: goto user profile?????
+        contentPadding: EdgeInsets.zero,
+        leading: CircleAvatar(
+          backgroundImage: event.user?.image == null
+              ? null
+              : CachedNetworkImageProvider(event.user!.image!),
+        ),
+        title: Text(
+          event.user?.fullname ?? 'Unknown',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(
+          '@${event.user?.username} | ${event.user?.email}',
+        ),
+      ),
+      const Divider(height: 48),
+
+      // Tickets
+      Text(
+        'Tickets',
+        style: context.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      const SizedBox(height: 14),
+      if (!widget.isPublishedEvent)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: AddTicketCard(
+            size: 75,
+            onTap: () async {
+              final success = await UpsertTicketDialog.show(
+                context,
+                eventId: event.id,
+              );
+              if ((success ?? false) && context.mounted) {
+                context
+                    .read<PublishedEventDetailCubit>()
+                    .getMyEventDetail(event.id);
+              }
+            },
+          ),
+        ),
+      ...event.tickets!.map(
+        (ticket) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: EventDetailTicketCard(
+            event: event,
+            ticket: ticket,
+            onTap: widget.isPublishedEvent
+                ? null
+                : () => context.goNamed(
+                      RouteNames.salesByTicket,
+                      pathParameters: {
+                        'id': event.id,
+                        'ticketId': ticket.id,
+                      },
+                    ),
+            onEdit: widget.isPublishedEvent
+                ? null
+                : () async {
+                    final edited = await UpsertTicketDialog.show(
+                      context,
+                      ticket: ticket,
+                    );
+                    if (context.mounted && (edited ?? false)) {
+                      context
+                          .read<PublishedEventDetailCubit>()
+                          .getMyEventDetail(event.id);
+                    }
+                  },
+          ),
+        ),
+      ),
+    ];
   }
 
   Widget _eventDescription(EventModel event, BuildContext context) {

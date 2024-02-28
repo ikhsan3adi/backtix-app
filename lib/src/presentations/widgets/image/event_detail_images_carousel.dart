@@ -1,5 +1,5 @@
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -72,10 +72,11 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
 
               return Stack(
                 alignment: Alignment.center,
+                fit: StackFit.expand,
                 children: [
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: widget.height,
+                      height: widget.height + 72,
                       enableInfiniteScroll: false,
                       padEnds: false,
                       viewportFraction: 1,
@@ -94,9 +95,12 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
                             doubleTapZoomable: true,
                             swipeDismissible: true,
                           ),
-                          child: CustomNetworkImage(
-                            src: images[index].image,
-                            cached: index < 5,
+                          child: AspectRatio(
+                            aspectRatio: 2,
+                            child: CustomNetworkImage(
+                              src: images[index].image,
+                              cached: index < 5,
+                            ),
                           ),
                         );
                       },
@@ -107,33 +111,36 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.black54,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 6,
-                          ),
-                          margin: const EdgeInsets.all(8),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints.loose(
-                              Size.fromWidth(context.width * .72),
-                            ),
-                            child: MarqueeWidget(
-                              pauseDuration: const Duration(seconds: 2),
-                              child: ValueListenableBuilder(
-                                valueListenable: _indexNotifier,
-                                builder: (_, index, __) {
-                                  return Text(
-                                    images[index].description,
-                                    style: const TextStyle(color: Colors.white),
-                                  );
-                                },
+                        ValueListenableBuilder(
+                          valueListenable: _indexNotifier,
+                          builder: (_, index, __) {
+                            if (images[index].description.trim().isEmpty) {
+                              return const SizedBox();
+                            }
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.black54,
                               ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 6,
+                              ),
+                              margin: const EdgeInsets.all(8),
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints.loose(
+                                  Size.fromWidth(context.width * .72),
+                                ),
+                                child: MarqueeWidget(
+                                  pauseDuration: const Duration(seconds: 2),
+                                  child: Text(
+                                    images[index].description.trim(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         Container(
                           decoration: BoxDecoration(

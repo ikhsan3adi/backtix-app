@@ -15,6 +15,7 @@ class EventModel with _$EventModel {
     required String id,
     required String name,
     required String description,
+    @Default([]) List<String> categories,
     required DateTime date,
     DateTime? endDate,
     required String location,
@@ -29,6 +30,10 @@ class EventModel with _$EventModel {
     List<TicketModel>? tickets,
     UserModel? user,
   }) = _EventModel;
+
+  bool get isOnGoing {
+    return isEnded ? false : date.toLocal().isBefore(DateTime.now().toLocal());
+  }
 
   bool get isEnded {
     return endDate?.toLocal().isBefore(DateTime.now().toLocal()) ?? false;

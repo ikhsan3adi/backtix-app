@@ -1,4 +1,4 @@
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 

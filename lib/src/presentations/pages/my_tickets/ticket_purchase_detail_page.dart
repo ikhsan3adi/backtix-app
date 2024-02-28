@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchase_detail/my_ticket_purchase_detail_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
+import 'package:backtix_app/src/data/models/ticket/ticket_purchase_status_enum.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,29 +17,55 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TicketPurchaseDetailPage extends StatelessWidget {
-  const TicketPurchaseDetailPage({super.key, required this.uid});
+  const TicketPurchaseDetailPage({
+    super.key,
+    required this.uid,
+    this.asEventOwner = false,
+  });
 
   final String uid;
+  final bool asEventOwner;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colorScheme.inversePrimary,
-      body: ResponsivePadding(
-        child: BlocProvider(
-          create: (_) => GetIt.I<MyTicketPurchaseDetailCubit>()
-            ..getTicketPurchaseDetail(uid),
-          child: _TicketPurchaseDetail(uid: uid),
-        ),
-      ),
+    return BlocProvider(
+      create: (_) {
+        return GetIt.I<MyTicketPurchaseDetailCubit>()
+          ..getTicketPurchaseDetail(uid);
+      },
+      child: Builder(builder: (context) {
+        return BlocBuilder<MyTicketPurchaseDetailCubit,
+            MyTicketPurchaseDetailState>(
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: state.maybeWhen(
+                loaded: (p) {
+                  if (p.refundStatus == TicketPurchaseRefundStatus.refunded) {
+                    return context.colorScheme.errorContainer;
+                  }
+                  return context.colorScheme.inversePrimary;
+                },
+                orElse: () => context.colorScheme.inversePrimary,
+              ),
+              body: ResponsivePadding(
+                child: _TicketPurchaseDetail(
+                  uid: uid,
+                  asEventOwner: asEventOwner,
+                ),
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 }
 
 class _TicketPurchaseDetail extends StatelessWidget {
-  const _TicketPurchaseDetail({required this.uid});
+  const _TicketPurchaseDetail({required this.uid, required this.asEventOwner});
 
   final String uid;
+  final bool asEventOwner;
 
   @override
   Widget build(BuildContext context) {
@@ -52,15 +78,42 @@ class _TicketPurchaseDetail extends StatelessWidget {
       },
       child: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            centerTitle: true,
-            title: const Text(
-              'Ticket',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            foregroundColor: context.colorScheme.onSurface,
-            backgroundColor: context.colorScheme.inversePrimary,
-            // forceMaterialTransparency: true,
+          BlocBuilder<MyTicketPurchaseDetailCubit, MyTicketPurchaseDetailState>(
+            builder: (context, state) {
+              return SliverAppBar(
+                centerTitle: true,
+                title: Text(
+                  state.maybeWhen(
+                    loaded: (p) => switch (p.refundStatus) {
+                      TicketPurchaseRefundStatus.refunded =>
+                        'Ticket (Refunded)',
+                      _ => 'Ticket',
+                    },
+                    orElse: () => 'Ticket',
+                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                foregroundColor: state.maybeWhen(
+                  loaded: (p) {
+                    if (p.refundStatus == TicketPurchaseRefundStatus.refunded) {
+                      return context.colorScheme.onErrorContainer;
+                    }
+                    return context.colorScheme.onSurface;
+                  },
+                  orElse: () => context.colorScheme.onSurface,
+                ),
+                backgroundColor: state.maybeWhen(
+                  loaded: (p) {
+                    if (p.refundStatus == TicketPurchaseRefundStatus.refunded) {
+                      return context.colorScheme.errorContainer;
+                    }
+                    return context.colorScheme.inversePrimary;
+                  },
+                  orElse: () => context.colorScheme.inversePrimary,
+                ),
+                // forceMaterialTransparency: true,
+              );
+            },
           ),
           BlocConsumer<MyTicketPurchaseDetailCubit,
               MyTicketPurchaseDetailState>(
@@ -73,7 +126,7 @@ class _TicketPurchaseDetail extends StatelessWidget {
               return state.map(
                 error: (state) => _errorWidget(
                   context,
-                  exception: state.exception,
+                  exception: state.exception as DioException,
                 ),
                 loading: (_) => _loadingWidget(context),
                 loaded: (state) {
@@ -90,11 +143,16 @@ class _TicketPurchaseDetail extends StatelessWidget {
                     ),
                     sliver: SliverList.list(
                       children: [
-                        ticketWidget,
-                        _Buttons(
-                          ticketPurchase: ticketPurchase,
-                          ticketWidget: ticketWidget,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Flexible(child: ticketWidget)],
                         ),
+                        asEventOwner
+                            ? _EventOwnerButtons(purchase: ticketPurchase)
+                            : _Buttons(
+                                ticketPurchase: ticketPurchase,
+                                ticketWidget: ticketWidget,
+                              ),
                       ],
                     ),
                   );
@@ -177,14 +235,15 @@ class _Buttons extends StatelessWidget {
           ? await getExternalStorageDirectory() ??
               await getApplicationDocumentsDirectory()
           : await getApplicationDocumentsDirectory();
-      final path = '${dir.path}/BackTix';
+      final path = '${dir.path}${Platform.pathSeparator}BackTix';
 
       if (!Directory(path).existsSync()) {
         Directory(path).createSync(recursive: true);
       }
 
       final filename = '${ticketPurchase.uid}_${ticketPurchase.orderId}.png';
-      final imageFile = await File('$path/$filename').writeAsBytes(image);
+      final imageFile = await File('$path${Platform.pathSeparator}$filename')
+          .writeAsBytes(image);
 
       if (Platform.isLinux && context.mounted) {
         return context.showSimpleTextSnackBar(
@@ -264,12 +323,18 @@ class _Buttons extends StatelessWidget {
                     await ConfirmTicketRefundDialog.show(
                       context,
                       ticketPurchase: ticketPurchase,
+                      onConfirm: (cubit) async {
+                        return await cubit.refundTicketPurchase(
+                          ticketPurchase.uid,
+                        );
+                      },
                     ).then((refunded) {
                       if (refunded ?? false) {
-                        Fluttertoast.showToast(
+                        Toast.show(
+                          context,
                           msg: 'Refund request successful',
                         );
-                        context.pop();
+                        context.pop(true);
                       }
                     });
                   },
@@ -279,6 +344,103 @@ class _Buttons extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _EventOwnerButtons extends StatelessWidget {
+  const _EventOwnerButtons({required this.purchase});
+
+  final TicketPurchaseModel purchase;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 54,
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (purchase.refundStatus != TicketPurchaseRefundStatus.refunded &&
+              purchase.status == TicketPurchaseStatus.completed)
+            Expanded(
+              child: FilledButton(
+                onPressed: () async {
+                  await ConfirmTicketRefundDialog.show(
+                    context,
+                    ticketPurchase: purchase,
+                    titleText: 'Accept Refund Confirmation',
+                    buttonText: 'Confirm & Accept',
+                    confirmText:
+                        'Are you sure you want to reject the refund request?',
+                    onConfirm: (cubit) async {
+                      return await cubit.acceptTicketRefund(
+                        purchase.uid,
+                      );
+                    },
+                  ).then((success) {
+                    if (success ?? false) {
+                      Toast.show(
+                        context,
+                        msg: 'Accept refund request successful',
+                      );
+                      context.pop(true);
+                    }
+                  });
+                },
+                style: purchase.refundStatus == null
+                    ? FilledButton.styleFrom(
+                        backgroundColor: context.colorScheme.error,
+                        foregroundColor: context.colorScheme.onError,
+                      )
+                    : null,
+                child: Text(
+                  purchase.refundStatus != null
+                      ? 'Accept Refund Request'
+                      : 'Cancel & Refund ticket',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          if (purchase.refundStatus ==
+              TicketPurchaseRefundStatus.refunding) ...[
+            const SizedBox(width: 8),
+            Expanded(
+              child: FilledButton(
+                onPressed: () async {
+                  await ConfirmTicketRefundDialog.show(
+                    context,
+                    ticketPurchase: purchase,
+                    titleText: 'Refuse Refund Confirmation',
+                    buttonText: 'Confirm & Reject',
+                    onConfirm: (cubit) async {
+                      return await cubit.rejectTicketRefund(
+                        purchase.uid,
+                      );
+                    },
+                  ).then((success) {
+                    if (success ?? false) {
+                      Toast.show(
+                        context,
+                        msg: 'Successfully refused refund request',
+                      );
+                      context.pop(true);
+                    }
+                  });
+                },
+                style: FilledButton.styleFrom(
+                  backgroundColor: context.colorScheme.errorContainer,
+                  foregroundColor: context.colorScheme.onErrorContainer,
+                ),
+                child: const Text(
+                  'Refuse Refund Request',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
           ],
         ],

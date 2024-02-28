@@ -1,4 +1,4 @@
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +7,7 @@ class ErrorDialog {
     BuildContext context,
     Exception error,
   ) {
-    return showDialog(
+    return showAdaptiveDialog(
       context: context,
       useSafeArea: true,
       builder: (_) {
@@ -31,7 +31,7 @@ class _NetworkErrorDialog extends StatelessWidget {
     final statusCode = error.response?.statusCode ?? 0;
     final message = error.response?.data['message'] ?? 'An error has occurred';
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
       titleTextStyle: context.textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.w600,
       ),
@@ -119,7 +119,7 @@ class _DefaultErrorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final message = (error as dynamic).message ?? error.toString();
 
-    return AlertDialog(
+    return AlertDialog.adaptive(
       titleTextStyle: context.textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.w600,
       ),

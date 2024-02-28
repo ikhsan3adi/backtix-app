@@ -1,19 +1,24 @@
-import 'package:backtix_app/src/core/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class TicketOrderSuccessDialog extends StatelessWidget {
-  const TicketOrderSuccessDialog({super.key});
+class SuccessBottomSheet extends StatelessWidget {
+  const SuccessBottomSheet({super.key, required this.text});
 
-  static Future<void> show(BuildContext context) {
-    return showModalBottomSheet(
+  static Future<void> show(
+    BuildContext context, {
+    String text = 'Success',
+  }) async {
+    return await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => const TicketOrderSuccessDialog(),
+      builder: (_) => SuccessBottomSheet(text: text),
     );
   }
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +35,23 @@ class TicketOrderSuccessDialog extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Payment successful',
+                text,
                 style: context.textTheme.headlineMedium,
+                textAlign: TextAlign.center,
               ),
             ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: SizedBox(
-          height: 100,
+          height: 72,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 8,
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
                   child: FilledButton(

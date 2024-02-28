@@ -1,9 +1,10 @@
+import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
-import 'package:backtix_app/src/core/extensions/extensions.dart';
 import 'package:backtix_app/src/data/models/event/event_filter.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
-import 'package:backtix_app/src/data/models/user/user_model.dart';
+import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,7 +60,8 @@ class _HomePageState extends State<HomePage> {
             bloc.add(PublishedEventsEvent.getPublishedEvents(
               state.query.copyWith(page: 0),
               refreshNearbyEvents: true,
-              isUserLocationSet: context.read<UserModel>().isUserLocationSet,
+              isUserLocationSet:
+                  context.read<AuthBloc>().user?.isUserLocationSet,
             ));
           });
         },
@@ -81,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                       fillOverscroll: true,
                       hasScrollBody: false,
                       child: LoadNewListDataWidget(
-                        reachedMax: state.hasReachedMax ?? false,
+                        reachedMax: state.hasReachedMax,
                       ),
                     );
                   },
@@ -123,7 +125,7 @@ class _SliverAppBarState extends State<_SliverAppBar> {
           leading: hideSearchBar ? const ThemeToggleIconButton() : null,
           title: hideSearchBar
               ? Text(
-                  'BACKTIX',
+                  Constant.appName.toUpperCase(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: context.colorScheme.primary,
@@ -172,7 +174,7 @@ class _FilterChips extends StatelessWidget {
             : loadedState.query.copyWith(page: 0);
         final event = GetPublishedEvents(
           query.copyWith(page: 0),
-          isUserLocationSet: context.read<UserModel>().isUserLocationSet,
+          isUserLocationSet: context.read<AuthBloc>().user?.isUserLocationSet,
         );
 
         return ListView(
@@ -370,8 +372,8 @@ class _OtherEventList extends StatelessWidget {
       listener: (_, state) {
         state.mapOrNull(
           loaded: (state) {
-            if (state.error != null) {
-              ErrorDialog.show(context, state.error!);
+            if (state.exception != null) {
+              ErrorDialog.show(context, state.exception!);
             }
           },
         );

@@ -7,7 +7,7 @@ class EventSearchState with _$EventSearchState {
   const factory EventSearchState.loaded(
     List<EventModel> events, {
     required EventQuery query,
-    @Default(false) bool? hasReachedMax,
-    DioException? error,
+    @Default(false) bool hasReachedMax,
+    Exception? exception,
   }) = _Loaded;
 }
