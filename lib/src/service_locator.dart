@@ -18,6 +18,7 @@ import 'package:backtix_app/src/blocs/tickets/my_ticket_purchases/my_ticket_purc
 import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_purchase_refund/ticket_purchase_refund_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_sales/ticket_sales_cubit.dart';
+import 'package:backtix_app/src/blocs/tickets/upsert_ticket/upsert_ticket_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
@@ -154,6 +155,9 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<EditEventBloc>(
     () => EditEventBloc(GetIt.I<EventRepository>()),
+  );
+  GetIt.I.registerFactory<UpsertTicketCubit>(
+    () => UpsertTicketCubit(GetIt.I<TicketRepository>()),
   );
 }
 

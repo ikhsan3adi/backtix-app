@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:backtix_app/src/data/models/purchase/create_ticket_order_model.dart';
 import 'package:backtix_app/src/data/models/purchase/ticket_order_model.dart';
+import 'package:backtix_app/src/data/models/ticket/ticket_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_query.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchases_by_event_model.dart';
@@ -54,4 +57,32 @@ abstract class TicketService {
   Future<HttpResponse<TicketPurchaseModel>> rejectTicketRefund(
     @Path('uid') String uid,
   );
+
+  @POST('events/{id}/tickets')
+  @MultiPart()
+  Future<HttpResponse<TicketModel>> addNewTicket(
+    @Path('id') String eventId, {
+    @Part(name: 'image') File? ticketImageFile,
+    @Part() String? name,
+    @Part() num? price,
+    @Part() int? stock,
+    @Part() String? salesOpenDate,
+    @Part() String? purchaseDeadline,
+  });
+
+  @PATCH('tickets/{id}')
+  @MultiPart()
+  Future<HttpResponse<TicketModel>> updateTicket(
+    @Path('id') String ticketId, {
+    @Part(name: 'image') File? ticketImageFile,
+    @Part() int? additionalStock,
+    @Part() bool? deleteImage,
+    @Part() String? name,
+    @Part() num? price,
+    @Part() String? salesOpenDate,
+    @Part() String? purchaseDeadline,
+  });
+
+  @DELETE('tickets/{id}')
+  Future<HttpResponse<TicketModel>> deleteTicket(@Path('id') String ticketId);
 }
