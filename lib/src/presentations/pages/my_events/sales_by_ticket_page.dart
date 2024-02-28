@@ -107,6 +107,7 @@ class _SalesByTicketState extends State<_SalesByTicket> {
                           vertical: 8,
                         ),
                         child: EventDetailTicketCard(
+                          event: state.purchasesWithTicket.ticket.event,
                           ticket: state.purchasesWithTicket.ticket,
                         ),
                       );

@@ -516,6 +516,7 @@ class _EventInfoState extends State<_EventInfo> {
                     (ticket) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: EventDetailTicketCard(
+                        event: event,
                         ticket: ticket,
                         onTap: widget.isPublishedEvent
                             ? null

@@ -9,19 +9,24 @@ import 'package:intl/intl.dart';
 class EventDetailTicketCard extends StatelessWidget {
   const EventDetailTicketCard({
     super.key,
+    this.event,
     required this.ticket,
     this.onTap,
   });
 
+  final EventModel? event;
   final TicketModel ticket;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final dateStart =
-        DateFormat('dd/MM/yy').format(ticket.salesOpenDate.toLocal());
-    final dateEnd =
-        ' - ${DateFormat('dd/MM/yy').format(ticket.purchaseDeadline.toLocal())}';
+    final dateStart = (ticket.salesOpenDate ?? event?.date) == null
+        ? ''
+        : DateFormat('dd/MM/yy')
+            .format(ticket.salesOpenDate?.toLocal() ?? event!.date);
+    final dateEnd = (ticket.purchaseDeadline ?? event?.endDate) == null
+        ? ''
+        : ' - ${DateFormat('dd/MM/yy').format(ticket.purchaseDeadline?.toLocal() ?? event!.endDate!)}';
 
     final dateText = '$dateStart$dateEnd';
 
