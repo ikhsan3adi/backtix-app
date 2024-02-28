@@ -27,9 +27,7 @@ class NewTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateStart = ticket.salesOpenDate == null
-        ? ''
-        : _dateFormatter.format(ticket.salesOpenDate!.toLocal());
+    final dateStart = _dateFormatter.format(ticket.salesOpenDate.toLocal());
     final dateEnd = ticket.purchaseDeadline == null
         ? ''
         : ' - ${_dateFormatter.format(ticket.purchaseDeadline!.toLocal())}';

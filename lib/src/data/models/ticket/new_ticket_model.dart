@@ -16,7 +16,7 @@ class NewTicketModel with _$NewTicketModel {
     required num price,
     required int stock,
     @Default(false) bool hasImage,
-    DateTime? salesOpenDate,
+    required DateTime salesOpenDate,
     DateTime? purchaseDeadline,
   }) = _NewTicketModel;
 
