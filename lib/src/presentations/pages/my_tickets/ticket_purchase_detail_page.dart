@@ -235,14 +235,15 @@ class _Buttons extends StatelessWidget {
           ? await getExternalStorageDirectory() ??
               await getApplicationDocumentsDirectory()
           : await getApplicationDocumentsDirectory();
-      final path = '${dir.path}/BackTix';
+      final path = '${dir.path}${Platform.pathSeparator}BackTix';
 
       if (!Directory(path).existsSync()) {
         Directory(path).createSync(recursive: true);
       }
 
       final filename = '${ticketPurchase.uid}_${ticketPurchase.orderId}.png';
-      final imageFile = await File('$path/$filename').writeAsBytes(image);
+      final imageFile = await File('$path${Platform.pathSeparator}$filename')
+          .writeAsBytes(image);
 
       if (Platform.isLinux && context.mounted) {
         return context.showSimpleTextSnackBar(
