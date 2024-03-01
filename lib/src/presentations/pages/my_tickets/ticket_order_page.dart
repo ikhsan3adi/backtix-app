@@ -351,7 +351,7 @@ class _BottomWidget extends StatelessWidget {
               state.mapOrNull(
                 loaded: (state) async {
                   if (state.exception != null) {
-                    return await ErrorDialog.show(context, state.exception!);
+                    return ErrorDialog.show(context, state.exception!);
                   }
                 },
               );

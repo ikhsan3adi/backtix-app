@@ -2,22 +2,34 @@ import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+bool _isError = false;
+
 class ErrorDialog {
-  static show(
+  static void show(
     BuildContext context,
     Exception error,
-  ) {
-    return showAdaptiveDialog(
-      context: context,
-      useSafeArea: true,
-      builder: (_) {
-        if (error.runtimeType == DioException) {
-          return _NetworkErrorDialog(error as DioException);
-        }
+  ) async {
+    if (!_isError) {
+      _isError = true;
+      return await showAdaptiveDialog(
+        context: context,
+        useSafeArea: true,
+        builder: (_) {
+          if (error.runtimeType == DioException) {
+            return _NetworkErrorDialog(error as DioException);
+          }
 
-        return _DefaultErrorDialog(error);
-      },
-    );
+          return _DefaultErrorDialog(error);
+        },
+      );
+    }
+  }
+
+  static void hide(BuildContext context) {
+    if (_isError) {
+      _isError = false;
+      Navigator.pop(context);
+    }
   }
 }
 
@@ -96,7 +108,10 @@ class _NetworkErrorDialog extends StatelessWidget {
           children: [
             Expanded(
               child: FilledButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  _isError = false;
+                  Navigator.pop(context);
+                },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text('OK'),
@@ -148,7 +163,10 @@ class _DefaultErrorDialog extends StatelessWidget {
           children: [
             Expanded(
               child: FilledButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  _isError = false;
+                  Navigator.pop(context);
+                },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text('OK'),

@@ -181,9 +181,9 @@ class _SalesByTicketState extends State<_SalesByTicket> {
     return BlocConsumer<TicketSalesCubit, TicketSalesState>(
       listener: (context, state) => state.mapOrNull(loaded: (s) async {
         if (s.exception != null) {
-          return await ErrorDialog.show(context, s.exception!);
+          return ErrorDialog.show(context, s.exception!);
         }
-        return null;
+        return;
       }),
       builder: (context, state) {
         /// If list is not scrollable, get more data immediately

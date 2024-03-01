@@ -415,7 +415,7 @@ class _NewEventFormState extends State<_NewEventForm> {
                     }
                   }
                 }).catchError((e) async {
-                  await ErrorDialog.show(
+                  ErrorDialog.show(
                     context,
                     e.runtimeType == Exception
                         ? e as Exception
@@ -568,7 +568,7 @@ class _NewEventFormState extends State<_NewEventForm> {
           },
           error: (exception) async {
             SimpleLoadingDialog.hide(context);
-            return await ErrorDialog.show(
+            return ErrorDialog.show(
               context,
               exception,
             );

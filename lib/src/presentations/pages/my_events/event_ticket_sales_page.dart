@@ -165,9 +165,9 @@ class _TicketPurchasesListState extends State<_TicketPurchasesList> {
           BlocConsumer<EventTicketSalesCubit, EventTicketSalesState>(
             listener: (context, state) => state.mapOrNull(loaded: (s) async {
               if (s.exception != null) {
-                return await ErrorDialog.show(context, s.exception!);
+                return ErrorDialog.show(context, s.exception!);
               }
-              return null;
+              return;
             }),
             builder: (context, state) {
               /// If list is not scrollable, get more data immediately

@@ -420,7 +420,7 @@ class _UpsertTicketDialogState extends State<UpsertTicketDialog> {
           loading: () => SimpleLoadingDialog.show(context),
           error: (err) async {
             SimpleLoadingDialog.hide(context);
-            return await ErrorDialog.show(context, err);
+            return ErrorDialog.show(context, err);
           },
           success: (_) {
             SimpleLoadingDialog.hide(context);
