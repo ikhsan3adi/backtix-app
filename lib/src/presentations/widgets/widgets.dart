@@ -34,6 +34,7 @@ export 'image/custom_network_image.dart';
 export 'image/event_detail_images_carousel.dart';
 export 'image/event_image_picker.dart';
 export 'image/event_image_picker_preview.dart';
+export 'image/event_image_placeholder.dart';
 export 'image/image_error_widget.dart';
 export 'image/ticket_image_placeholder.dart';
 export 'list_view/ticket_purchase_list.dart';

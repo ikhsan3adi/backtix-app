@@ -407,7 +407,8 @@ class _OtherEventList extends StatelessWidget {
                     queryParameters: {
                       'name': events[index].name,
                       'heroImageTag': heroImageTag,
-                      'heroImageUrl': events[index].images[0].image,
+                      if (events[index].images.isNotEmpty)
+                        'heroImageUrl': events[index].images[0].image,
                     },
                   ),
                   event: events[index],

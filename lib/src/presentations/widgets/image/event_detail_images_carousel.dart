@@ -59,6 +59,13 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
                     : const Shimmer(),
             loaded: (state) {
               final images = state.event.images;
+
+              if (images.isEmpty) {
+                return const Center(
+                  child: ImageErrorWidget(text: 'Image not found'),
+                );
+              }
+
               final viewerImageProviders = images
                   .asMap()
                   .map((index, e) => MapEntry(

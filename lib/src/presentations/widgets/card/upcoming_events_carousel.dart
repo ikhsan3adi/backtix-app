@@ -69,7 +69,8 @@ class UpcomingEventsCarousel extends StatelessWidget {
                       queryParameters: {
                         'name': events[index].name,
                         'heroImageTag': heroImageTag,
-                        'heroImageUrl': events[index].images[0].image,
+                        if (events[index].images.isNotEmpty)
+                          'heroImageUrl': events[index].images[0].image,
                       },
                     ),
                     heroImageTag: heroImageTag,
@@ -130,10 +131,12 @@ class _EventCard extends StatelessWidget {
             SizedBox(
               height: height,
               width: double.infinity,
-              child: Hero(
-                tag: heroImageTag ?? event.id,
-                child: CustomNetworkImage(src: event.images[0].image),
-              ),
+              child: event.images.isEmpty
+                  ? const EventImagePlaceholder()
+                  : Hero(
+                      tag: heroImageTag ?? event.id,
+                      child: CustomNetworkImage(src: event.images[0].image),
+                    ),
             ),
             Container(
               height: height,

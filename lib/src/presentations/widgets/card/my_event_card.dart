@@ -58,13 +58,15 @@ class MyEventCard extends StatelessWidget {
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Hero(
-                        tag: heroImageTag ?? event.id,
-                        child: CustomNetworkImage(
-                          src: event.images[0].image,
-                          small: true,
-                        ),
-                      ),
+                      child: event.images.isEmpty
+                          ? const EventImagePlaceholder()
+                          : Hero(
+                              tag: heroImageTag ?? event.id,
+                              child: CustomNetworkImage(
+                                src: event.images[0].image,
+                                small: true,
+                              ),
+                            ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
