@@ -85,4 +85,16 @@ abstract class TicketService {
 
   @DELETE('tickets/{id}')
   Future<HttpResponse<TicketModel>> deleteTicket(@Path('id') String ticketId);
+
+  @POST('purchases/ticket/validate')
+  Future<HttpResponse<TicketPurchaseModel>> validateTicketPurchase({
+    @Field('uid') required String uid,
+    @Field('eventId') required String eventId,
+  });
+
+  @PATCH('purchases/ticket/use')
+  Future<HttpResponse<TicketPurchaseModel>> useTicketPurchase({
+    @Field('uid') required String uid,
+    @Field('eventId') required String eventId,
+  });
 }

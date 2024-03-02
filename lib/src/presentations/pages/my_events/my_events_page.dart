@@ -27,9 +27,18 @@ class MyEventsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: context.colorScheme.primary,
-        onPressed: () => context.goNamed(RouteNames.createNewEvent),
-        label: const Text('New Event'),
-        icon: const Icon(Icons.add),
+        onPressed: () async {
+          final eventId = await ScanTicketEventListDialog.show(context);
+
+          if (eventId != null && context.mounted) {
+            context.goNamed(
+              RouteNames.verifyTicket,
+              pathParameters: {'id': eventId},
+            );
+          }
+        },
+        label: const Text('Scan Ticket'),
+        icon: const Icon(Icons.qr_code_scanner_outlined),
       ),
     );
   }
@@ -84,8 +93,14 @@ class _MyEventsPageState extends State<_MyEventsPage> {
           SliverAppBar(
             pinned: true,
             floating: true,
-            centerTitle: true,
             title: const Text('My Events'),
+            actions: [
+              TextButton.icon(
+                onPressed: () => context.goNamed(RouteNames.createNewEvent),
+                label: const Text('New Event'),
+                icon: const Icon(Icons.add),
+              ),
+            ],
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(50),
               child: SizedBox(
@@ -113,6 +128,7 @@ class _MyEventsPageState extends State<_MyEventsPage> {
                 loaded: (state) {
                   return SliverFillRemaining(
                     fillOverscroll: true,
+                    hasScrollBody: false,
                     child: LoadNewListDataWidget(
                       reachedMax: state.hasReachedMax,
                     ),
