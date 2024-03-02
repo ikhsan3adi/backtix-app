@@ -129,19 +129,26 @@ class EventDetailTicketCard extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    FaIcon(
-                                      FontAwesomeIcons.ticket,
-                                      size: 14,
-                                      color: context.colorScheme.primary,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      'Available stock: ${ticket.currentStock}',
-                                    ),
-                                  ],
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      FaIcon(
+                                        FontAwesomeIcons.ticket,
+                                        size: 14,
+                                        color: context.colorScheme.primary,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: MarqueeWidget(
+                                          child: Text(
+                                            'Available stock: ${ticket.currentStock}',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                const SizedBox(width: 8),
                                 CustomBadge(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 3,

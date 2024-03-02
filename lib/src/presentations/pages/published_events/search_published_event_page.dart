@@ -77,6 +77,7 @@ class _SearchEventPageState extends State<_SearchEventPage> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         scrollBehavior: const MaterialScrollBehavior(),
         slivers: [
@@ -301,7 +302,8 @@ class _EventList extends StatelessWidget {
                     queryParameters: {
                       'name': state.events[index].name,
                       'heroImageTag': state.events[index].id,
-                      'heroImageUrl': state.events[index].images[0].image,
+                      if (state.events[index].images.isNotEmpty)
+                        'heroImageUrl': state.events[index].images[0].image,
                     },
                   ),
                   event: state.events[index],

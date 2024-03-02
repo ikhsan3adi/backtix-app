@@ -54,6 +54,7 @@ class _TicketPurchaseListState extends State<TicketPurchaseList> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         slivers: [
           const SliverPadding(
@@ -133,7 +134,9 @@ class _PurchasesList extends StatelessWidget {
                     queryParameters: {
                       'name': eventWithPurchases.event.name,
                       'heroImageTag': heroImageTag,
-                      'heroImageUrl': eventWithPurchases.event.images[0].image,
+                      if (eventWithPurchases.event.images.isNotEmpty)
+                        'heroImageUrl':
+                            eventWithPurchases.event.images[0].image,
                     },
                   ),
                   onPurchaseTap: (purchase) {

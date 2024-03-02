@@ -52,13 +52,15 @@ class PublishedEventCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Hero(
-                      tag: heroImageTag ?? event.id,
-                      child: CustomNetworkImage(
-                        src: event.images[0].image,
-                        small: true,
-                      ),
-                    ),
+                    event.images.isEmpty
+                        ? const EventImagePlaceholder()
+                        : Hero(
+                            tag: heroImageTag ?? event.id,
+                            child: CustomNetworkImage(
+                              src: event.images[0].image,
+                              small: true,
+                            ),
+                          ),
                     if (event.isEnded)
                       Container(
                         color: Colors.grey.withAlpha(100),

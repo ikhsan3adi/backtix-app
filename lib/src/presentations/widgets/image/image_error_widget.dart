@@ -2,9 +2,14 @@ import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ImageErrorWidget extends StatelessWidget {
-  const ImageErrorWidget({super.key, this.small = false});
+  const ImageErrorWidget({
+    super.key,
+    this.small = false,
+    this.text = 'Image error',
+  });
 
   final bool small;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class ImageErrorWidget extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Image error',
+          text,
           style: small
               ? context.textTheme.bodySmall?.copyWith(
                   color: context.theme.disabledColor,

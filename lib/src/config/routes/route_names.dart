@@ -22,4 +22,7 @@ class RouteNames {
   static const String createNewEvent = 'createNewEvent';
   static const String editEvent = 'editEvent';
   static const String locationPicker = 'locationPicker';
+
+  /// Scan Ticket QR Code
+  static const String verifyTicket = 'verifyTicket';
 }

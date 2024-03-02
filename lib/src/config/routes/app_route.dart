@@ -14,12 +14,14 @@ import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_sales
 import 'package:backtix_app/src/presentations/pages/my_events/my_event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/my_events_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/sales_by_ticket_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_events/verify_ticket_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_history_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_purchase_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/home_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/search_published_event_page.dart';
+import 'package:backtix_app/src/presentations/pages/unsupported_platform_page.dart';
 import 'package:backtix_app/src/presentations/wrappers/navigation_shell.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -41,6 +43,7 @@ class AppRoute {
       debugLogDiagnostics: kDebugMode,
       navigatorKey: rootNavigatorKey,
       redirect: routerNotifier.redirect,
+      refreshListenable: routerNotifier,
       initialLocation: '/',
       routes: [
         GoRoute(
@@ -197,6 +200,19 @@ class AppRoute {
                       },
                       routes: [
                         GoRoute(
+                          name: RouteNames.verifyTicket,
+                          path: 'verify',
+                          parentNavigatorKey: rootNavigatorKey,
+                          builder: (_, state) {
+                            if (VerifyTicketPage.supported) {
+                              return VerifyTicketPage(
+                                eventId: state.pathParameters['id'] ?? '',
+                              );
+                            }
+                            return const UnsupportedPlatformPage();
+                          },
+                        ),
+                        GoRoute(
                           name: RouteNames.eventTicketSales,
                           path: 'sales',
                           parentNavigatorKey: rootNavigatorKey,
@@ -238,7 +254,6 @@ class AppRoute {
           ],
         ),
       ],
-      refreshListenable: routerNotifier,
     );
   }
 }

@@ -53,54 +53,7 @@ class EventDetailPage extends StatelessWidget {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: ResponsivePadding(
-            child: Container(
-              height: 72,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (isPublishedEvent)
-                    Expanded(child: _ctaButton)
-                  else ...[
-                    Expanded(
-                      child: FilledButton.tonal(
-                        onPressed: () => context.goNamed(
-                          RouteNames.eventTicketRefundRequest,
-                          pathParameters: {'id': id},
-                        ),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: context.colorScheme.errorContainer,
-                        ),
-                        child: Text(
-                          'Ticket refund request',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: context.colorScheme.onErrorContainer,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: FilledButton.icon(
-                        onPressed: () => context.goNamed(
-                          RouteNames.eventTicketSales,
-                          pathParameters: {'id': id},
-                        ),
-                        icon: const FaIcon(
-                          FontAwesomeIcons.ticket,
-                          size: 18,
-                        ),
-                        label: const Text(
-                          'Ticket sales',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+            child: isPublishedEvent ? _ctaButton : _ownerCtaButton(context),
           ),
         );
       }),
@@ -108,27 +61,108 @@ class EventDetailPage extends StatelessWidget {
   }
 
   Widget get _ctaButton {
-    return BlocBuilder<PublishedEventDetailCubit, PublishedEventDetailState>(
-      builder: (context, state) {
-        return FilledButton(
-          onPressed: state.maybeMap(
-            loaded: (state) => state.event.isEnded
-                ? null
-                : () async => await TicketOrderPage.show(
-                      context,
-                      eventId: state.event.id,
+    return Container(
+      height: 72,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: BlocBuilder<PublishedEventDetailCubit,
+                PublishedEventDetailState>(
+              builder: (context, state) {
+                return FilledButton(
+                  onPressed: state.maybeMap(
+                    loaded: (state) => state.event.isEnded
+                        ? null
+                        : () async => await TicketOrderPage.show(
+                              context,
+                              eventId: state.event.id,
+                            ),
+                    orElse: () => null,
+                  ),
+                  child: Text(
+                    state.whenOrNull(
+                          loaded: (e) =>
+                              e.isEnded ? 'Event has ended' : 'Get Ticket',
+                        ) ??
+                        'Loading',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _ownerCtaButton(BuildContext context) {
+    return Container(
+      height: 136,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: FilledButton.icon(
+              onPressed: () => context.goNamed(
+                RouteNames.verifyTicket,
+                pathParameters: {'id': id},
+              ),
+              icon: const Icon(Icons.qr_code_scanner_outlined),
+              label: const Text(
+                'Scan Ticket',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: FilledButton.tonal(
+                    onPressed: () => context.goNamed(
+                      RouteNames.eventTicketRefundRequest,
+                      pathParameters: {'id': id},
                     ),
-            orElse: () => null,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: context.colorScheme.errorContainer,
+                    ),
+                    child: Text(
+                      'Ticket refund request',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: context.colorScheme.onErrorContainer,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: () => context.goNamed(
+                      RouteNames.eventTicketSales,
+                      pathParameters: {'id': id},
+                    ),
+                    icon: const FaIcon(
+                      FontAwesomeIcons.ticket,
+                      size: 18,
+                    ),
+                    label: const Text(
+                      'Ticket sales',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Text(
-            state.whenOrNull(
-                  loaded: (e) => e.isEnded ? 'Event has ended' : 'Get Ticket',
-                ) ??
-                'Loading',
-            style: const TextStyle(fontSize: 18),
-          ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
@@ -192,6 +226,7 @@ class _EventDetailPageState extends State<_EventDetailPage> {
           });
         },
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           slivers: [
             SliverAppBar(
@@ -265,7 +300,7 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                 left: 16,
                 right: 16,
                 top: 16,
-                bottom: 100,
+                bottom: 156,
               ),
               sliver: _EventInfo(
                 name: widget.name,

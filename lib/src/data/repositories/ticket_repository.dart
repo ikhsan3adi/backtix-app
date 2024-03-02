@@ -175,4 +175,36 @@ class TicketRepository {
       (error, _) => error as DioException,
     ).run();
   }
+
+  Future<Either<DioException, TicketPurchaseModel>> validateTicketPurchase({
+    required String uid,
+    required String eventId,
+  }) async {
+    return await TaskEither.tryCatch(
+      () async {
+        final response = await _ticketService.validateTicketPurchase(
+          uid: uid,
+          eventId: eventId,
+        );
+        return response.data;
+      },
+      (error, _) => error as DioException,
+    ).run();
+  }
+
+  Future<Either<DioException, TicketPurchaseModel>> useTicketPurchase({
+    required String uid,
+    required String eventId,
+  }) async {
+    return await TaskEither.tryCatch(
+      () async {
+        final response = await _ticketService.useTicketPurchase(
+          uid: uid,
+          eventId: eventId,
+        );
+        return response.data;
+      },
+      (error, _) => error as DioException,
+    ).run();
+  }
 }

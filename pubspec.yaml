@@ -43,14 +43,6 @@ dependencies:
   package_info_plus: ^5.0.1
   window_manager: ^0.3.8
 
-  # location
-  geolocator: ^11.0.0
-  geocoding: ^2.1.1
-  flutter_map: ^6.1.0
-  flutter_map_cancellable_tile_provider: ^2.0.0
-  latlong2: ^0.9.0
-  nominatim_geocoding: ^0.0.6
-
   # data class
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
@@ -80,12 +72,23 @@ dependencies:
   # payment
   midtrans_sdk: ^0.4.0
 
+  # location
+  geolocator: ^11.0.0
+  geocoding: ^2.1.1
+  flutter_map: ^6.1.0
+  flutter_map_cancellable_tile_provider: ^2.0.0
+  latlong2: ^0.9.0
+  nominatim_geocoding: ^0.0.6
+
   # form
   validatorless: ^1.2.3
   regexpattern: ^2.6.0
   input_quantity: ^2.2.0
   image_picker: ^1.0.7
   image_cropper: ^5.0.1
+
+  # qr code scanner
+  mobile_scanner: ^4.0.1
 
   # ui
   go_router: ^13.2.0

@@ -139,6 +139,7 @@ class _TicketPurchasesListState extends State<_TicketPurchasesList> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         slivers: [
           const SliverPadding(
@@ -155,9 +156,9 @@ class _TicketPurchasesListState extends State<_TicketPurchasesList> {
     return BlocConsumer<EventTicketSalesCubit, EventTicketSalesState>(
       listener: (context, state) => state.mapOrNull(loaded: (s) async {
         if (s.exception != null) {
-          return await ErrorDialog.show(context, s.exception!);
+          return ErrorDialog.show(context, s.exception!);
         }
-        return null;
+        return;
       }),
       builder: (context, state) {
         /// If list is not scrollable, get more data immediately

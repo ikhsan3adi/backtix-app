@@ -54,7 +54,11 @@ class TicketOrderBloc extends Bloc<TicketOrderEvent, TicketOrderState> {
     );
 
     return result.fold(
-      (e) => emit(TicketOrderState.loaded(previousState.event, exception: e)),
+      (e) => emit(TicketOrderState.loaded(
+        previousState.event,
+        exception: e,
+        orderSuccess: false,
+      )),
       (orderResult) async {
         if (orderResult.transaction.status == TransactionStatus.pending) {
           final result = await _paymentService.startPaymentFlow(

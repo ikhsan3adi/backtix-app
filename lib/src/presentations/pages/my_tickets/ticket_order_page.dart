@@ -79,6 +79,7 @@ class _TicketList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -350,8 +351,8 @@ class _BottomWidget extends StatelessWidget {
             listener: (_, state) {
               state.mapOrNull(
                 loaded: (state) async {
-                  if (state.exception != null) {
-                    return await ErrorDialog.show(context, state.exception!);
+                  if (state.exception != null && state.orderSuccess == null) {
+                    return ErrorDialog.show(context, state.exception!);
                   }
                 },
               );

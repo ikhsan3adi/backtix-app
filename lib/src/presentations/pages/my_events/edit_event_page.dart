@@ -66,7 +66,7 @@ class EditEventPage extends StatelessWidget {
                 loaded: (event, exception) async {
                   SimpleLoadingDialog.hide(context);
                   if (exception == null) return;
-                  return await ErrorDialog.show(
+                  return ErrorDialog.show(
                     context,
                     exception,
                   );
@@ -74,6 +74,7 @@ class EditEventPage extends StatelessWidget {
               ),
               child: ResponsivePadding(
                 child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [_EditEventForm(eventId: eventId)],
                 ),
               ),
@@ -466,7 +467,7 @@ class _EditEventFormState extends State<_EditEventForm> {
                     }
                   }
                 }).catchError((e) async {
-                  await ErrorDialog.show(
+                  ErrorDialog.show(
                     context,
                     e.runtimeType == Exception
                         ? e as Exception
