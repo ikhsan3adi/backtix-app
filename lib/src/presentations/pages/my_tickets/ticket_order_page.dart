@@ -350,7 +350,7 @@ class _BottomWidget extends StatelessWidget {
             listener: (_, state) {
               state.mapOrNull(
                 loaded: (state) async {
-                  if (state.exception != null) {
+                  if (state.exception != null && state.orderSuccess == null) {
                     return ErrorDialog.show(context, state.exception!);
                   }
                 },

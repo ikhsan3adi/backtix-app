@@ -2,6 +2,7 @@ import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_
 import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,10 +39,16 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
             sliver: SliverList.list(
               children: [
                 BlocListener<TicketOrderBloc, TicketOrderState>(
-                  listener: (context, state) {
+                  listener: (_, state) {
                     state.mapOrNull(
                       loaded: (state) async {
                         if (state.orderSuccess != null) {
+                          if (state.exception != null) {
+                            return ErrorDialog.show(
+                              context,
+                              state.exception!,
+                            );
+                          }
                           return Navigator.pop(context, state.orderSuccess);
                         }
                       },
