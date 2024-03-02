@@ -32,6 +32,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         shrinkWrap: true,
         slivers: [
           SliverPadding(

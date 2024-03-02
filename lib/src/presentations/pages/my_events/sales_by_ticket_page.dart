@@ -76,6 +76,7 @@ class _SalesByTicketState extends State<_SalesByTicket> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         slivers: [
           SliverAppBar(

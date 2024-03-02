@@ -45,6 +45,7 @@ class CreateNewEventPage extends StatelessWidget {
         ),
         body: const ResponsivePadding(
           child: CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             slivers: [_NewEventForm()],
           ),
         ),

@@ -77,6 +77,7 @@ class _TicketPurchaseDetail extends StatelessWidget {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           BlocBuilder<MyTicketPurchaseDetailCubit, MyTicketPurchaseDetailState>(
             builder: (context, state) {

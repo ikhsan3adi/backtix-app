@@ -78,6 +78,7 @@ class _MyEventsPageState extends State<_MyEventsPage> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         slivers: [
           SliverAppBar(

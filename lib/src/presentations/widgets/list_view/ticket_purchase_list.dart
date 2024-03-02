@@ -54,6 +54,7 @@ class _TicketPurchaseListState extends State<TicketPurchaseList> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         slivers: [
           const SliverPadding(

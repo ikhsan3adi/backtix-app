@@ -77,6 +77,7 @@ class _SearchEventPageState extends State<_SearchEventPage> {
         });
       },
       child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         controller: _controller,
         scrollBehavior: const MaterialScrollBehavior(),
         slivers: [

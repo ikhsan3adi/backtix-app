@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
           });
         },
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: _controller,
           scrollBehavior: const MaterialScrollBehavior(),
           slivers: [

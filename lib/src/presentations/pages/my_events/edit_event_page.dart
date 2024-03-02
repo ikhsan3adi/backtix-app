@@ -74,6 +74,7 @@ class EditEventPage extends StatelessWidget {
               ),
               child: ResponsivePadding(
                 child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [_EditEventForm(eventId: eventId)],
                 ),
               ),
