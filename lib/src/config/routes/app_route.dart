@@ -41,6 +41,7 @@ class AppRoute {
       debugLogDiagnostics: kDebugMode,
       navigatorKey: rootNavigatorKey,
       redirect: routerNotifier.redirect,
+      refreshListenable: routerNotifier,
       initialLocation: '/',
       routes: [
         GoRoute(
@@ -238,7 +239,6 @@ class AppRoute {
           ],
         ),
       ],
-      refreshListenable: routerNotifier,
     );
   }
 }
