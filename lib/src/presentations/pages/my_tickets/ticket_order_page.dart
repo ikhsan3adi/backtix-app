@@ -138,7 +138,7 @@ class _PaymentMethodWidget extends StatelessWidget {
         BlocBuilder<CreateTicketOrderCubit, CreateTicketOrderState>(
           builder: (context, order) {
             final balance = context.read<AuthBloc>().state.mapOrNull(
-                  authenticated: (s) => s.user.balance?.balance,
+                  authenticated: (s) => s.user.balance.balance,
                 );
             if (order.paymentMethod == PaymentMethod.balance &&
                 order.totalPrice > (balance ?? 0)) {
@@ -242,7 +242,7 @@ class _BalancePaymentCard extends StatelessWidget {
       builder: (context, order) {
         final bloc = context.read<CreateTicketOrderCubit>();
         final bool selected = order.paymentMethod == PaymentMethod.balance;
-        final balance = context.watch<AuthBloc>().user?.balance?.balance;
+        final balance = context.watch<AuthBloc>().user?.balance.balance;
 
         final foregroundColor = context.isDark
             ? null
