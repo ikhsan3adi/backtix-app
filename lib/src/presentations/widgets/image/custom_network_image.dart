@@ -10,12 +10,14 @@ class CustomNetworkImage extends StatelessWidget {
     this.small = false,
     this.fit = BoxFit.cover,
     this.cached = true,
+    this.errorWidget,
   });
 
   final String src;
   final bool small;
   final BoxFit fit;
   final bool cached;
+  final Widget? errorWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +31,11 @@ class CustomNetworkImage extends StatelessWidget {
         return child;
       },
       errorBuilder: (_, __, ___) {
-        return Container(
-          color: context.isDark ? Colors.grey[800] : Colors.grey[200],
-          child: Center(child: ImageErrorWidget(small: small)),
-        );
+        return errorWidget ??
+            Container(
+              color: context.isDark ? Colors.grey[800] : Colors.grey[200],
+              child: Center(child: ImageErrorWidget(small: small)),
+            );
       },
     );
   }
