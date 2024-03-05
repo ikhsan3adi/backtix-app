@@ -20,6 +20,8 @@ import 'package:backtix_app/src/blocs/tickets/ticket_purchase_refund/ticket_purc
 import 'package:backtix_app/src/blocs/tickets/ticket_sales/ticket_sales_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/upsert_ticket/upsert_ticket_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/verify_ticket/verify_ticket_cubit.dart';
+import 'package:backtix_app/src/blocs/user/reset_password/reset_password_cubit.dart';
+import 'package:backtix_app/src/blocs/user/update_password/update_password_cubit.dart';
 import 'package:backtix_app/src/blocs/user/update_profile/update_profile_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
@@ -166,6 +168,12 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<UpdateProfileCubit>(
     () => UpdateProfileCubit(GetIt.I<UserRepository>()),
+  );
+  GetIt.I.registerFactory<UpdatePasswordCubit>(
+    () => UpdatePasswordCubit(GetIt.I<UserRepository>()),
+  );
+  GetIt.I.registerFactory<ResetPasswordCubit>(
+    () => ResetPasswordCubit(GetIt.I<UserRepository>()),
   );
 }
 

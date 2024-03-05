@@ -28,4 +28,20 @@ abstract class UserService {
     @Part() double? latitude,
     @Part() double? longitude,
   });
+
+  @PATCH('users/my/password')
+  Future<HttpResponse<UserModel>> updateUserPassword({
+    @Field('oldPassword') required String oldPassword,
+    @Field('newPassword') required String newPassword,
+  });
+
+  @NoBody()
+  @POST('users/my/password/reset')
+  Future<HttpResponse<Map<String, String>>> requestPasswordReset();
+
+  @PATCH('users/my/password/reset')
+  Future<HttpResponse<UserModel>> passwordReset({
+    @Field('resetCode') required String resetCode,
+    @Field('newPassword') required String newPassword,
+  });
 }

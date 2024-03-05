@@ -8,6 +8,8 @@ import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dar
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/location_picker_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/my_account_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_account/reset_password_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_account/update_password_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/update_profile_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/create_new_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/edit_event_page.dart';
@@ -274,6 +276,18 @@ class AppRoute {
                           highlightLocationField: highlightLocationField,
                         );
                       },
+                    ),
+                    GoRoute(
+                      name: RouteNames.updatePassword,
+                      path: 'password',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, __) => const UpdatePasswordPage(),
+                    ),
+                    GoRoute(
+                      name: RouteNames.resetPassword,
+                      path: 'password/reset',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, __) => const ResetPasswordPage(),
                     ),
                   ],
                 ),
