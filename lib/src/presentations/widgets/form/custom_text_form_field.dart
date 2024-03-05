@@ -18,6 +18,7 @@ class CustomTextFormField extends StatefulWidget {
     this.decoration = const InputDecoration(),
     this.debounce = false,
     this.debouncer,
+    this.autoFocus = false,
   });
 
   final TextEditingController? controller;
@@ -30,6 +31,7 @@ class CustomTextFormField extends StatefulWidget {
   final InputDecoration? decoration;
   final bool debounce;
   final Debouncer? debouncer;
+  final bool? autoFocus;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -65,6 +67,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     );
 
     return TextFormField(
+      autofocus: widget.autoFocus ?? false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: widget.controller,
       onChanged: (value) {
