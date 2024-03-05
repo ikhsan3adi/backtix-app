@@ -14,4 +14,27 @@ class UserRepository {
       (error, _) => error as DioException,
     ).run();
   }
+
+  Future<Either<DioException, UserWithAuthModel>> updateUser(
+    UpdateUserModel updatedUser,
+  ) async {
+    return await TaskEither.tryCatch(
+      () async {
+        final response = await _userService.updateUser(
+          image: updatedUser.image,
+          deleteImage: updatedUser.deleteImage,
+          username: updatedUser.username,
+          fullname: updatedUser.fullname,
+          email: updatedUser.email,
+          password: updatedUser.password,
+          location: updatedUser.location,
+          latitude: updatedUser.latitude,
+          longitude: updatedUser.longitude,
+        );
+
+        return response.data;
+      },
+      (error, _) => error as DioException,
+    ).run();
+  }
 }

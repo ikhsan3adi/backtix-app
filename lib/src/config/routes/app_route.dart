@@ -8,6 +8,7 @@ import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dar
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/location_picker_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/my_account_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_account/update_profile_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/create_new_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/edit_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_refund_page.dart';
@@ -261,6 +262,19 @@ class AppRoute {
                     return const NoTransitionPage(child: MyAccountPage());
                   },
                   routes: [
+                    GoRoute(
+                      name: RouteNames.updateProfile,
+                      path: 'edit',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        final highlightLocationField = bool.tryParse(
+                          state.uri.queryParameters['location'] ?? 'false',
+                        );
+                        return UpdateProfilePage(
+                          highlightLocationField: highlightLocationField,
+                        );
+                      },
+                    ),
                   ],
                 ),
               ],

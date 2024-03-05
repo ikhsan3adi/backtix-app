@@ -46,10 +46,7 @@ class NearbyEventsCarousel extends StatelessWidget {
                 ),
               ),
               FilledButton(
-                onPressed: () {
-                  // TODO: go to profile to set user location
-                  // TODO: get user location
-                },
+                onPressed: () => context.goNamed(RouteNames.updateProfile),
                 child: const Text('Update my location'),
               ),
             ],
