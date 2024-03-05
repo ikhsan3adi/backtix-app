@@ -25,4 +25,10 @@ class RouteNames {
 
   /// Scan Ticket QR Code
   static const String verifyTicket = 'verifyTicket';
+
+  static const String account = 'account';
+  static const String updateProfile = 'updateProfile';
+  static const String updatePassword = 'updatePassword';
+  static const String resetPassword = 'resetPassword';
+  static const String withdraw = 'withdraw';
 }

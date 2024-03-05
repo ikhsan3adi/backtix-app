@@ -7,6 +7,7 @@ import 'package:backtix_app/src/presentations/pages/auth/login_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/location_picker_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_account/my_account_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/create_new_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/edit_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_refund_page.dart';
@@ -247,6 +248,19 @@ class AppRoute {
                         ),
                       ],
                     ),
+                  ],
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: RouteNames.account,
+                  path: '/${RouteNames.account}',
+                  pageBuilder: (_, __) {
+                    return const NoTransitionPage(child: MyAccountPage());
+                  },
+                  routes: [
                   ],
                 ),
               ],
