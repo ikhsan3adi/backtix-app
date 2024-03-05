@@ -231,7 +231,6 @@ class _EventDetailPageState extends State<_EventDetailPage> {
           slivers: [
             SliverAppBar(
               pinned: true,
-              floating: true,
               expandedHeight: _kExpandedHeight,
               centerTitle: true,
               title: ValueListenableBuilder(
@@ -259,34 +258,32 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                   );
                 },
               ),
-              actions: widget.isPublishedEvent
-                  ? null
-                  : [
-                      SizedBox(
-                        height: kToolbarHeight,
-                        width: kToolbarHeight,
-                        child: ValueListenableBuilder(
-                          valueListenable: _isAppBarExpanded,
-                          builder: (_, isExpanded, __) {
-                            return IconButton(
-                              onPressed: () => context.goNamed(
-                                RouteNames.editEvent,
-                                pathParameters: {'id': widget.id},
-                              ),
-                              tooltip: 'Edit',
-                              style: IconButton.styleFrom(
-                                backgroundColor:
-                                    isExpanded ? Colors.black38 : null,
-                              ),
-                              icon: Icon(
-                                Icons.edit,
-                                color: isExpanded ? Colors.white : null,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+              actions: [
+                if (!widget.isPublishedEvent)
+                  SizedBox(
+                    height: kToolbarHeight,
+                    width: kToolbarHeight,
+                    child: ValueListenableBuilder(
+                      valueListenable: _isAppBarExpanded,
+                      builder: (_, isExpanded, __) {
+                        return IconButton(
+                          onPressed: () => context.goNamed(
+                            RouteNames.editEvent,
+                            pathParameters: {'id': widget.id},
+                          ),
+                          tooltip: 'Edit',
+                          style: IconButton.styleFrom(
+                            backgroundColor: isExpanded ? Colors.black38 : null,
+                          ),
+                          icon: Icon(
+                            Icons.edit,
+                            color: isExpanded ? Colors.white : null,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: EventDetailImagesCarousel(
                   heroImageTag: widget.heroImageTag,
