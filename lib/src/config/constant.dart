@@ -30,11 +30,13 @@ class Constant {
     return 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
   }
 
+  static const String locale = 'id_ID';
+
   /// example: IDR 1.2k
   static String toSimpleCurrency(dynamic numberOrString) {
     return NumberFormat.compactSimpleCurrency(
       // locale: Intl.getCurrentLocale(),
-      locale: 'id_ID',
+      locale: locale,
     ).format(numberOrString);
   }
 
@@ -42,7 +44,7 @@ class Constant {
   static String toCurrency(dynamic numberOrString) {
     return NumberFormat.currency(
       // locale: Intl.getCurrentLocale(),
-      locale: 'id_ID',
+      locale: locale,
     ).format(numberOrString);
   }
 }
