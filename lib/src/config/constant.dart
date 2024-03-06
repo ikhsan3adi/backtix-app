@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' show dotenv;
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 PackageInfo _packageInfo = GetIt.I<PackageInfo>();
@@ -23,29 +22,5 @@ class Constant {
       ? dotenv.env['MIDTRANS_CLIENT_KEY_SANDBOX']!
       : dotenv.env['MIDTRANS_CLIENT_KEY']!;
 
-  static String googleMapsUrlFromLatLong({
-    required double lat,
-    required double long,
-  }) {
-    return 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
-  }
-
   static const String locale = 'id_ID';
-
-  /// example: IDR 1.2k
-  static String toSimpleCurrency(dynamic numberOrString) {
-    return NumberFormat.compactSimpleCurrency(
-      // locale: Intl.getCurrentLocale(),
-      locale: locale,
-    ).format(numberOrString);
-  }
-
-  /// example: IDR 1.200
-  static String toCurrency(dynamic numberOrString) {
-    return NumberFormat.currency(
-      // locale: Intl.getCurrentLocale(),
-      locale: locale,
-      decimalDigits: 0,
-    ).format(numberOrString);
-  }
 }

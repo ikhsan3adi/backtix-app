@@ -1,8 +1,8 @@
 import 'package:backtix_app/src/blocs/tickets/event_ticket_sales/event_ticket_sales_cubit.dart';
-import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_status_enum.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -147,7 +147,7 @@ class EventTicketSalesCard extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              Constant.toCurrency(purchase.price),
+                              Utils.toCurrency(purchase.price),
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: context.colorScheme.primary,

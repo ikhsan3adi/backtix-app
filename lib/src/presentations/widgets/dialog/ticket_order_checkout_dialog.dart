@@ -1,7 +1,7 @@
 import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_order_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
-import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,7 +125,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      Constant.toCurrency(e.ticket.price),
+                                      Utils.toCurrency(e.ticket.price),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 12,
@@ -139,8 +139,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
                               ),
                               TableCell(
                                 child: Text(
-                                  Constant.toCurrency(
-                                      e.ticket.price * e.quantity),
+                                  Utils.toCurrency(e.ticket.price * e.quantity),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -170,7 +169,7 @@ class TicketOrderCheckoutDialog extends StatelessWidget {
                             const TableCell(child: SizedBox()),
                             TableCell(
                               child: Text(
-                                Constant.toCurrency(order.totalPrice),
+                                Utils.toCurrency(order.totalPrice),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,

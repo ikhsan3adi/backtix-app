@@ -1,6 +1,6 @@
-import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -134,7 +134,7 @@ class _TicketInfo extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  Constant.toCurrency(ticket.price),
+                  Utils.toCurrency(ticket.price),
                   style: context.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: context.colorScheme.primary,
