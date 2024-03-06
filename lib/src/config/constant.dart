@@ -40,11 +40,12 @@ class Constant {
     ).format(numberOrString);
   }
 
-  /// example: IDR 1.200,00
+  /// example: IDR 1.200
   static String toCurrency(dynamic numberOrString) {
     return NumberFormat.currency(
       // locale: Intl.getCurrentLocale(),
       locale: locale,
+      decimalDigits: 0,
     ).format(numberOrString);
   }
 }
