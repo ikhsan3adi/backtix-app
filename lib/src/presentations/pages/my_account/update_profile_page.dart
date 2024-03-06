@@ -30,13 +30,15 @@ class UpdateProfilePage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => GetIt.I<UpdateProfileCubit>()..init(),
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: _UpdateProfileForm(highlightLocationField),
-            ),
-          ],
+        child: ResponsivePadding(
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: _UpdateProfileForm(highlightLocationField),
+              ),
+            ],
+          ),
         ),
       ),
     );

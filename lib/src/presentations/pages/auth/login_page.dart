@@ -29,59 +29,61 @@ class LoginPage extends StatelessWidget {
           ThemeToggleIconButton(),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: context.height / 8),
-            child: Text(
-              'Enter your details to continue',
-              style: context.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+      body: ResponsivePadding(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: context.height / 8),
+              child: Text(
+                'Enter your details to continue',
+                style: context.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          BlocProvider(
-            create: (_) => GetIt.I<LoginBloc>(),
-            child: Builder(
-              builder: (context) {
-                return BlocListener<LoginBloc, LoginState>(
-                  listener: (context, state) {
-                    state.whenOrNull(
-                      success: (auth) => context
-                          .read<AuthBloc>()
-                          .add(AuthEvent.authenticate(newAuth: auth)),
-                      error: (error) => ErrorDialog.show(context, error),
-                    );
-                  },
-                  child: _LoginForm(
-                    initialUsername: initialUsername,
-                  ),
-                );
-              },
+            BlocProvider(
+              create: (_) => GetIt.I<LoginBloc>(),
+              child: Builder(
+                builder: (context) {
+                  return BlocListener<LoginBloc, LoginState>(
+                    listener: (context, state) {
+                      state.whenOrNull(
+                        success: (auth) => context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.authenticate(newAuth: auth)),
+                        error: (error) => ErrorDialog.show(context, error),
+                      );
+                    },
+                    child: _LoginForm(
+                      initialUsername: initialUsername,
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Don\'t have an account?'),
-                const SizedBox(width: 4),
-                GestureDetector(
-                  onTap: () => context.goNamed(RouteNames.register),
-                  child: Text(
-                    'Sign up',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: context.colorScheme.primary,
+            const SizedBox(height: 8),
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Don\'t have an account?'),
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: () => context.goNamed(RouteNames.register),
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: context.colorScheme.primary,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

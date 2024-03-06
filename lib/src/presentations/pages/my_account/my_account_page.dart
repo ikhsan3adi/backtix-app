@@ -30,14 +30,16 @@ class MyAccountPage extends StatelessWidget {
         onRefresh: () async {
           context.read<AuthBloc>().add(const AuthEvent.updateUserDetails());
         },
-        child: const CustomScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.all(16),
-              sliver: _MyAccount(),
-            ),
-          ],
+        child: const ResponsivePadding(
+          child: CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.all(16),
+                sliver: _MyAccount(),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -18,17 +18,19 @@ class ResetPasswordPage extends StatelessWidget {
         centerTitle: true,
         title: const Text('Reset Password'),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: BlocProvider(
-              create: (_) =>
-                  GetIt.I<ResetPasswordCubit>()..requestPasswordReset(),
-              child: const _ResetPasswordForm(),
+      body: ResponsivePadding(
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: BlocProvider(
+                create: (_) =>
+                    GetIt.I<ResetPasswordCubit>()..requestPasswordReset(),
+                child: const _ResetPasswordForm(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -19,16 +19,18 @@ class UpdatePasswordPage extends StatelessWidget {
         centerTitle: true,
         title: const Text('Update Password'),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: BlocProvider(
-              create: (_) => GetIt.I<UpdatePasswordCubit>(),
-              child: const _UpdatePasswordForm(),
+      body: ResponsivePadding(
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: BlocProvider(
+                create: (_) => GetIt.I<UpdatePasswordCubit>(),
+                child: const _UpdatePasswordForm(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

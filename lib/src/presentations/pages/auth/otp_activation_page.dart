@@ -30,40 +30,43 @@ class OtpActivationPage extends StatelessWidget {
           },
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: context.height / 8,
-              top: (context.height / 8) - kToolbarHeight,
-            ),
-            child: Text(
-              'Activate your account',
-              style: context.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+      body: ResponsivePadding(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: context.height / 8,
+                top: (context.height / 8) - kToolbarHeight,
+              ),
+              child: Text(
+                'Activate your account',
+                style: context.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          BlocProvider(
-            create: (_) => GetIt.I<UserActivationCubit>()..requestActivation(),
-            child: Builder(
-              builder: (_) {
-                return BlocListener<UserActivationCubit, UserActivationState>(
-                  listener: (context, state) {
-                    state.whenOrNull(
-                      success: (user) => context
-                          .read<AuthBloc>()
-                          .add(AuthEvent.updateUserDetails(user: user)),
-                      error: (error) => ErrorDialog.show(context, error),
-                    );
-                  },
-                  child: const _OtpActivationForm(),
-                );
-              },
+            BlocProvider(
+              create: (_) =>
+                  GetIt.I<UserActivationCubit>()..requestActivation(),
+              child: Builder(
+                builder: (_) {
+                  return BlocListener<UserActivationCubit, UserActivationState>(
+                    listener: (context, state) {
+                      state.whenOrNull(
+                        success: (user) => context
+                            .read<AuthBloc>()
+                            .add(AuthEvent.updateUserDetails(user: user)),
+                        error: (error) => ErrorDialog.show(context, error),
+                      );
+                    },
+                    child: const _OtpActivationForm(),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

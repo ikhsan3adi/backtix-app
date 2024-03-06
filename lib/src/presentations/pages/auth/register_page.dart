@@ -26,70 +26,72 @@ class RegisterPage extends StatelessWidget {
         forceMaterialTransparency: true,
         backgroundColor: Colors.transparent,
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-        children: [
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: context.height / 8,
-              top: (context.height / 8) - kToolbarHeight,
-            ),
-            child: Text(
-              'Enter your details to continue',
-              style: context.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+      body: ResponsivePadding(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: context.height / 8,
+                top: (context.height / 8) - kToolbarHeight,
+              ),
+              child: Text(
+                'Enter your details to continue',
+                style: context.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          BlocProvider(
-            create: (_) => GetIt.I<RegisterBloc>(),
-            child: Builder(builder: (_) {
-              return BlocListener<RegisterBloc, RegisterState>(
-                listener: (context, state) {
-                  state.whenOrNull(
-                    success: (user, auth, isRegistered) {
-                      if (auth != null && (isRegistered)) {
-                        Toast.show(context, msg: 'User has been registered');
-                        return context
-                            .read<AuthBloc>()
-                            .add(AuthEvent.authenticate(newAuth: auth));
-                      } else if (user != null) {
-                        Toast.show(context, msg: 'User register successful');
-                        return context.goNamed(
-                          RouteNames.login,
-                          queryParameters: {'username': user.username},
-                        );
-                      }
-                      Toast.show(context, msg: 'Sign up failed, try again');
-                    },
-                    error: (error) => ErrorDialog.show(context, error),
-                  );
-                },
-                child: const _RegisterUserForm(),
-              );
-            }),
-          ),
-          const SizedBox(height: 8),
-          Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Already have an account?'),
-                const SizedBox(width: 4),
-                GestureDetector(
-                  onTap: () => context.goNamed(RouteNames.login),
-                  child: Text(
-                    'Sign in',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: context.colorScheme.primary,
+            BlocProvider(
+              create: (_) => GetIt.I<RegisterBloc>(),
+              child: Builder(builder: (_) {
+                return BlocListener<RegisterBloc, RegisterState>(
+                  listener: (context, state) {
+                    state.whenOrNull(
+                      success: (user, auth, isRegistered) {
+                        if (auth != null && (isRegistered)) {
+                          Toast.show(context, msg: 'User has been registered');
+                          return context
+                              .read<AuthBloc>()
+                              .add(AuthEvent.authenticate(newAuth: auth));
+                        } else if (user != null) {
+                          Toast.show(context, msg: 'User register successful');
+                          return context.goNamed(
+                            RouteNames.login,
+                            queryParameters: {'username': user.username},
+                          );
+                        }
+                        Toast.show(context, msg: 'Sign up failed, try again');
+                      },
+                      error: (error) => ErrorDialog.show(context, error),
+                    );
+                  },
+                  child: const _RegisterUserForm(),
+                );
+              }),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Already have an account?'),
+                  const SizedBox(width: 4),
+                  GestureDetector(
+                    onTap: () => context.goNamed(RouteNames.login),
+                    child: Text(
+                      'Sign in',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: context.colorScheme.primary,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
