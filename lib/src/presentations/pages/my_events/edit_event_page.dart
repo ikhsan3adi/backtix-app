@@ -60,7 +60,7 @@ class EditEventPage extends StatelessWidget {
                     context,
                     text: 'Event updated',
                   );
-                  if (context.mounted) return context.pop();
+                  if (context.mounted) return context.pop(true);
                   return;
                 },
                 loaded: (event, exception) async {

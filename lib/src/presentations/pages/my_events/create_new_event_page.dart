@@ -564,7 +564,7 @@ class _NewEventFormState extends State<_NewEventForm> {
               context,
               text: 'Event submitted\nWait for approval',
             );
-            if (context.mounted) return context.pop();
+            if (context.mounted) return context.pop(true);
             return;
           },
           error: (exception) async {

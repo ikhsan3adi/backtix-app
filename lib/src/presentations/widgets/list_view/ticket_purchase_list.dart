@@ -139,13 +139,20 @@ class _PurchasesList extends StatelessWidget {
                             eventWithPurchases.event.images[0].image,
                     },
                   ),
-                  onPurchaseTap: (purchase) {
+                  onPurchaseTap: (purchase) async {
                     if (purchase.refundStatus !=
                         TicketPurchaseRefundStatus.refunded) {
-                      context.pushNamed(
+                      final bool? refresh = await context.pushNamed(
                         RouteNames.myTicketDetail,
                         pathParameters: {'uid': purchase.uid},
                       );
+                      if (context.mounted && (refresh ?? false)) {
+                        context.read<MyTicketPurchasesBloc>().add(
+                              MyTicketPurchasesEvent.getMyTicketPurchases(
+                                state.query.copyWith(page: 0),
+                              ),
+                            );
+                      }
                     }
                   },
                 );
