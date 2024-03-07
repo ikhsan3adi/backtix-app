@@ -23,15 +23,18 @@ import 'package:backtix_app/src/blocs/tickets/verify_ticket/verify_ticket_cubit.
 import 'package:backtix_app/src/blocs/user/reset_password/reset_password_cubit.dart';
 import 'package:backtix_app/src/blocs/user/update_password/update_password_cubit.dart';
 import 'package:backtix_app/src/blocs/user/update_profile/update_profile_cubit.dart';
+import 'package:backtix_app/src/blocs/user/withdraw/withdraw_cubit.dart';
 import 'package:backtix_app/src/blocs/user_activation/user_activation_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/core/network/dio_client.dart';
 import 'package:backtix_app/src/core/network/interceptors/auth_interceptor.dart';
 import 'package:backtix_app/src/core/network/interceptors/logging_interceptor.dart';
+import 'package:backtix_app/src/data/repositories/balance_repository.dart';
 import 'package:backtix_app/src/data/repositories/event_repository.dart';
 import 'package:backtix_app/src/data/repositories/ticket_repository.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
+import 'package:backtix_app/src/data/services/remote/balance_service.dart';
 import 'package:backtix_app/src/data/services/remote/event_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/payment_service.dart';
@@ -64,6 +67,9 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerLazySingleton<TicketService>(
     () => TicketService(GetIt.I<Dio>()),
   );
+  GetIt.I.registerLazySingleton<BalanceService>(
+    () => BalanceService(GetIt.I<Dio>()),
+  );
 
   await initPaymentService();
 
@@ -75,6 +81,9 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerLazySingleton<TicketRepository>(
     () => TicketRepository(GetIt.I<TicketService>()),
+  );
+  GetIt.I.registerLazySingleton<BalanceRepository>(
+    () => BalanceRepository(GetIt.I<BalanceService>()),
   );
 
   GetIt.I.registerSingleton<AuthBloc>(
@@ -174,6 +183,9 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<ResetPasswordCubit>(
     () => ResetPasswordCubit(GetIt.I<UserRepository>()),
+  );
+  GetIt.I.registerFactory<WithdrawCubit>(
+    () => WithdrawCubit(GetIt.I<BalanceRepository>()),
   );
 }
 

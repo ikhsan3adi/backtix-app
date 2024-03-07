@@ -185,7 +185,7 @@ class _MyAccount extends StatelessWidget {
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: InkWelledStack(
-                  onTap: () {},
+                  onTap: () => context.goNamed(RouteNames.withdraw),
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -235,7 +235,10 @@ class _MyAccount extends StatelessWidget {
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: InkWelledStack(
-                  onTap: () {},
+                  onTap: () => context.goNamed(
+                    RouteNames.withdraw,
+                    queryParameters: {'from': 'revenue'},
+                  ),
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(

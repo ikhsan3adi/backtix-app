@@ -23,4 +23,5 @@ class Constant {
       : dotenv.env['MIDTRANS_CLIENT_KEY']!;
 
   static const String locale = 'id_ID';
+  static const String currencyPrefix = 'Rp';
 }

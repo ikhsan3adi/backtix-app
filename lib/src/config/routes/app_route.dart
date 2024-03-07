@@ -1,6 +1,7 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/config/routes/router_notifier.dart';
+import 'package:backtix_app/src/data/models/withdraw/withdraw_from_enum.dart';
 import 'package:backtix_app/src/presentations/pages/app_start/onboarding_page.dart';
 import 'package:backtix_app/src/presentations/pages/app_start/splash_page.dart';
 import 'package:backtix_app/src/presentations/pages/auth/login_page.dart';
@@ -11,6 +12,7 @@ import 'package:backtix_app/src/presentations/pages/my_account/my_account_page.d
 import 'package:backtix_app/src/presentations/pages/my_account/reset_password_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/update_password_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/update_profile_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_account/withdraw_balance_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/create_new_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/edit_event_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_events/event_ticket_refund_page.dart';
@@ -288,6 +290,18 @@ class AppRoute {
                       path: 'password/reset',
                       parentNavigatorKey: rootNavigatorKey,
                       builder: (_, __) => const ResetPasswordPage(),
+                    ),
+                    GoRoute(
+                      name: RouteNames.withdraw,
+                      path: RouteNames.withdraw,
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, state) {
+                        final from =
+                            state.uri.queryParameters['from'] == 'revenue'
+                                ? WithdrawFrom.revenue
+                                : WithdrawFrom.balance;
+                        return WithdrawBalancePage(withdrawFrom: from);
+                      },
                     ),
                   ],
                 ),

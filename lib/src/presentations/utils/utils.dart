@@ -29,4 +29,10 @@ class Utils {
       decimalDigits: decimalDigits,
     ).format(numberOrString);
   }
+
+  /// from 1.200 to 1200
+  static double unformatCurrency(String string) {
+    if (string.isEmpty) return 0;
+    return double.tryParse(string.split('.').join()) ?? 0;
+  }
 }
