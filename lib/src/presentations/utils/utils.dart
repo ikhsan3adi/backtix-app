@@ -22,11 +22,11 @@ class Utils {
   }
 
   /// example: IDR 1.200
-  static String toCurrency(dynamic numberOrString) {
+  static String toCurrency(dynamic numberOrString, {int decimalDigits = 0}) {
     return NumberFormat.currency(
       // locale: Intl.getCurrentLocale(),
       locale: Constant.locale,
-      decimalDigits: 0,
+      decimalDigits: decimalDigits,
     ).format(numberOrString);
   }
 }
