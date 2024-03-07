@@ -158,6 +158,7 @@ class _MyAccount extends StatelessWidget {
                     : 'Set your location'),
               ),
             ),
+            _logoutButton,
           ],
         );
       },
@@ -277,6 +278,35 @@ class _MyAccount extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget get _logoutButton {
+    return Container(
+      height: 48,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          bool loggingout = false;
+          return FilledButton.icon(
+            onPressed: state.mapOrNull(
+              authenticated: (_) => () {
+                if (loggingout) return;
+                loggingout = true;
+                context
+                    .read<AuthBloc>()
+                    .add(const AuthEvent.removeAuthentication());
+              },
+            ),
+            icon: const Icon(Icons.logout),
+            label: const Text('Logout'),
+            style: FilledButton.styleFrom(
+              foregroundColor: context.colorScheme.onError,
+              backgroundColor: context.colorScheme.error,
+            ),
+          );
+        },
+      ),
     );
   }
 }
