@@ -82,9 +82,6 @@ class _FilterChips extends StatelessWidget {
                     query.copyWith(status: s ? filter : null),
                   ),
                   label: Text(filter.toString()),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
                 ),
               );
             }),
@@ -97,9 +94,6 @@ class _FilterChips extends StatelessWidget {
                   query.copyWith(used: s),
                 ),
                 label: const Text('Used'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
               ),
             ),
           ],

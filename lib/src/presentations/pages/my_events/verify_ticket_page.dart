@@ -456,9 +456,6 @@ class _EventDetail extends StatelessWidget {
                             category,
                             style: context.textTheme.labelMedium,
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
                         );
                       },
                     ),

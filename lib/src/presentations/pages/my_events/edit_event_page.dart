@@ -526,9 +526,6 @@ class _EditEventFormState extends State<_EditEventForm> {
               return ChoiceChip(
                 label: Text(e.category),
                 selected: e.selected,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
                 onSelected: (v) {
                   _categories.value = [
                     ...categories

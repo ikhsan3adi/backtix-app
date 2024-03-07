@@ -370,9 +370,6 @@ class _EventInfoState extends State<_EventInfo> {
                               category,
                               style: context.textTheme.labelMedium,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
                           );
                         },
                       ),

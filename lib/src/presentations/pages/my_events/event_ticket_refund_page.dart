@@ -81,9 +81,6 @@ class _FilterChips extends StatelessWidget {
                 );
               },
               label: Text(filter.toString()),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
             );
           },
         );
