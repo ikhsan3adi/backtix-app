@@ -31,4 +31,5 @@ class RouteNames {
   static const String updatePassword = 'updatePassword';
   static const String resetPassword = 'resetPassword';
   static const String withdraw = 'withdraw';
+  static const String myWithdraws = 'myWithdraws';
 }

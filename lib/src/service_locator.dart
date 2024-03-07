@@ -20,6 +20,7 @@ import 'package:backtix_app/src/blocs/tickets/ticket_purchase_refund/ticket_purc
 import 'package:backtix_app/src/blocs/tickets/ticket_sales/ticket_sales_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/upsert_ticket/upsert_ticket_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/verify_ticket/verify_ticket_cubit.dart';
+import 'package:backtix_app/src/blocs/user/my_withdraw_requests/my_withdraw_requests_cubit.dart';
 import 'package:backtix_app/src/blocs/user/reset_password/reset_password_cubit.dart';
 import 'package:backtix_app/src/blocs/user/update_password/update_password_cubit.dart';
 import 'package:backtix_app/src/blocs/user/update_profile/update_profile_cubit.dart';
@@ -186,6 +187,9 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<WithdrawCubit>(
     () => WithdrawCubit(GetIt.I<BalanceRepository>()),
+  );
+  GetIt.I.registerFactory<MyWithdrawRequestsCubit>(
+    () => MyWithdrawRequestsCubit(GetIt.I<BalanceRepository>()),
   );
 }
 

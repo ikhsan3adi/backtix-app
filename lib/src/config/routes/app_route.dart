@@ -9,6 +9,7 @@ import 'package:backtix_app/src/presentations/pages/auth/otp_activation_page.dar
 import 'package:backtix_app/src/presentations/pages/auth/register_page.dart';
 import 'package:backtix_app/src/presentations/pages/location_picker_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/my_account_page.dart';
+import 'package:backtix_app/src/presentations/pages/my_account/my_withdraw_requests_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/reset_password_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/update_password_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_account/update_profile_page.dart';
@@ -302,6 +303,12 @@ class AppRoute {
                                 : WithdrawFrom.balance;
                         return WithdrawBalancePage(withdrawFrom: from);
                       },
+                    ),
+                    GoRoute(
+                      name: RouteNames.myWithdraws,
+                      path: 'withdraw/my',
+                      parentNavigatorKey: rootNavigatorKey,
+                      builder: (_, __) => const MyWithdrawRequestsPage(),
                     ),
                   ],
                 ),

@@ -114,7 +114,7 @@ class _MyAccount extends StatelessWidget {
             SizedBox(
               height: 48,
               child: FilledButton.tonal(
-                onPressed: () => context.goNamed(RouteNames.withdraw),
+                onPressed: () => context.goNamed(RouteNames.myWithdraws),
                 child: const Text('Withdraw requests'),
               ),
             ),
