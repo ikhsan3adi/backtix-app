@@ -96,11 +96,15 @@ class _OtpActivationFormState extends State<_OtpActivationForm> {
 
   @override
   Widget build(BuildContext context) {
+    final email = context.read<AuthBloc>().user?.email;
+
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text('OTP has been sent to $email'),
+          const SizedBox(height: 12),
           CustomTextFormField(
             controller: _otpController,
             keyboardType: TextInputType.number,

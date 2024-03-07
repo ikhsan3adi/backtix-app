@@ -46,7 +46,10 @@ class NearbyEventsCarousel extends StatelessWidget {
                 ),
               ),
               FilledButton(
-                onPressed: () => context.goNamed(RouteNames.updateProfile),
+                onPressed: () => context.goNamed(
+                  RouteNames.updateProfile,
+                  queryParameters: {'location': 'true'},
+                ),
                 child: const Text('Update my location'),
               ),
             ],

@@ -13,22 +13,24 @@ class UnsupportedPlatformPage extends StatelessWidget {
         centerTitle: true,
         title: const Text('Unsupported'),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.error_outline_outlined,
-            color: context.theme.disabledColor,
-            size: 52,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Unsupported on ${Platform.operatingSystem}',
-            style: context.textTheme.bodyMedium?.copyWith(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.error_outline_outlined,
               color: context.theme.disabledColor,
+              size: 52,
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              'Unsupported on ${Platform.operatingSystem}',
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: context.theme.disabledColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

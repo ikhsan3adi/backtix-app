@@ -133,7 +133,7 @@ class _UpdatePasswordFormState extends State<_UpdatePasswordForm> {
             listener: (context, state) => state.whenOrNull(
               initial: () => SimpleLoadingDialog.hide(context),
               loading: () => SimpleLoadingDialog.show(context),
-              success: (userWithAuth) async {
+              success: (_) async {
                 SimpleLoadingDialog.hide(context);
                 await SuccessBottomSheet.show(
                   context,

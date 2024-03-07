@@ -1,3 +1,4 @@
+import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/user/reset_password/reset_password_cubit.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/utils/utils.dart';
@@ -66,10 +67,14 @@ class _ResetPasswordFormState extends State<_ResetPasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final email = context.read<AuthBloc>().user?.email;
+
     return Form(
       key: _formKey,
       child: SliverList.list(
         children: [
+          Text('Reset code has been sent to $email'),
+          const SizedBox(height: 12),
           CustomTextFormField(
             controller: _resetCodeController,
             debounce: true,
@@ -163,10 +168,9 @@ class _ResetPasswordFormState extends State<_ResetPasswordForm> {
           Center(
             child: ValueListenableBuilder(
               valueListenable: _resendCount,
-              builder: (_, value, __) {
-                if (value >= 5) {
-                  return const SizedBox();
-                }
+              builder: (context, value, __) {
+                if (value >= 5) return const SizedBox();
+
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
