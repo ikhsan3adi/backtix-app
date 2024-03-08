@@ -1,6 +1,7 @@
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,24 +41,26 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(
-            flex: 8,
-            child: PageView(
-              controller: _controller,
-              onPageChanged: (value) {
-                _pageIndexListenable.value = value;
-              },
-              children: _pages,
+      body: ResponsivePadding(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 8,
+              child: PageView(
+                controller: _controller,
+                onPageChanged: (value) {
+                  _pageIndexListenable.value = value;
+                },
+                children: _pages,
+              ),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: _onboardingAction(context),
-          ),
-        ],
+            Expanded(
+              flex: 2,
+              child: _onboardingAction(context),
+            ),
+          ],
+        ),
       ),
     );
   }

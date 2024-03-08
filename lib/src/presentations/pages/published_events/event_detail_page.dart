@@ -1,10 +1,10 @@
 import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
-import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_order_page.dart';
 import 'package:backtix_app/src/presentations/pages/webview_page.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -231,7 +231,6 @@ class _EventDetailPageState extends State<_EventDetailPage> {
           slivers: [
             SliverAppBar(
               pinned: true,
-              floating: true,
               expandedHeight: _kExpandedHeight,
               centerTitle: true,
               title: ValueListenableBuilder(
@@ -259,34 +258,32 @@ class _EventDetailPageState extends State<_EventDetailPage> {
                   );
                 },
               ),
-              actions: widget.isPublishedEvent
-                  ? null
-                  : [
-                      SizedBox(
-                        height: kToolbarHeight,
-                        width: kToolbarHeight,
-                        child: ValueListenableBuilder(
-                          valueListenable: _isAppBarExpanded,
-                          builder: (_, isExpanded, __) {
-                            return IconButton(
-                              onPressed: () => context.goNamed(
-                                RouteNames.editEvent,
-                                pathParameters: {'id': widget.id},
-                              ),
-                              tooltip: 'Edit',
-                              style: IconButton.styleFrom(
-                                backgroundColor:
-                                    isExpanded ? Colors.black38 : null,
-                              ),
-                              icon: Icon(
-                                Icons.edit,
-                                color: isExpanded ? Colors.white : null,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+              actions: [
+                if (!widget.isPublishedEvent)
+                  SizedBox(
+                    height: kToolbarHeight,
+                    width: kToolbarHeight,
+                    child: ValueListenableBuilder(
+                      valueListenable: _isAppBarExpanded,
+                      builder: (_, isExpanded, __) {
+                        return IconButton(
+                          onPressed: () => context.goNamed(
+                            RouteNames.editEvent,
+                            pathParameters: {'id': widget.id},
+                          ),
+                          tooltip: 'Edit',
+                          style: IconButton.styleFrom(
+                            backgroundColor: isExpanded ? Colors.black38 : null,
+                          ),
+                          icon: Icon(
+                            Icons.edit,
+                            color: isExpanded ? Colors.white : null,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: EventDetailImagesCarousel(
                   heroImageTag: widget.heroImageTag,
@@ -372,9 +369,6 @@ class _EventInfoState extends State<_EventInfo> {
                             label: Text(
                               category,
                               style: context.textTheme.labelMedium,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
                             ),
                           );
                         },
@@ -466,7 +460,7 @@ class _EventInfoState extends State<_EventInfo> {
             : () async {
                 await WebViewPage.showAsBottomSheet(
                   context,
-                  url: Constant.googleMapsUrlFromLatLong(
+                  url: Utils.googleMapsUrlFromLatLong(
                     lat: event.latitude!,
                     long: event.longitude!,
                   ),

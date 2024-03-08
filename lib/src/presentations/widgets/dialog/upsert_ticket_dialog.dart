@@ -244,6 +244,7 @@ class _UpsertTicketDialogState extends State<UpsertTicketDialog> {
             debounce: true,
             debouncer: _debouncer,
             keyboardType: TextInputType.number,
+            inputFormatters: [CurrencyInputFormatter()],
             validator: Validatorless.multiple([
               Validatorless.number('Value is not a number'),
               Validatorless.numbersBetweenInterval(

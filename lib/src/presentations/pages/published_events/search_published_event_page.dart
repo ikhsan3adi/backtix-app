@@ -167,9 +167,6 @@ class _FilterChips extends StatelessWidget {
                 color: context.colorScheme.onSurface,
               ),
               selected: query.from != null,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
               label: Text(
                 query.from != null
                     ? 'from: ${dateFormat.format(query.from!)}'
@@ -198,9 +195,6 @@ class _FilterChips extends StatelessWidget {
                   color: context.colorScheme.onSurface,
                 ),
                 selected: query.to != null,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
                 label: Text(
                   query.to != null
                       ? 'to: ${dateFormat.format(query.to!)}'
@@ -232,9 +226,6 @@ class _FilterChips extends StatelessWidget {
                         query.categories.contains(e.filter),
                       EventFilterType.keyword => query.search == e.filter,
                     },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                     label: Text(e.filter),
                     onSelected: (value) async {
                       switch (e.type) {

@@ -8,6 +8,9 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
     useMaterial3: true,
     fontFamily: fontFamily,
+    chipTheme: ChipThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+    ),
   );
 
   final ThemeData darkTheme = ThemeData(
@@ -18,5 +21,8 @@ class AppTheme {
     brightness: Brightness.dark,
     useMaterial3: true,
     fontFamily: fontFamily,
+    chipTheme: ChipThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+    ),
   );
 }

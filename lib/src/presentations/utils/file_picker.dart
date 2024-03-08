@@ -28,12 +28,17 @@ class FilePicker {
   static Future<File?> cropImage({
     required File file,
     int? maxWidth = 1280,
+    double? ratioX,
+    double? ratioY,
   }) async {
     if (!Platform.isAndroid && !Platform.isIOS && !kIsWeb) return file;
 
     final CroppedFile? croppedImage = await imageCropper.cropImage(
       sourcePath: file.path,
       maxWidth: maxWidth,
+      aspectRatio: ratioX != null || ratioY != null
+          ? CropAspectRatio(ratioX: ratioX ?? 1, ratioY: ratioY ?? 1)
+          : null,
       uiSettings: [
         AndroidUiSettings(toolbarTitle: 'Crop image'),
         IOSUiSettings(title: 'Crop image'),

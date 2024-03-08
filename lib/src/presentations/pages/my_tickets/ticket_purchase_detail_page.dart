@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:backtix_app/src/blocs/tickets/my_ticket_purchase_detail/my_ticket_purchase_detail_cubit.dart';
-import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_model.dart';
 import 'package:backtix_app/src/data/models/ticket/ticket_purchase_status_enum.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -257,7 +257,7 @@ class _Buttons extends StatelessWidget {
       final event = ticketPurchase.ticket?.event;
       final eventName = event?.name;
       final eventLocationUrl = event!.isLatLongSet
-          ? Constant.googleMapsUrlFromLatLong(
+          ? Utils.googleMapsUrlFromLatLong(
               lat: event.latitude!,
               long: event.longitude!,
             )

@@ -60,7 +60,7 @@ class EditEventPage extends StatelessWidget {
                     context,
                     text: 'Event updated',
                   );
-                  if (context.mounted) return context.pop();
+                  if (context.mounted) return context.pop(true);
                   return;
                 },
                 loaded: (event, exception) async {
@@ -526,9 +526,6 @@ class _EditEventFormState extends State<_EditEventForm> {
               return ChoiceChip(
                 label: Text(e.category),
                 selected: e.selected,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
                 onSelected: (v) {
                   _categories.value = [
                     ...categories

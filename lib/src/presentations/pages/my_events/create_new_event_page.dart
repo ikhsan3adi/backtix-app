@@ -475,9 +475,6 @@ class _NewEventFormState extends State<_NewEventForm> {
               return ChoiceChip(
                 label: Text(e.category),
                 selected: e.selected,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
                 onSelected: (v) {
                   _categories.value = [
                     ...categories
@@ -564,7 +561,7 @@ class _NewEventFormState extends State<_NewEventForm> {
               context,
               text: 'Event submitted\nWait for approval',
             );
-            if (context.mounted) return context.pop();
+            if (context.mounted) return context.pop(true);
             return;
           },
           error: (exception) async {

@@ -24,16 +24,16 @@ class UserModel with _$UserModel {
     required DateTime createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
-    UserBalanceModel? balance,
+    @Default(UserBalanceModel(balance: 0, revenue: 0)) UserBalanceModel balance,
   }) = _UserModel;
 
   bool get isUserLocationSet => latitude != null && longitude != null;
 
   static UserModel get dummyUser => UserModel(
         id: '0',
-        username: 'dummy',
-        fullname: 'dummy',
-        email: 'dummy',
+        username: 'unknown',
+        fullname: 'unknown',
+        email: 'unknown',
         activated: true,
         createdAt: DateTime(2024),
       );

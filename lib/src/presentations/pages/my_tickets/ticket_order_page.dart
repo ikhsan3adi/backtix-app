@@ -1,9 +1,9 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/tickets/create_ticket_order/create_ticket_order_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/ticket_order/ticket_order_bloc.dart';
-import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/data/models/purchase/payment_method_enum.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -138,7 +138,7 @@ class _PaymentMethodWidget extends StatelessWidget {
         BlocBuilder<CreateTicketOrderCubit, CreateTicketOrderState>(
           builder: (context, order) {
             final balance = context.read<AuthBloc>().state.mapOrNull(
-                  authenticated: (s) => s.user.balance?.balance,
+                  authenticated: (s) => s.user.balance.balance,
                 );
             if (order.paymentMethod == PaymentMethod.balance &&
                 order.totalPrice > (balance ?? 0)) {
@@ -242,7 +242,7 @@ class _BalancePaymentCard extends StatelessWidget {
       builder: (context, order) {
         final bloc = context.read<CreateTicketOrderCubit>();
         final bool selected = order.paymentMethod == PaymentMethod.balance;
-        final balance = context.watch<AuthBloc>().user?.balance?.balance;
+        final balance = context.watch<AuthBloc>().user?.balance.balance;
 
         final foregroundColor = context.isDark
             ? null
@@ -293,7 +293,7 @@ class _BalancePaymentCard extends StatelessWidget {
                             text: 'Current balance: ',
                           ),
                           TextSpan(
-                            text: Constant.toCurrency(balance ?? 0),
+                            text: Utils.toCurrency(balance ?? 0),
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
@@ -336,7 +336,7 @@ class _BottomWidget extends StatelessWidget {
               BlocBuilder<CreateTicketOrderCubit, CreateTicketOrderState>(
                 builder: (_, order) {
                   return Text(
-                    Constant.toCurrency(order.totalPrice),
+                    Utils.toCurrency(order.totalPrice),
                     style: context.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

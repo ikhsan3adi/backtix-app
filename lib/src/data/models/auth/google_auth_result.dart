@@ -27,7 +27,7 @@ class GoogleAuthResult with _$GoogleAuthResult {
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,
-    UserBalanceModel? balance,
+    @Default(UserBalanceModel(balance: 0, revenue: 0)) UserBalanceModel balance,
   }) = _GoogleAuthResult;
 
   Either<NewAuthModel, UserModel> getAuthOrNewUser() {

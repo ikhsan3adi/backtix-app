@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:backtix_app/src/config/constant.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -70,7 +71,7 @@ class LocationService {
     final placeMark = (await placemarkFromCoordinates(
       latLng.latitude,
       latLng.longitude,
-      localeIdentifier: 'id_ID',
+      localeIdentifier: Constant.locale,
     ))[0];
     return '${placeMark.name}, ${placeMark.street}, ${placeMark.thoroughfare}, ${placeMark.subThoroughfare}, ${placeMark.subLocality}, ${placeMark.locality}, ${placeMark.subAdministrativeArea} ${placeMark.administrativeArea} ${placeMark.postalCode}, ${placeMark.country}';
   }

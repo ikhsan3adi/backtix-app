@@ -1,6 +1,7 @@
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
@@ -18,6 +19,8 @@ class CustomTextFormField extends StatefulWidget {
     this.decoration = const InputDecoration(),
     this.debounce = false,
     this.debouncer,
+    this.autoFocus = false,
+    this.inputFormatters,
   });
 
   final TextEditingController? controller;
@@ -30,6 +33,8 @@ class CustomTextFormField extends StatefulWidget {
   final InputDecoration? decoration;
   final bool debounce;
   final Debouncer? debouncer;
+  final bool? autoFocus;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -65,6 +70,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     );
 
     return TextFormField(
+      autofocus: widget.autoFocus ?? false,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: widget.controller,
       onChanged: (value) {
@@ -116,6 +122,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
       ),
       keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
     );
   }
 }

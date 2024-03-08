@@ -45,11 +45,11 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
     final currentUser = state.mapOrNull(authenticated: (s) => s.user);
 
-    if (_counter < _refreshAt && currentUser != null) {
+    if ((_counter < _refreshAt && currentUser != null) || event.user != null) {
       _counter++;
       _currentUser = currentUser;
       return emit(AuthState.authenticated(
-        user: currentUser,
+        user: currentUser ?? event.user!,
         auth: event.newAuth,
       ));
     }

@@ -133,9 +133,6 @@ class PointToLatlngPage extends State<LocationPickerPage> {
                       softWrap: true,
                       textAlign: TextAlign.center,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                   );
                 },
               ),

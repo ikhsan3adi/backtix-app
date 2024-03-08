@@ -96,7 +96,19 @@ class _MyEventsPageState extends State<_MyEventsPage> {
             title: const Text('My Events'),
             actions: [
               TextButton.icon(
-                onPressed: () => context.goNamed(RouteNames.createNewEvent),
+                onPressed: () async {
+                  final bool? refresh = await context.pushNamed(
+                    RouteNames.createNewEvent,
+                  );
+                  if (context.mounted && (refresh ?? false)) {
+                    final bloc = context.read<MyEventsBloc>();
+                    bloc.state.mapOrNull(loaded: (state) {
+                      bloc.add(MyEventsEvent.getMyEvents(
+                        state.query.copyWith(page: 0),
+                      ));
+                    });
+                  }
+                },
                 label: const Text('New Event'),
                 icon: const Icon(Icons.add),
               ),
@@ -177,9 +189,6 @@ class _FilterChips extends StatelessWidget {
                 color: context.colorScheme.onSurface,
               ),
               selected: query.from != null,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
               label: Text(
                 query.from != null
                     ? 'from: ${dateFormat.format(query.from!)}'
@@ -214,9 +223,6 @@ class _FilterChips extends StatelessWidget {
                   color: context.colorScheme.onSurface,
                 ),
                 selected: query.to != null,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
                 label: Text(
                   query.to != null
                       ? 'to: ${dateFormat.format(query.to!)}'
@@ -258,9 +264,6 @@ class _FilterChips extends StatelessWidget {
                         ),
                       ));
                     },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
                   ),
                 );
               },
@@ -273,9 +276,6 @@ class _FilterChips extends StatelessWidget {
                 onSelected: (value) async => bloc.add(MyEventsEvent.getMyEvents(
                   query.copyWith(ongoingOnly: value),
                 )),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
               ),
             ),
             Padding(
@@ -286,9 +286,6 @@ class _FilterChips extends StatelessWidget {
                 onSelected: (value) async => bloc.add(MyEventsEvent.getMyEvents(
                   query.copyWith(endedOnly: value),
                 )),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
               ),
             ),
           ],
@@ -355,10 +352,19 @@ class _EventList extends StatelessWidget {
                         'heroImageUrl': events[index].images[0].image,
                     },
                   ),
-                  onEdit: () => context.goNamed(
-                    RouteNames.editEvent,
-                    pathParameters: {'id': events[index].id},
-                  ),
+                  onEdit: () async {
+                    final bool? refresh = await context.pushNamed(
+                      RouteNames.editEvent,
+                      pathParameters: {'id': events[index].id},
+                    );
+                    if (context.mounted && (refresh ?? false)) {
+                      context.read<MyEventsBloc>().add(
+                            MyEventsEvent.getMyEvents(
+                              state.query.copyWith(page: 0),
+                            ),
+                          );
+                    }
+                  },
                   onDelete: () async {
                     final confirm = await ConfirmDialog.show(context);
                     if (!context.mounted || !(confirm ?? false)) return;
