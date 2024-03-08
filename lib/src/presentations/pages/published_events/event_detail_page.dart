@@ -1,4 +1,4 @@
-import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
+import 'package:backtix_app/src/blocs/events/event_detail/event_detail_cubit.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
@@ -36,10 +36,9 @@ class EventDetailPage extends StatelessWidget {
     return BlocProvider(
       create: (_) {
         if (isPublishedEvent) {
-          return GetIt.I<PublishedEventDetailCubit>()
-            ..getPublishedEventDetail(id);
+          return GetIt.I<EventDetailCubit>()..getPublishedEventDetail(id);
         }
-        return GetIt.I<PublishedEventDetailCubit>()..getMyEventDetail(id);
+        return GetIt.I<EventDetailCubit>()..getMyEventDetail(id);
       },
       child: Builder(builder: (context) {
         return Scaffold(
@@ -68,8 +67,7 @@ class EventDetailPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: BlocBuilder<PublishedEventDetailCubit,
-                PublishedEventDetailState>(
+            child: BlocBuilder<EventDetailCubit, EventDetailState>(
               builder: (context, state) {
                 return FilledButton(
                   onPressed: state.maybeMap(
@@ -218,7 +216,7 @@ class _EventDetailPageState extends State<_EventDetailPage> {
     return ResponsivePadding(
       child: RefreshIndicator.adaptive(
         onRefresh: () async {
-          final bloc = context.read<PublishedEventDetailCubit>();
+          final bloc = context.read<EventDetailCubit>();
           await bloc.state.mapOrNull(loaded: (state) async {
             widget.isPublishedEvent
                 ? await bloc.getPublishedEventDetail(widget.id)
@@ -333,7 +331,7 @@ class _EventInfoState extends State<_EventInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PublishedEventDetailCubit, PublishedEventDetailState>(
+    return BlocConsumer<EventDetailCubit, EventDetailState>(
       listener: (_, state) {
         state.mapOrNull(
           error: (state) => ErrorDialog.show(context, state.exception),
@@ -561,9 +559,7 @@ class _EventInfoState extends State<_EventInfo> {
                 eventId: event.id,
               );
               if ((success ?? false) && context.mounted) {
-                context
-                    .read<PublishedEventDetailCubit>()
-                    .getMyEventDetail(event.id);
+                context.read<EventDetailCubit>().getMyEventDetail(event.id);
               }
             },
           ),
@@ -592,7 +588,7 @@ class _EventInfoState extends State<_EventInfo> {
                     );
                     if (context.mounted && (edited ?? false)) {
                       context
-                          .read<PublishedEventDetailCubit>()
+                          .read<EventDetailCubit>()
                           .getMyEventDetail(event.id);
                     }
                   },

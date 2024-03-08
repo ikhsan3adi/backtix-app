@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
+import 'package:backtix_app/src/blocs/events/event_detail/event_detail_cubit.dart';
 import 'package:backtix_app/src/blocs/tickets/verify_ticket/verify_ticket_cubit.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
@@ -30,7 +30,7 @@ class VerifyTicketPage extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (_) =>
-                GetIt.I<PublishedEventDetailCubit>()..getMyEventDetail(eventId),
+                GetIt.I<EventDetailCubit>()..getMyEventDetail(eventId),
           ),
           BlocProvider(create: (_) => GetIt.I<VerifyTicketCubit>()),
         ],
@@ -93,7 +93,7 @@ class _VerifyTicketPageState extends State<_VerifyTicketPage> {
         MobileScanner(
           controller: _scannerController,
           onDetect: (capture) {
-            context.read<PublishedEventDetailCubit>().state.whenOrNull(
+            context.read<EventDetailCubit>().state.whenOrNull(
               loaded: (event) async {
                 final value = capture.barcodes[0].rawValue;
                 debugPrint('Barcode found! $value');
@@ -149,7 +149,7 @@ class _VerifyTicketPageState extends State<_VerifyTicketPage> {
           },
           success: (ticket) async {
             SimpleLoadingDialog.hide(context);
-            context.read<PublishedEventDetailCubit>().state.whenOrNull(
+            context.read<EventDetailCubit>().state.whenOrNull(
               loaded: (event) async {
                 await TicketVerificationDialog.show(
                   context,
@@ -328,7 +328,7 @@ class _VerifyTicketPageState extends State<_VerifyTicketPage> {
 
   Widget get _eventDetailPreview {
     return ResponsivePadding(
-      child: BlocBuilder<PublishedEventDetailCubit, PublishedEventDetailState>(
+      child: BlocBuilder<EventDetailCubit, EventDetailState>(
         builder: (context, state) {
           return GestureDetector(
             onTap: () => state.whenOrNull(

@@ -9,7 +9,7 @@ class Toast {
   static final bool _supported = Platform.isAndroid || Platform.isIOS || kIsWeb;
 
   /// show [SnackBar] if [Platform.operatingSystem] is not supported
-  /// and providing [BuildContext] parameter
+  /// and providing [BuildContext] argument
   static Future<bool?> show(
     BuildContext? context, {
     required String msg,

@@ -1,4 +1,4 @@
-import 'package:backtix_app/src/blocs/events/published_event_detail/published_event_detail_cubit.dart';
+import 'package:backtix_app/src/blocs/events/event_detail/event_detail_cubit.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -43,7 +43,7 @@ class _EventDetailImagesCarouselState extends State<EventDetailImagesCarousel> {
           bottom: Radius.circular(24),
         ),
       ),
-      child: BlocBuilder<PublishedEventDetailCubit, PublishedEventDetailState>(
+      child: BlocBuilder<EventDetailCubit, EventDetailState>(
         builder: (context, state) {
           return state.maybeMap(
             orElse: () =>
