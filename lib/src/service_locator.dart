@@ -38,6 +38,7 @@ import 'package:backtix_app/src/data/services/remote/auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/balance_service.dart';
 import 'package:backtix_app/src/data/services/remote/event_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
+import 'package:backtix_app/src/data/services/remote/location_service.dart';
 import 'package:backtix_app/src/data/services/remote/payment_service.dart';
 import 'package:backtix_app/src/data/services/remote/ticket_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
@@ -45,6 +46,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:midtrans_sdk/midtrans_sdk.dart';
+import 'package:nominatim_geocoding/nominatim_geocoding.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 Future<void> initializeDependencies() async {
@@ -73,6 +75,10 @@ Future<void> initializeDependencies() async {
   );
 
   await initPaymentService();
+
+  if (!LocationService.geocodingSupported) {
+    await NominatimGeocoding.init(reqCacheNum: 20);
+  }
 
   GetIt.I.registerSingleton<UserRepository>(
     UserRepository(GetIt.I<UserService>()),

@@ -10,6 +10,9 @@ class LocationService {
   /// [Platform.operatingSystem] that supported by [Geolocator]
   static bool supportDeviceLocation = !Platform.isLinux;
 
+  /// [Platform.operatingSystem] that supported by [geocoding]
+  static bool geocodingSupported = Platform.isAndroid || Platform.isIOS;
+
   /// Determine the current position of the device.
   ///
   /// When the location services are not enabled or permissions
@@ -57,7 +60,7 @@ class LocationService {
 
   /// Use [NominatimGeocoding] if [Platform.operatingSystem] is not supported by [geocoding]
   static Future<String?> addressFromLatLong(LatLng latLng) async {
-    if (!Platform.isAndroid && !Platform.isIOS) {
+    if (!geocodingSupported) {
       try {
         final geocoding = await NominatimGeocoding.to.reverseGeoCoding(
           Coordinate(latitude: latLng.latitude, longitude: latLng.longitude),
