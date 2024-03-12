@@ -10,12 +10,15 @@ class Toast {
 
   /// show [SnackBar] if [Platform.operatingSystem] is not supported
   /// and providing [BuildContext] argument
-  static Future<bool?> show(
+  static Future show(
     BuildContext? context, {
     required String msg,
     bool cancelActive = true,
   }) async {
-    if (!_supported) return context?.showSimpleTextSnackBar(msg);
+    if (!_supported) {
+      context?.showSimpleTextSnackBar(msg);
+      return;
+    }
 
     if (cancelActive) await cancel();
     return await Fluttertoast.showToast(msg: msg);
