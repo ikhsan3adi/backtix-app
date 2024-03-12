@@ -517,8 +517,8 @@ class _NewEventFormState extends State<_NewEventForm> {
                 controller: _categoryController,
                 validator: (value) {
                   if (value == null || value.isEmpty) return null;
-                  if (value.length < 3 || value.length > 10) {
-                    return 'Between 3-10 character';
+                  if (value.length < 3 || value.length > 16) {
+                    return 'Between 3-16 character';
                   }
                   return null;
                 },
@@ -528,7 +528,7 @@ class _NewEventFormState extends State<_NewEventForm> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       final text = _categoryController.value.text;
-                      if (text.isEmpty || text.length < 3 || text.length > 10) {
+                      if (text.isEmpty || text.length < 3 || text.length > 16) {
                         return;
                       }
                       _categories.value = [
