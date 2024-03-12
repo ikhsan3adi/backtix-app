@@ -18,8 +18,8 @@ class RouterNotifier extends ChangeNotifier {
     return _authBloc.state.whenOrNull(
       unauthenticated: (_) {
         switch (state.matchedLocation) {
-          case '/splash':
-          case '/splash/onboarding':
+          case '/':
+          case '/onboarding':
           case '/login':
           case '/login/register':
             return null;
