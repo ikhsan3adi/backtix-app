@@ -294,15 +294,15 @@ class _MyAccount extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          bool loggingout = false;
           return FilledButton.icon(
             onPressed: state.mapOrNull(
-              authenticated: (_) => () {
-                if (loggingout) return;
-                loggingout = true;
-                context
-                    .read<AuthBloc>()
-                    .add(const AuthEvent.removeAuthentication());
+              authenticated: (_) => () async {
+                final logout = await ConfirmDialog.show(context);
+                if (context.mounted && (logout ?? false)) {
+                  context
+                      .read<AuthBloc>()
+                      .add(const AuthEvent.removeAuthentication());
+                }
               },
             ),
             icon: const Icon(Icons.logout),
