@@ -57,11 +57,15 @@ class _MyAccount extends StatelessWidget {
         );
 
         final noProfileImageWidget = Text(
-          user.fullname.splitMapJoin(
-            ' ',
-            onMatch: (v) => '',
-            onNonMatch: (v) => v[0],
-          ),
+          user.fullname
+              .splitMapJoin(
+                ' ',
+                onMatch: (v) => '',
+                onNonMatch: (v) => v[0],
+              )
+              .split('')
+              .take(3)
+              .join(),
         );
 
         return SliverList.list(

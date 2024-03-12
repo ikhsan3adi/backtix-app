@@ -526,9 +526,24 @@ class _EventInfoState extends State<_EventInfo> {
         onTap: () {}, // TODO: goto user profile?????
         contentPadding: EdgeInsets.zero,
         leading: CircleAvatar(
+          foregroundColor: context.colorScheme.onTertiary,
+          backgroundColor: context.colorScheme.tertiary,
           backgroundImage: event.user?.image == null
               ? null
               : CachedNetworkImageProvider(event.user!.image!),
+          child: event.user?.image != null
+              ? null
+              : Text(
+                  event.user!.fullname
+                      .splitMapJoin(
+                        ' ',
+                        onMatch: (v) => '',
+                        onNonMatch: (v) => v[0],
+                      )
+                      .split('')
+                      .take(3)
+                      .join(),
+                ),
         ),
         title: Text(
           event.user?.fullname ?? 'Unknown',
