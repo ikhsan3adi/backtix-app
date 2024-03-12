@@ -139,6 +139,7 @@ class MyEventCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               FaIcon(
                                 FontAwesomeIcons.locationDot,
@@ -157,7 +158,6 @@ class MyEventCard extends StatelessWidget {
                                         : null,
                                   ),
                                   overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
                                   maxLines: 2,
                                 ),
                               ),

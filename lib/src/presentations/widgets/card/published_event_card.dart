@@ -160,6 +160,7 @@ class PublishedEventCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FaIcon(
                           FontAwesomeIcons.locationDot,

@@ -173,6 +173,7 @@ class _UpdateProfileFormState extends State<_UpdateProfileForm> {
                   maxLength: 255,
                   decoration: const InputDecoration(
                     labelText: 'Address',
+                    alignLabelWithHint: true,
                     hintText: 'abc street',
                     helperText: '',
                   ),

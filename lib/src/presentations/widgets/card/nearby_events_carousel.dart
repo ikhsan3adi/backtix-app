@@ -248,7 +248,13 @@ class _EventCard extends StatelessWidget {
                           color: Colors.red,
                         ),
                         const SizedBox(width: 4),
-                        Text(event.location),
+                        Flexible(
+                          child: Text(
+                            event.location,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ],
