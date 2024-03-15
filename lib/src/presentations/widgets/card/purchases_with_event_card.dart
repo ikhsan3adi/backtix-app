@@ -216,6 +216,7 @@ class _PurchasesEventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FaIcon(
                         FontAwesomeIcons.locationDot,
@@ -225,12 +226,16 @@ class _PurchasesEventCard extends StatelessWidget {
                             : Colors.red,
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        event.location,
-                        style: TextStyle(
-                          color: event.isEnded
-                              ? context.theme.disabledColor
-                              : null,
+                      Expanded(
+                        child: Text(
+                          event.location,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: event.isEnded
+                                ? context.theme.disabledColor
+                                : null,
+                          ),
                         ),
                       ),
                     ],
