@@ -25,6 +25,7 @@ import 'package:backtix_app/src/presentations/pages/my_events/verify_ticket_page
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_history_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/my_tickets_page.dart';
 import 'package:backtix_app/src/presentations/pages/my_tickets/ticket_purchase_detail_page.dart';
+import 'package:backtix_app/src/presentations/pages/notifications/notifications_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/event_detail_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/home_page.dart';
 import 'package:backtix_app/src/presentations/pages/published_events/search_published_event_page.dart';
@@ -255,6 +256,17 @@ class AppRoute {
                       ],
                     ),
                   ],
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  name: RouteNames.notifications,
+                  path: '/${RouteNames.notifications}',
+                  pageBuilder: (_, __) {
+                    return const NoTransitionPage(child: NotificationsPage());
+                  },
                 ),
               ],
             ),

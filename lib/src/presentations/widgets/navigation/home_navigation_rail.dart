@@ -1,4 +1,5 @@
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
+import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class HomeNavigationRail extends StatelessWidget {
@@ -35,6 +36,11 @@ class HomeNavigationRail extends StatelessWidget {
           icon: Icon(Icons.event_outlined),
           selectedIcon: Icon(Icons.event_note),
           label: Text('My Events'),
+        ),
+        NavigationRailDestination(
+          icon: NotificationNavIcon(),
+          selectedIcon: NotificationNavIcon.selected(),
+          label: Text('Notification'),
         ),
         NavigationRailDestination(
           icon: Icon(Icons.person_outline),

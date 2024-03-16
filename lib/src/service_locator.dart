@@ -9,6 +9,8 @@ import 'package:backtix_app/src/blocs/events/event_search/event_search_cubit.dar
 import 'package:backtix_app/src/blocs/events/my_events/my_events_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
 import 'package:backtix_app/src/blocs/login/login_bloc.dart';
+import 'package:backtix_app/src/blocs/notifications/info_notifications_cubit.dart';
+import 'package:backtix_app/src/blocs/notifications/notifications_cubit.dart';
 import 'package:backtix_app/src/blocs/onboarding/onboarding_cubit.dart';
 import 'package:backtix_app/src/blocs/register/register_bloc.dart';
 import 'package:backtix_app/src/blocs/theme_mode/theme_mode_cubit.dart';
@@ -32,6 +34,7 @@ import 'package:backtix_app/src/core/network/interceptors/auth_interceptor.dart'
 import 'package:backtix_app/src/core/network/interceptors/logging_interceptor.dart';
 import 'package:backtix_app/src/data/repositories/balance_repository.dart';
 import 'package:backtix_app/src/data/repositories/event_repository.dart';
+import 'package:backtix_app/src/data/repositories/notification_repository.dart';
 import 'package:backtix_app/src/data/repositories/ticket_repository.dart';
 import 'package:backtix_app/src/data/repositories/user_repository.dart';
 import 'package:backtix_app/src/data/services/remote/auth_service.dart';
@@ -39,6 +42,7 @@ import 'package:backtix_app/src/data/services/remote/balance_service.dart';
 import 'package:backtix_app/src/data/services/remote/event_service.dart';
 import 'package:backtix_app/src/data/services/remote/google_auth_service.dart';
 import 'package:backtix_app/src/data/services/remote/location_service.dart';
+import 'package:backtix_app/src/data/services/remote/notification_service.dart';
 import 'package:backtix_app/src/data/services/remote/payment_service.dart';
 import 'package:backtix_app/src/data/services/remote/ticket_service.dart';
 import 'package:backtix_app/src/data/services/remote/user_service.dart';
@@ -73,6 +77,9 @@ Future<void> initializeDependencies() async {
   GetIt.I.registerLazySingleton<BalanceService>(
     () => BalanceService(GetIt.I<Dio>()),
   );
+  GetIt.I.registerLazySingleton<NotificationService>(
+    () => NotificationService(GetIt.I<Dio>()),
+  );
 
   await initPaymentService();
 
@@ -91,6 +98,9 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerLazySingleton<BalanceRepository>(
     () => BalanceRepository(GetIt.I<BalanceService>()),
+  );
+  GetIt.I.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepository(GetIt.I<NotificationService>()),
   );
 
   GetIt.I.registerSingleton<AuthBloc>(
@@ -196,6 +206,12 @@ Future<void> initializeDependencies() async {
   );
   GetIt.I.registerFactory<MyWithdrawRequestsCubit>(
     () => MyWithdrawRequestsCubit(GetIt.I<BalanceRepository>()),
+  );
+  GetIt.I.registerFactory<NotificationsCubit>(
+    () => NotificationsCubit(GetIt.I<NotificationRepository>()),
+  );
+  GetIt.I.registerFactory<InfoNotificationsCubit>(
+    () => InfoNotificationsCubit(GetIt.I<NotificationRepository>()),
   );
 }
 
