@@ -11,10 +11,10 @@ class TicketPurchaseRefundCubit extends Cubit<TicketPurchaseRefundState> {
 
   TicketPurchaseRefundCubit(this._ticketRepository) : super(const _Initial());
 
-  Future<void> refundTicketPurchase(String uid) async {
+  Future<void> refundTicketPurchase(String uid, String eventId) async {
     emit(const TicketPurchaseRefundState.loading());
 
-    final result = await _ticketRepository.refundTicketPurchase(uid);
+    final result = await _ticketRepository.refundTicketPurchase(uid, eventId);
 
     return result.fold(
       (err) => emit(TicketPurchaseRefundState.failed(err)),
