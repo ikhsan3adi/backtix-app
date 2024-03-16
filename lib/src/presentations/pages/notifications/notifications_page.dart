@@ -242,6 +242,7 @@ class _NotificationList<C extends NotificationsCubit> extends StatelessWidget {
           } else if (notification.type == NotificationType.ticketRefundStatus) {
             return context.goNamed(
               RouteNames.myTickets,
+              queryParameters: {'refund': 'yes'},
             );
           }
           return context.goNamed(

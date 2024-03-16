@@ -135,8 +135,12 @@ class AppRoute {
                 GoRoute(
                   name: RouteNames.myTickets,
                   path: '/${RouteNames.myTickets}',
-                  pageBuilder: (_, __) {
-                    return const NoTransitionPage(child: MyTicketsPage());
+                  pageBuilder: (_, state) {
+                    final refund = state.uri.queryParameters['refund'];
+                    return NoTransitionPage(
+                      restorationId: refund,
+                      child: MyTicketsPage(gotorefund: refund != null),
+                    );
                   },
                   routes: [
                     GoRoute(
