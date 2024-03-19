@@ -62,7 +62,6 @@ class _MyTicketsPageState extends State<MyTicketsPage>
 
     return Scaffold(
       body: NestedScrollView(
-        scrollBehavior: const MaterialScrollBehavior(),
         headerSliverBuilder: (_, innerBoxIsScrolled) => [
           SliverAppBar(
             centerTitle: true,

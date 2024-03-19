@@ -56,79 +56,77 @@ class _NotificationsPageState extends State<NotificationsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: RefreshIndicator.adaptive(
-          onRefresh: () async {
-            if (_tabController.index == 0) {
-              return context.read<NotificationsCubit>().getNotifications();
-            }
-            return context.read<InfoNotificationsCubit>().getNotifications();
-          },
-          child: NestedScrollView(
-            controller: _scrollController,
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverAppBar(
-                title: const Text('Notification'),
-                floating: true,
-                snap: true,
-                forceElevated: innerBoxIsScrolled,
-                actions: [
-                  TextButton.icon(
-                    onPressed: () async {
-                      final b = await ConfirmDialog.show(context);
-                      if ((b ?? false) && context.mounted) {
-                        if (_tabController.index == 0) {
-                          return await context
-                              .read<NotificationsCubit>()
-                              .readAllNotifications();
-                        }
+      body: RefreshIndicator.adaptive(
+        notificationPredicate: (n) => n.depth == 2,
+        onRefresh: () async {
+          if (_tabController.index == 0) {
+            return context.read<NotificationsCubit>().getNotifications();
+          }
+          return context.read<InfoNotificationsCubit>().getNotifications();
+        },
+        child: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              title: const Text('Notification'),
+              floating: true,
+              snap: true,
+              forceElevated: innerBoxIsScrolled,
+              actions: [
+                TextButton.icon(
+                  onPressed: () async {
+                    final b = await ConfirmDialog.show(context);
+                    if ((b ?? false) && context.mounted) {
+                      if (_tabController.index == 0) {
                         return await context
-                            .read<InfoNotificationsCubit>()
+                            .read<NotificationsCubit>()
                             .readAllNotifications();
                       }
-                    },
-                    icon: const Icon(Icons.check),
-                    label: const Text('Mark as read'),
-                  ),
-                ],
-                bottom: TabBar(
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: 'Important'),
-                    Tab(text: 'Info'),
-                  ],
+                      return await context
+                          .read<InfoNotificationsCubit>()
+                          .readAllNotifications();
+                    }
+                  },
+                  icon: const Icon(Icons.check),
+                  label: const Text('Mark as read'),
                 ),
+              ],
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(text: 'Important'),
+                  Tab(text: 'Info'),
+                ],
               ),
-            ],
-            body: Builder(builder: (context) {
-              /// If list is not scrollable, get more data immediately
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                if (_scrollController.position.maxScrollExtent <=
-                    kToolbarHeight + kTextTabBarHeight) {
-                  if (_tabController.index == 0) {
-                    return context
-                        .read<NotificationsCubit>()
-                        .getMoreNotifications();
-                  }
+            ),
+          ],
+          body: Builder(builder: (context) {
+            /// If list is not scrollable, get more data immediately
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              if (_scrollController.position.maxScrollExtent <=
+                  kToolbarHeight + kTextTabBarHeight) {
+                if (_tabController.index == 0) {
                   return context
-                      .read<InfoNotificationsCubit>()
+                      .read<NotificationsCubit>()
                       .getMoreNotifications();
                 }
-              });
-              return TabBarView(
-                controller: _tabController,
-                children: const [
-                  _NotificationList<NotificationsCubit>(
-                    key: PageStorageKey<String>('important_notifications'),
-                  ),
-                  _NotificationList<InfoNotificationsCubit>(
-                    key: PageStorageKey<String>('info_notifications'),
-                  ),
-                ],
-              );
-            }),
-          ),
+                return context
+                    .read<InfoNotificationsCubit>()
+                    .getMoreNotifications();
+              }
+            });
+            return TabBarView(
+              controller: _tabController,
+              children: const [
+                _NotificationList<NotificationsCubit>(
+                  key: PageStorageKey<String>('important_notifications'),
+                ),
+                _NotificationList<InfoNotificationsCubit>(
+                  key: PageStorageKey<String>('info_notifications'),
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
