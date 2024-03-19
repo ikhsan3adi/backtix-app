@@ -89,14 +89,15 @@ class NotificationCard extends StatelessWidget {
             ),
           ),
         ),
-        IconButton(
-          onPressed: onRead,
-          icon: Icon(
-            Icons.check,
-            color: context.colorScheme.primary,
-            size: 28,
+        if (!notification.isRead)
+          IconButton(
+            onPressed: onRead,
+            icon: Icon(
+              Icons.check,
+              color: context.colorScheme.primary,
+              size: 28,
+            ),
           ),
-        ),
       ],
     );
   }

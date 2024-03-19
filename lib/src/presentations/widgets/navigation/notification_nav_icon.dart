@@ -18,12 +18,13 @@ class NotificationNavIcon extends StatelessWidget {
       builder: (context, state) {
         return state.maybeMap(
           loaded: (state) {
+            final ntx = state.notifications.where((e) => !e.isRead);
             return Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 Icon(iconData),
-                if (state.notifications.isNotEmpty)
+                if (ntx.isNotEmpty)
                   Positioned(
                     top: -1,
                     right: -2,
@@ -37,7 +38,7 @@ class NotificationNavIcon extends StatelessWidget {
                         minHeight: 12,
                       ),
                       child: Text(
-                        '${state.notifications.length}',
+                        '${ntx.length}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: context.colorScheme.onError,
