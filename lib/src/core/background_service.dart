@@ -42,10 +42,10 @@ class BackgroundService {
           onStart: onStart,
           autoStartOnBoot: true,
           autoStart: false,
-          isForegroundMode: false,
+          isForegroundMode: true,
           notificationChannelId: notificationChannelId,
           initialNotificationTitle: Constant.appName,
-          initialNotificationContent: 'Initializing',
+          initialNotificationContent: 'Notification service enabled',
           foregroundServiceNotificationId: 6969,
         ),
         iosConfiguration: IosConfiguration(
