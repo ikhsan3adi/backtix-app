@@ -12,13 +12,17 @@ abstract class NotificationService {
   @GET('notifications')
   Future<HttpResponse<List<NotificationModel>>> getImportantNotifications([
     @Query('page') int page = 0,
+    @Query('skip') int? skip,
     @Query('from') DateTime? from,
+    @Query('to') DateTime? to,
   ]);
 
   @GET('notifications/info')
   Future<HttpResponse<List<NotificationModel>>> getInfoNotifications([
     @Query('page') int page = 0,
+    @Query('skip') int? skip,
     @Query('from') DateTime? from,
+    @Query('to') DateTime? to,
   ]);
 
   @NoBody()

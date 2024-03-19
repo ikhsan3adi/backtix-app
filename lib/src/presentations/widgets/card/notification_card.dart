@@ -39,6 +39,8 @@ class NotificationCard extends StatelessWidget {
                       Icons.rotate_left_rounded,
                     NotificationType.ticketRefundStatus =>
                       Icons.rotate_left_rounded,
+                    NotificationType.eventStatus =>
+                      Icons.calendar_month_outlined,
                   },
                   color: notification.isRead
                       ? context.theme.disabledColor
@@ -57,19 +59,7 @@ class NotificationCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          switch (notification.type) {
-                            NotificationType.ticketPurchase =>
-                              'Ticket purchase information',
-                            NotificationType.ticketSales =>
-                              'Ticket sales report',
-                            NotificationType.withdrawStatus =>
-                              'Withdrawal status',
-                            NotificationType.other => 'Information',
-                            NotificationType.ticketRefundRequest =>
-                              'Ticket refund requests',
-                            NotificationType.ticketRefundStatus =>
-                              'Refund request status',
-                          },
+                          notification.type.title,
                           style: context.textTheme.titleMedium?.copyWith(
                             color: notification.isRead
                                 ? context.theme.disabledColor

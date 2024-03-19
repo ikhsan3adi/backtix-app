@@ -1,16 +1,22 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 enum NotificationType {
+  @JsonValue('EVENT_STATUS')
+  eventStatus('Event status information'),
   @JsonValue('TICKET_PURCHASE')
-  ticketPurchase,
+  ticketPurchase('Ticket purchase information'),
   @JsonValue('TICKET_SALES')
-  ticketSales,
+  ticketSales('Ticket sales report'),
   @JsonValue('TICKET_REFUND_REQUEST')
-  ticketRefundRequest,
+  ticketRefundRequest('Ticket refund requests'),
   @JsonValue('TICKET_REFUND_STATUS')
-  ticketRefundStatus,
+  ticketRefundStatus('Refund request status'),
   @JsonValue('WITHDRAW_STATUS')
-  withdrawStatus,
+  withdrawStatus('Withdrawal status'),
   @JsonValue('OTHER')
-  other,
+  other('Information');
+
+  final String title;
+
+  const NotificationType(this.title);
 }

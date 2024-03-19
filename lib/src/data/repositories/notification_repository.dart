@@ -9,12 +9,19 @@ class NotificationRepository {
   const NotificationRepository(this._notificationService);
 
   Future<Either<DioException, List<NotificationModel>>>
-      getImportantNotifications({int page = 0, DateTime? from}) async {
+      getImportantNotifications({
+    int page = 0,
+    int? skip,
+    DateTime? from,
+    DateTime? to,
+  }) async {
     return await TaskEither.tryCatch(
       () async {
         final response = await _notificationService.getImportantNotifications(
           page,
+          skip,
           from,
+          to,
         );
         return response.data;
       },
@@ -24,13 +31,17 @@ class NotificationRepository {
 
   Future<Either<DioException, List<NotificationModel>>> getInfoNotifications({
     int page = 0,
+    int? skip,
     DateTime? from,
+    DateTime? to,
   }) async {
     return await TaskEither.tryCatch(
       () async {
         final response = await _notificationService.getInfoNotifications(
           page,
+          skip,
           from,
+          to,
         );
         return response.data;
       },

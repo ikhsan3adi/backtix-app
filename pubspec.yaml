@@ -80,6 +80,11 @@ dependencies:
   latlong2: ^0.9.0
   nominatim_geocoding: ^0.0.6
 
+  # notification & background service
+  flutter_local_notifications: ^17.0.0
+  flutter_background_service: ^5.0.5
+  flutter_background_service_android: ^6.2.2
+
   # form
   validatorless: ^1.2.3
   regexpattern: ^2.6.0

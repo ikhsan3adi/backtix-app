@@ -1,9 +1,13 @@
 import 'package:backtix_app/src/blocs/notifications/info_notifications_cubit.dart';
 import 'package:backtix_app/src/blocs/notifications/notifications_cubit.dart';
+import 'package:backtix_app/src/config/constant.dart';
 import 'package:backtix_app/src/config/routes/route_names.dart';
+import 'package:backtix_app/src/core/background_service.dart';
+import 'package:backtix_app/src/core/local_notification.dart';
 import 'package:backtix_app/src/data/models/notification/notification_entity_type_enum.dart';
 import 'package:backtix_app/src/data/models/notification/notification_model.dart';
 import 'package:backtix_app/src/data/models/notification/notification_type_enum.dart';
+import 'package:backtix_app/src/data/services/background_notification_service.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,15 +56,15 @@ class _NotificationsPageState extends State<NotificationsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator.adaptive(
-        onRefresh: () async {
-          if (_tabController.index == 0) {
-            return context.read<NotificationsCubit>().getNotifications();
-          }
-          return context.read<InfoNotificationsCubit>().getNotifications();
-        },
-        child: DefaultTabController(
-          length: 2,
+      body: DefaultTabController(
+        length: 2,
+        child: RefreshIndicator.adaptive(
+          onRefresh: () async {
+            if (_tabController.index == 0) {
+              return context.read<NotificationsCubit>().getNotifications();
+            }
+            return context.read<InfoNotificationsCubit>().getNotifications();
+          },
           child: NestedScrollView(
             controller: _scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -116,10 +120,10 @@ class _NotificationsPageState extends State<NotificationsPage>
                 controller: _tabController,
                 children: const [
                   _NotificationList<NotificationsCubit>(
-                    key: PageStorageKey<String>('important'),
+                    key: PageStorageKey<String>('important_notifications'),
                   ),
                   _NotificationList<InfoNotificationsCubit>(
-                    key: PageStorageKey<String>('info'),
+                    key: PageStorageKey<String>('info_notifications'),
                   ),
                 ],
               );
@@ -136,6 +140,20 @@ class _NotificationList<C extends NotificationsCubit> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BackgroundService.on(BackgroundNotificationService.updateMethod)?.listen(
+        (event) {
+          final List data = event?[(key as PageStorageKey<String>).value] ?? [];
+          debugPrint(event.toString());
+          context.read<C>().addNewNotifications(
+                data.map((e) => NotificationModel.fromJson(e)).toList(),
+                DateTime.tryParse(event?[C is InfoNotificationsCubit
+                    ? 'info_last_updated'
+                    : 'last_updated']),
+              );
+        },
+      );
+    });
     return CustomScrollView(
       key: key,
       slivers: [
@@ -147,11 +165,32 @@ class _NotificationList<C extends NotificationsCubit> extends StatelessWidget {
             bottom: 16,
           ),
           sliver: BlocConsumer<C, NotificationsState>(
-            listener: (_, state) {
+            listener: (context, state) {
               state.mapOrNull(
                 loaded: (state) {
                   if (state.exception != null) {
-                    ErrorDialog.show(context, state.exception!);
+                    return ErrorDialog.show(context, state.exception!);
+                  }
+                  if (BackgroundService.supported) {
+                    return BackgroundService.invoke(
+                      BackgroundNotificationService.setDateMethod,
+                      C is InfoNotificationsCubit
+                          ? {'lastUpdatedInfo': state.lastUpdated}
+                          : {'lastUpdated': state.lastUpdated},
+                    );
+                  }
+                  final lastUpdated = context.read<C>().previouslastUpdated;
+                  final limit = Constant.notificationCountLimit;
+                  final ntx = state.notifications.where((e) {
+                    return !e.isRead && e.updatedAt.isAfter(lastUpdated);
+                  }).take(limit);
+                  for (var n in ntx) {
+                    LocalNotification.show(
+                      id: 6969,
+                      title: n.type.title,
+                      body: n.message,
+                      payload: '${n.id}',
+                    );
                   }
                 },
               );
@@ -183,8 +222,11 @@ class _NotificationList<C extends NotificationsCubit> extends StatelessWidget {
                       return NotificationCard(
                         notification: notification,
                         onTap: _onNotificationTap(context, notification),
-                        onRead: () =>
-                            context.read<C>().readNotification(notification.id),
+                        onRead: notification.isRead
+                            ? null
+                            : () => context
+                                .read<C>()
+                                .readNotification(notification.id),
                       );
                     },
                   );
@@ -243,6 +285,11 @@ class _NotificationList<C extends NotificationsCubit> extends StatelessWidget {
             return context.goNamed(
               RouteNames.myTickets,
               queryParameters: {'refund': 'yes'},
+            );
+          } else if (notification.type == NotificationType.eventStatus) {
+            return context.goNamed(
+              RouteNames.myEventDetail,
+              pathParameters: {'id': notification.entityId ?? ''},
             );
           }
           return context.goNamed(
