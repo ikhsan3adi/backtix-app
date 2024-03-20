@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:backtix_app/src/app.dart';
 import 'package:backtix_app/src/blocs/app_bloc_observer.dart';
+import 'package:backtix_app/src/core/background_service.dart';
+import 'package:backtix_app/src/core/local_notification.dart';
 import 'package:backtix_app/src/service_locator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -27,7 +29,11 @@ Future<void> main() async {
             : await getApplicationDocumentsDirectory(),
       );
 
-      await initializeDependencies();
+      await Future.wait([
+        ServiceLocator.initializeDependencies(),
+        LocalNotification.init(),
+      ]);
+      await BackgroundService.init();
 
       /// for debugging on desktop
       if (kDebugMode &&

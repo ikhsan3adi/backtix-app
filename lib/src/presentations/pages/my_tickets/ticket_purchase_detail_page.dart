@@ -327,6 +327,7 @@ class _Buttons extends StatelessWidget {
                       onConfirm: (cubit) async {
                         return await cubit.refundTicketPurchase(
                           ticketPurchase.uid,
+                          ticketPurchase.ticket!.event!.id,
                         );
                       },
                     ).then((refunded) {

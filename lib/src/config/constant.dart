@@ -24,4 +24,10 @@ class Constant {
 
   static const String locale = 'id_ID';
   static const String currencyPrefix = 'Rp';
+
+  /// notification
+  static Duration shortInterval = const Duration(seconds: 15);
+  static Duration mediumInterval = const Duration(seconds: 60);
+  static Duration longInterval = const Duration(seconds: 300);
+  static int notificationCountLimit = 5;
 }

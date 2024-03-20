@@ -87,10 +87,14 @@ class TicketRepository {
 
   Future<Either<DioException, TicketPurchaseModel>> refundTicketPurchase(
     String uid,
+    String eventId,
   ) async {
     return await TaskEither.tryCatch(
       () async {
-        final response = await _ticketService.refundTicketPurchase(uid);
+        final response = await _ticketService.refundTicketPurchase(
+          uid,
+          eventId,
+        );
         return response.data;
       },
       (error, _) => error as DioException,

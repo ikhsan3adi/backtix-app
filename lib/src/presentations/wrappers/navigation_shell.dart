@@ -1,5 +1,8 @@
 import 'package:backtix_app/src/blocs/auth/auth_bloc.dart';
 import 'package:backtix_app/src/blocs/events/published_events/published_events_bloc.dart';
+import 'package:backtix_app/src/blocs/notifications/info_notifications_cubit.dart';
+import 'package:backtix_app/src/blocs/notifications/notifications_cubit.dart';
+import 'package:backtix_app/src/core/background_service.dart';
 import 'package:backtix_app/src/data/models/event/event_query.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
@@ -20,6 +23,10 @@ class NavigationShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.watch<AuthBloc>().user;
 
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await BackgroundService.start();
+    });
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -31,6 +38,20 @@ class NavigationShell extends StatelessWidget {
                 refreshNearbyEvents: true,
               ),
             ),
+        ),
+        BlocProvider<NotificationsCubit>(
+          create: (_) {
+            final cubit = GetIt.I<NotificationsCubit>()..getNotifications();
+            if (!BackgroundService.supported) cubit.startRefreshing();
+            return cubit;
+          },
+        ),
+        BlocProvider<InfoNotificationsCubit>(
+          create: (_) {
+            final cubit = GetIt.I<InfoNotificationsCubit>()..getNotifications();
+            if (!BackgroundService.supported) cubit.startRefreshing();
+            return cubit;
+          },
         ),
       ],
       child: _NavigationShell(navigationShell: navigationShell),

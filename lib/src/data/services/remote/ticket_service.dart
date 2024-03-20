@@ -46,6 +46,7 @@ abstract class TicketService {
   @POST('purchases/{uid}/refund')
   Future<HttpResponse<TicketPurchaseModel>> refundTicketPurchase(
     @Path('uid') String uid,
+    @Query('eventId') String eventId,
   );
 
   @PATCH('purchases/{uid}/refund')

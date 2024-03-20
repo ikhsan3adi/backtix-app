@@ -16,14 +16,17 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
   final AuthService _authService;
   final UserRepository _userRepository;
   final DioClient _dioClient;
-  final GoogleAuthService _googleAuthService;
+  final GoogleAuthService? _googleAuthService;
+
+  final bool disableToJson;
 
   AuthBloc(
     this._authService,
     this._userRepository,
-    this._dioClient,
+    this._dioClient, [
     this._googleAuthService,
-  ) : super(const _Initial()) {
+    this.disableToJson = false,
+  ]) : super(const _Initial()) {
     on<_AddAuthentication>(_addAuthentication);
     on<_RemoveAuthentication>(_removeAuthentication);
     on<_UpdateUserDetails>(_updateUserDetails);
@@ -90,7 +93,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
     } finally {
       _currentUser = null;
       _dioClient.deleteAccessTokenHeader();
-      await _googleAuthService.signOut();
+      await _googleAuthService?.signOut();
       emit(const AuthState.unauthenticated());
     }
   }
@@ -137,6 +140,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
 
   @override
   Map<String, dynamic>? toJson(AuthState state) {
+    if (disableToJson) return null;
     return state.maybeMap(
       authenticated: (state) => {
         'authenticated': true,

@@ -10,23 +10,28 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 class MyTicketsPage extends StatefulWidget {
-  const MyTicketsPage({super.key});
+  const MyTicketsPage({super.key, this.gotorefund = false});
+
+  final bool gotorefund;
 
   @override
   State<MyTicketsPage> createState() => _MyTicketsPageState();
 }
 
-class _MyTicketsPageState extends State<MyTicketsPage> {
+class _MyTicketsPageState extends State<MyTicketsPage>
+    with SingleTickerProviderStateMixin {
   static const double _filterChipsHeight = 50;
 
   late final MyTicketPurchasesBloc upcomingTicketPurchasesBloc,
       refundTicketPurchasesBloc;
 
   final _tabIndex = ValueNotifier(0);
+  late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     upcomingTicketPurchasesBloc = GetIt.I<MyTicketPurchasesBloc>()
       ..add(const MyTicketPurchasesEvent.getMyTicketPurchases(
         TicketPurchaseQuery(
@@ -43,82 +48,86 @@ class _MyTicketsPageState extends State<MyTicketsPage> {
 
   @override
   void dispose() {
+    _tabController.dispose();
     _tabIndex.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.gotorefund) {
+      _tabIndex.value = 1;
+      _tabController.animateTo(1);
+    }
+
     return Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          scrollBehavior: const MaterialScrollBehavior(),
-          headerSliverBuilder: (_, innerBoxIsScrolled) => [
-            SliverAppBar(
-              centerTitle: true,
-              pinned: true,
-              floating: true,
-              forceElevated: innerBoxIsScrolled,
-              title: const Text('My Tickets'),
-              actions: [
-                IconButton(
-                  onPressed: () => context.goNamed(RouteNames.myTicketsHistory),
-                  icon: const FaIcon(FontAwesomeIcons.clockRotateLeft),
-                ),
-              ],
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(
-                  kTextTabBarHeight + _filterChipsHeight,
-                ),
-                child: Column(
-                  children: [
-                    TabBar(
-                      onTap: (index) => _tabIndex.value = index,
-                      tabs: const [
-                        Tab(text: 'Upcoming'),
-                        Tab(text: 'Refund'),
-                      ],
-                    ),
-                    SizedBox(
-                      height: _filterChipsHeight,
-                      child: ValueListenableBuilder(
-                        valueListenable: _tabIndex,
-                        builder: (_, index, __) {
-                          switch (index) {
-                            case 0:
-                              return BlocProvider.value(
-                                value: upcomingTicketPurchasesBloc,
-                                child: const _FilterChips.upcoming(),
-                              );
-                            case 1:
-                              return BlocProvider.value(
-                                value: refundTicketPurchasesBloc,
-                                child: const _FilterChips.refund(),
-                              );
-                            default:
-                              return const SizedBox();
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-          body: TabBarView(
-            children: [
-              BlocProvider.value(
-                value: upcomingTicketPurchasesBloc,
-                child: const TicketPurchaseList(),
-              ),
-              BlocProvider.value(
-                value: refundTicketPurchasesBloc,
-                child: const TicketPurchaseList(),
+      body: NestedScrollView(
+        headerSliverBuilder: (_, innerBoxIsScrolled) => [
+          SliverAppBar(
+            centerTitle: true,
+            pinned: true,
+            floating: true,
+            forceElevated: innerBoxIsScrolled,
+            title: const Text('My Tickets'),
+            actions: [
+              IconButton(
+                onPressed: () => context.goNamed(RouteNames.myTicketsHistory),
+                icon: const FaIcon(FontAwesomeIcons.clockRotateLeft),
               ),
             ],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(
+                kTextTabBarHeight + _filterChipsHeight,
+              ),
+              child: Column(
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    onTap: (index) => _tabIndex.value = index,
+                    tabs: const [
+                      Tab(text: 'Upcoming'),
+                      Tab(text: 'Refund'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: _filterChipsHeight,
+                    child: ValueListenableBuilder(
+                      valueListenable: _tabIndex,
+                      builder: (_, index, __) {
+                        switch (index) {
+                          case 0:
+                            return BlocProvider.value(
+                              value: upcomingTicketPurchasesBloc,
+                              child: const _FilterChips.upcoming(),
+                            );
+                          case 1:
+                            return BlocProvider.value(
+                              value: refundTicketPurchasesBloc,
+                              child: const _FilterChips.refund(),
+                            );
+                          default:
+                            return const SizedBox();
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
+        ],
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            BlocProvider.value(
+              value: upcomingTicketPurchasesBloc,
+              child: const TicketPurchaseList(),
+            ),
+            BlocProvider.value(
+              value: refundTicketPurchasesBloc,
+              child: const TicketPurchaseList(),
+            ),
+          ],
         ),
       ),
     );

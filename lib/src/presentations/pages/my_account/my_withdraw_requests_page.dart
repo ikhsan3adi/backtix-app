@@ -105,7 +105,7 @@ class _MyWithdrawRequestsScreenState extends State<_MyWithdrawRequestsScreen> {
           ),
         ),
         const SliverPadding(
-          padding: EdgeInsets.only(left: 16, top: 4, right: 16),
+          padding: EdgeInsets.only(left: 16, top: 4, right: 16, bottom: 72),
           sliver: _WithdrawRequestList(),
         ),
         BlocBuilder<MyWithdrawRequestsCubit, MyWithdrawRequestsState>(

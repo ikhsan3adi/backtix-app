@@ -7,17 +7,26 @@ class AuthHelper {
   ///! **Inject [AuthService] with different [Dio] instance without *interceptors***
   ///
   ///! **to avoid infinite interceptor loop (when) receive `401`**
-  AuthHelper(this._authBloc, this._authService);
+  AuthHelper(
+    this._authBloc,
+    this._authService, {
+    this.ignoreUnauthorized = false,
+  });
 
   final AuthService _authService;
   final AuthBloc _authBloc;
+  final bool ignoreUnauthorized;
 
   Future<String?> refreshAccessToken() async {
     try {
+      if (ignoreUnauthorized) _authBloc.hydrate();
+
       final auth = _authBloc.state.mapOrNull(authenticated: (s) => s.auth);
 
       if (auth?.refreshToken == null) {
-        _authBloc.add(const AuthEvent.removeAuthentication());
+        if (!ignoreUnauthorized) {
+          _authBloc.add(const AuthEvent.removeAuthentication());
+        }
         return null;
       }
 
@@ -32,7 +41,7 @@ class AuthHelper {
 
       return response.data.accessToken;
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401 && !ignoreUnauthorized) {
         _authBloc.add(const AuthEvent.removeAuthentication());
       }
     } catch (e) {
