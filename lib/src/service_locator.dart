@@ -257,20 +257,24 @@ class ServiceLocator {
 
   static Future<(NotificationRepository, AuthBloc)>
       initNotificationService() async {
-    final client = await initDio();
-    final dio = client.dio;
+    final client = DioClient(
+      baseUrl: Constant.apiBaseUrl,
+      contentType: Headers.jsonContentType,
+      headers: {'user-agent': '${Constant.appName} background service'},
+    );
     final notificationRepository = NotificationRepository(
-      NotificationService(dio),
+      NotificationService(client.dio),
     );
     final authBloc = AuthBloc(
-      AuthService(dio),
-      UserRepository(UserService(dio)),
+      AuthService(client.dio),
+      UserRepository(UserService(client.dio)),
       client,
+      null,
+      true,
     );
-    dio.interceptors.addAll([
-      LoggingInterceptor(),
+    client.dio.interceptors.addAll([
       AuthInterceptor(
-        dio: dio,
+        dio: client.dio,
         authHelper: AuthHelper(
           authBloc,
           AuthService(
@@ -280,8 +284,21 @@ class ServiceLocator {
             )),
             baseUrl: Constant.apiBaseUrl,
           ),
+          ignoreUnauthorized: true,
         ),
       ),
+      if (kDebugMode)
+        InterceptorsWrapper(
+          onRequest: (req, handler) {
+            debugPrint(req.uri.toString());
+            debugPrint(req.headers.toString());
+            return handler.next(req);
+          },
+          onResponse: (res, handler) {
+            debugPrint(res.data.toString());
+            return handler.next(res);
+          },
+        ),
     ]);
     return (notificationRepository, authBloc);
   }

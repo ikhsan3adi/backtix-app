@@ -41,7 +41,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
     previouslastUpdated = lastUpdated;
     lastUpdated = DateTime.now();
-    final result = await repository.getImportantNotifications();
+    final result = await repository.getImportantNotifications(page: 0);
 
     result.fold(
       (e) => emit(NotificationsState.loaded([], exception: e)),

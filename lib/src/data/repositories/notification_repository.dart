@@ -10,7 +10,7 @@ class NotificationRepository {
 
   Future<Either<DioException, List<NotificationModel>>>
       getImportantNotifications({
-    int page = 0,
+    int? page,
     int? skip,
     DateTime? from,
     DateTime? to,
@@ -30,7 +30,7 @@ class NotificationRepository {
   }
 
   Future<Either<DioException, List<NotificationModel>>> getInfoNotifications({
-    int page = 0,
+    int? page,
     int? skip,
     DateTime? from,
     DateTime? to,

@@ -23,6 +23,10 @@ class NavigationShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.watch<AuthBloc>().user;
 
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await BackgroundService.start();
+    });
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(

@@ -14,10 +14,15 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final statusCode = err.response?.statusCode;
-    final dynamic messageResponse = err.response?.data['message'];
-    final String? message = messageResponse.runtimeType == List
-        ? messageResponse[0]
-        : messageResponse;
+    String? message;
+    if (err.response?.data.runtimeType == String) {
+      message = err.response?.data;
+    } else {
+      final dynamic messageResponse = err.response?.data['message'];
+      message = messageResponse.runtimeType == List
+          ? messageResponse[0]
+          : messageResponse;
+    }
 
     if (statusCode == 401) {
       // If a 401 response is received, refresh the access token

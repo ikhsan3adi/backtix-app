@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:backtix_app/src/config/app_theme.dart';
 import 'package:backtix_app/src/config/constant.dart';
@@ -56,66 +57,73 @@ class BackgroundNotificationService {
   }
 
   void run(ServiceInstance service) async {
-    dispose();
     debugPrint('BACKGROUND NOTIFICATION SERVICE STARTED');
 
     Duration importantInterval = Constant.shortInterval;
     Duration infoInterval = Constant.longInterval;
 
     _timer0 = Timer.periodic(importantInterval, (timer) async {
-      final d = DateTime.now();
-      final result = await _repository.getImportantNotifications(
-        from: lastUpdated,
-      );
+      try {
+        final d = DateTime.now();
+        final result = await _repository.getImportantNotifications(
+          from: lastUpdated,
+        );
 
-      lastUpdated = d;
+        lastUpdated = d;
 
-      debugPrint('UPDATED IMPORTANT NOTIFICATIONS: $lastUpdated');
+        debugPrint('UPDATED IMPORTANT NOTIFICATIONS: $lastUpdated');
 
-      final notifications = result.toNullable() ?? [];
-      showNotifications(notifications);
+        final notifications = result.toNullable() ?? [];
+        showNotifications(notifications);
 
-      service.invoke(
-        updateMethod,
-        {
-          'last_updated': lastUpdated?.toIso8601String(),
-          'important_notifications':
-              notifications.map((e) => e.toJson()).toList(),
-          'info_notifications': [],
-        },
-      );
+        service.invoke(
+          updateMethod,
+          {
+            'last_updated': lastUpdated?.toIso8601String(),
+            'important_notifications':
+                notifications.map((e) => e.toJson()).toList(),
+            'info_notifications': [],
+          },
+        );
+      } catch (e) {
+        debugPrint('UPDATED IMPORTANT NOTIFICATIONS ERROR: $e');
+      }
     });
 
     _timer1 = Timer.periodic(infoInterval, (timer) async {
-      final d = DateTime.now();
-      final result = await _repository.getInfoNotifications(
-        from: lastUpdatedInfo,
-      );
+      try {
+        final d = DateTime.now();
+        final result = await _repository.getInfoNotifications(
+          from: lastUpdatedInfo,
+        );
 
-      lastUpdatedInfo = d;
+        lastUpdatedInfo = d;
 
-      debugPrint('UPDATED INFO NOTIFICATIONS: $lastUpdatedInfo');
+        debugPrint('UPDATED INFO NOTIFICATIONS: $lastUpdatedInfo');
 
-      final notifications = result.toNullable() ?? [];
-      showNotifications(notifications);
+        final notifications = result.toNullable() ?? [];
+        showNotifications(notifications);
 
-      service.invoke(
-        updateMethod,
-        {
-          'info_last_updated': lastUpdatedInfo?.toIso8601String(),
-          'important_notifications': [],
-          'info_notifications': notifications.map((e) => e.toJson()).toList(),
-        },
-      );
+        service.invoke(
+          updateMethod,
+          {
+            'info_last_updated': lastUpdatedInfo?.toIso8601String(),
+            'important_notifications': [],
+            'info_notifications': notifications.map((e) => e.toJson()).toList(),
+          },
+        );
+      } catch (e) {
+        debugPrint('UPDATED INFO NOTIFICATIONS ERROR: $e');
+      }
     });
   }
 
   static final limit = Constant.notificationCountLimit;
 
-  void showNotifications(List<NotificationModel> notifications) {
+  void showNotifications(List<NotificationModel> notifications) async {
     for (var n in notifications.take(limit)) {
-      LocalNotification.show(
-        id: 6969,
+      await LocalNotification.show(
+        id: Random.secure().nextInt(6968),
         title: n.type.title,
         body: n.message,
         payload: '${n.id}',

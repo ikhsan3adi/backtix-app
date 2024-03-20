@@ -16,7 +16,7 @@ class InfoNotificationsCubit extends NotificationsCubit {
 
     previouslastUpdated = lastUpdated;
     lastUpdated = DateTime.now();
-    final result = await repository.getInfoNotifications();
+    final result = await repository.getInfoNotifications(page: 0);
 
     return result.fold(
       (e) => emit(NotificationsState.loaded([], exception: e)),

@@ -14,6 +14,7 @@ class BackgroundService {
   static bool supported = Platform.isAndroid || Platform.isIOS;
 
   static const notificationChannelId = 'btx_notification_channel_id';
+  static const foregroundNotificationId = 6969;
 
   static final service = FlutterBackgroundService();
 
@@ -40,16 +41,16 @@ class BackgroundService {
       await service.configure(
         androidConfiguration: AndroidConfiguration(
           onStart: onStart,
-          autoStartOnBoot: true,
+          autoStartOnBoot: false,
           autoStart: false,
-          isForegroundMode: true,
+          isForegroundMode: false,
           notificationChannelId: notificationChannelId,
           initialNotificationTitle: Constant.appName,
           initialNotificationContent: 'Notification service enabled',
-          foregroundServiceNotificationId: 6969,
+          foregroundServiceNotificationId: foregroundNotificationId,
         ),
         iosConfiguration: IosConfiguration(
-          autoStart: false,
+          autoStart: true,
           onForeground: onStart,
           onBackground: (s) {
             onStart(s);
@@ -68,9 +69,7 @@ class BackgroundService {
     await dotenv.load();
 
     HydratedBloc.storage = await HydratedStorage.build(
-      storageDirectory: kIsWeb
-          ? HydratedStorage.webStorageDirectory
-          : await getApplicationDocumentsDirectory(),
+      storageDirectory: await getApplicationDocumentsDirectory(),
     );
 
     final (repository, bloc) = await ServiceLocator.initNotificationService();
@@ -79,7 +78,7 @@ class BackgroundService {
       repository,
     );
 
-    bloc.stream.listen((state) {
+    final subscription = bloc.stream.listen((state) {
       debugPrint('AUTH BLOC STATE CHANGED: ${state.runtimeType}');
       state.maybeMap(
         authenticated: (_) async => await BackgroundService.start(),
@@ -90,8 +89,10 @@ class BackgroundService {
     service.on('stop').listen((event) async {
       if (supported && (await BackgroundService.service.isRunning())) {
         debugPrint('BACKGROUND SERVICE STOPPED');
+        await subscription.cancel();
+        await bloc.close();
         backgroundNotificationService.dispose();
-        service.stopSelf();
+        await service.stopSelf();
       }
     });
 
