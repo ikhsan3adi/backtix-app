@@ -13,7 +13,7 @@ class LocalNotification {
 
   static Future<void> init() async {
     const initializationSettingsAndroid = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      '@drawable/ic_bg_service',
     );
 
     /// Not sure
@@ -73,6 +73,7 @@ class LocalNotification {
     AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'notification_id',
       Constant.appName,
+      icon: '@drawable/ic_bg_service',
       channelDescription: '${Constant.appName} notifications',
       importance: Importance.defaultImportance,
       priority: Priority.high,
@@ -82,7 +83,9 @@ class LocalNotification {
       presentAlert: true,
       threadIdentifier: Constant.appName,
     );
-    const LinuxNotificationDetails linuxDetails = LinuxNotificationDetails();
+    LinuxNotificationDetails linuxDetails = LinuxNotificationDetails(
+      icon: AssetsLinuxIcon('assets/icons/ic_launcher.png'),
+    );
     return NotificationDetails(
       android: androidDetails,
       iOS: darwinDetails,
