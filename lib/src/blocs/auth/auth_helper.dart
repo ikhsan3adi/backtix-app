@@ -45,7 +45,7 @@ class AuthHelper {
         _authBloc.add(const AuthEvent.removeAuthentication());
       }
     } catch (e) {
-      if (kDebugMode) print(e.toString());
+      if (kDebugMode) debugPrint(e.toString());
     }
     return null;
   }

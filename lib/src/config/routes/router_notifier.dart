@@ -11,8 +11,8 @@ class RouterNotifier extends ChangeNotifier {
 
   String? redirect(_, GoRouterState state) {
     // if (kDebugMode) {
-    //   print(_authBloc.state);
-    //   print(state.matchedLocation);
+    //   debugPrint(_authBloc.state);
+    //   debugPrint(state.matchedLocation);
     // }
 
     return _authBloc.state.whenOrNull(

@@ -38,8 +38,8 @@ class GoogleAuthService {
         final idToken = googleAuth?.idToken;
 
         if (kDebugMode) {
-          print('idToken: ${googleAuth?.idToken}');
-          print('$googleSignInAccount');
+          debugPrint('idToken: ${googleAuth?.idToken}');
+          debugPrint('$googleSignInAccount');
         }
 
         if (serverAuthCode == null ||

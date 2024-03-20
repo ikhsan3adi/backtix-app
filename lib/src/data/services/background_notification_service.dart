@@ -47,7 +47,6 @@ class BackgroundNotificationService {
 
   void start(ServiceInstance service) async {
     service.on(setDateMethod).listen((event) {
-      debugPrint(event?.toString());
       lastUpdated = DateTime.tryParse(event?['lastUpdated']);
       lastUpdatedInfo = DateTime.tryParse(event?['lastUpdatedInfo']);
       run(service);

@@ -79,7 +79,7 @@ class BackgroundService {
     );
 
     final subscription = bloc.stream.listen((state) {
-      debugPrint('AUTH BLOC STATE CHANGED: ${state.runtimeType}');
+      debugPrint('BACKGROUND AUTH BLOC STATE CHANGED: ${state.runtimeType}');
       state.maybeMap(
         authenticated: (_) async => await BackgroundService.start(),
         orElse: () => BackgroundService.stop(),

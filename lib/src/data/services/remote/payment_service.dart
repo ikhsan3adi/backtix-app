@@ -17,7 +17,7 @@ class PaymentService {
     _midtransSdk?.setUIKitCustomSetting(skipCustomerDetailsPages: true);
     _midtransSdk?.setTransactionFinishedCallback((result) {
       _completer?.complete(!result.isTransactionCanceled);
-      if (kDebugMode) print(result.toJson());
+      if (kDebugMode) debugPrint(result.toJson().toString());
     });
   }
 
@@ -32,7 +32,7 @@ class PaymentService {
 
         return await _completer?.future ?? false;
       } catch (e) {
-        if (kDebugMode) print(e.toString());
+        if (kDebugMode) debugPrint(e.toString());
         return false;
       }
     }
