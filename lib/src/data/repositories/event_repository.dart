@@ -78,7 +78,7 @@ class EventRepository {
           eventImageFiles: newEvent.eventImageFiles
               .map((e) => MultipartFile.fromBytes(
                     e.readAsBytesSync(),
-                    filename: e.path.split('/').last,
+                    filename: e.path.split(Platform.pathSeparator).last,
                   ))
               .toList(),
           ticketImageFiles: newEvent.ticketImageFiles
