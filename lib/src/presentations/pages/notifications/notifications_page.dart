@@ -4,17 +4,14 @@ import 'dart:math';
 import 'package:backtix_app/src/blocs/notifications/info_notifications_cubit.dart';
 import 'package:backtix_app/src/blocs/notifications/notifications_cubit.dart';
 import 'package:backtix_app/src/config/constant.dart';
-import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/core/background_service.dart';
 import 'package:backtix_app/src/core/local_notification.dart';
-import 'package:backtix_app/src/data/models/notification/notification_entity_type_enum.dart';
 import 'package:backtix_app/src/data/models/notification/notification_model.dart';
-import 'package:backtix_app/src/data/models/notification/notification_type_enum.dart';
 import 'package:backtix_app/src/data/services/background_notification_service.dart';
+import 'package:backtix_app/src/presentations/utils/utils.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -151,14 +148,15 @@ class _NS<C extends NotificationsCubit> extends State<_NotificationList<C>> {
                     final lastUpdated = context.read<C>().previouslastUpdated;
                     final limit = Constant.notificationCountLimit;
                     final ntx = state.notifications.where((e) {
-                      return !e.isRead && e.updatedAt.isAfter(lastUpdated);
+                      return !e.isRead &&
+                          (e.updatedAt?.isAfter(lastUpdated) ?? false);
                     }).take(limit);
                     for (var n in ntx) {
                       await LocalNotification.show(
                         id: Random.secure().nextInt(6968),
                         title: n.type.title,
                         body: n.message,
-                        payload: '${n.id}',
+                        payload: n.toSimpleJson().toString(),
                       );
                     }
                   },
@@ -196,7 +194,10 @@ class _NS<C extends NotificationsCubit> extends State<_NotificationList<C>> {
                         final notification = state.notifications[index];
                         return NotificationCard(
                           notification: notification,
-                          onTap: _onNotificationTap(context, notification),
+                          onTap: NotificationHandler.onNotificationTap(
+                            context,
+                            notification,
+                          ),
                           onRead: notification.isRead
                               ? null
                               : () => context
@@ -235,50 +236,5 @@ class _NS<C extends NotificationsCubit> extends State<_NotificationList<C>> {
         ],
       ),
     );
-  }
-
-  VoidCallback _onNotificationTap(
-    BuildContext context,
-    NotificationModel notification,
-  ) {
-    return () {
-      switch (notification.entityType) {
-        case NotificationEntityType.event:
-          if (notification.type == NotificationType.ticketPurchase) {
-            return context.goNamed(RouteNames.myTickets);
-          } else if (notification.type == NotificationType.ticketSales) {
-            return context.goNamed(
-              RouteNames.eventTicketSales,
-              pathParameters: {'id': notification.entityId ?? ''},
-            );
-          } else if (notification.type ==
-              NotificationType.ticketRefundRequest) {
-            return context.goNamed(
-              RouteNames.eventTicketRefundRequest,
-              pathParameters: {'id': notification.entityId ?? ''},
-            );
-          } else if (notification.type == NotificationType.ticketRefundStatus) {
-            return context.goNamed(
-              RouteNames.myTickets,
-              queryParameters: {'refund': 'yes'},
-            );
-          } else if (notification.type == NotificationType.eventStatus) {
-            return context.goNamed(
-              RouteNames.myEventDetail,
-              pathParameters: {'id': notification.entityId ?? ''},
-            );
-          }
-          return context.goNamed(
-            RouteNames.eventDetail,
-            pathParameters: {'id': notification.entityId ?? ''},
-          );
-        case NotificationEntityType.withdrawRequest:
-          return context.goNamed(RouteNames.myWithdraws);
-        case NotificationEntityType.purchase:
-        case NotificationEntityType.ticket:
-        default:
-        // Not implemented
-      }
-    };
   }
 }

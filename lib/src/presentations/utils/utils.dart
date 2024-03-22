@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 export 'currency_input_formatter.dart';
 export 'debouncer.dart';
 export 'file_picker.dart';
+export 'notification_handler.dart';
 
 class Utils {
   static String googleMapsUrlFromLatLong({

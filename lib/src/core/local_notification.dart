@@ -9,7 +9,11 @@ class LocalNotification {
   static final _responseStream =
       StreamController<NotificationResponse>.broadcast();
 
-  static Stream<NotificationResponse> get stream => _responseStream.stream;
+  static StreamSubscription<NotificationResponse> onResponse(
+    Function(NotificationResponse) onData,
+  ) {
+    return _responseStream.stream.listen(onData);
+  }
 
   static Future<void> init() async {
     const initializationSettingsAndroid = AndroidInitializationSettings(
@@ -17,19 +21,7 @@ class LocalNotification {
     );
 
     /// Not sure
-    final initializationSettingsDarwin = DarwinInitializationSettings(
-      onDidReceiveLocalNotification:
-          (int id, String? title, String? body, String? payload) async {
-        _responseStream.add(
-          NotificationResponse(
-            notificationResponseType:
-                NotificationResponseType.selectedNotification,
-            id: id,
-            payload: payload,
-          ),
-        );
-      },
-    );
+    const initializationSettingsDarwin = DarwinInitializationSettings();
     final initializationSettingsLinux = LinuxInitializationSettings(
       defaultActionName: 'Open notification',
       defaultIcon: AssetsLinuxIcon('assets/icons/ic_launcher.png'),

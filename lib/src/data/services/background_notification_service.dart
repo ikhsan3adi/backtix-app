@@ -125,7 +125,7 @@ class BackgroundNotificationService {
         id: Random.secure().nextInt(6968),
         title: n.type.title,
         body: n.message,
-        payload: '${n.id}',
+        payload: n.toSimpleJson().toString(),
       );
     }
   }

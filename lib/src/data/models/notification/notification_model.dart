@@ -10,18 +10,26 @@ class NotificationModel with _$NotificationModel {
   const NotificationModel._();
 
   const factory NotificationModel({
-    required int id,
+    @Default(-1) int id,
     String? userId,
-    required String message,
+    @Default('') String message,
     required NotificationType type,
     NotificationEntityType? entityType,
     String? entityId,
     @Default([]) List<NotificationRead> reads,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _NotificationModel;
 
   bool get isRead => reads.isNotEmpty ? reads[0].isRead : false;
+
+  Map<String, dynamic> toSimpleJson() {
+    return {
+      'type': _$NotificationTypeEnumMap[type],
+      'entityType': _$NotificationEntityTypeEnumMap[entityType],
+      'entityId': entityId,
+    };
+  }
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       _$NotificationModelFromJson(json);

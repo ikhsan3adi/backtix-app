@@ -68,8 +68,10 @@ class NotificationCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(notification.message),
-                        const SizedBox(height: 6),
-                        Text(_formattter.format(notification.updatedAt)),
+                        if (notification.updatedAt != null) ...[
+                          const SizedBox(height: 6),
+                          Text(_formattter.format(notification.updatedAt!)),
+                        ],
                       ],
                     ),
                   ),

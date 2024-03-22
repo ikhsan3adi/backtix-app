@@ -14,7 +14,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_manager/window_manager.dart';
 
-Future<void> main() async {
+void main() {
   runZonedGuarded(
     () async {
       await dotenv.load();
