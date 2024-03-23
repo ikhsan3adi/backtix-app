@@ -39,9 +39,11 @@ void main() {
       if (kDebugMode &&
           (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
         await windowManager.ensureInitialized();
-        await windowManager.setAspectRatio(9 / 21);
-        await windowManager.setAlwaysOnTop(true);
-        await windowManager.setAlignment(Alignment.topRight);
+        await Future.wait([
+          windowManager.setAspectRatio(9 / 21),
+          windowManager.setAlwaysOnTop(true),
+          windowManager.setAlignment(Alignment.topRight),
+        ]);
       }
 
       App.run();
