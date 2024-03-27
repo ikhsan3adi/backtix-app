@@ -33,14 +33,14 @@ class _NavigationShellState extends State<NavigationShell> {
   StreamSubscription? subscription;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await BackgroundService.start();
+    BackgroundService.start();
   }
 
   @override
-  void dispose() async {
-    await subscription?.cancel();
+  void dispose() {
+    subscription?.cancel();
     super.dispose();
   }
 
