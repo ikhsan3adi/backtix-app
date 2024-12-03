@@ -3,7 +3,7 @@ import 'package:backtix_app/src/config/routes/route_names.dart';
 import 'package:backtix_app/src/data/models/event/event_model.dart';
 import 'package:backtix_app/src/presentations/extensions/extensions.dart';
 import 'package:backtix_app/src/presentations/widgets/widgets.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as csl;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,15 +30,15 @@ class UpcomingEventsCarousel extends StatelessWidget {
             child: const Center(child: NotFoundWidget()),
           );
         }
-        return CarouselSlider(
+        return csl.CarouselSlider(
           carouselController: _carouselController,
-          options: CarouselOptions(
+          options: csl.CarouselOptions(
             autoPlay: true,
             enlargeCenterPage: true,
             height: 300,
             enableInfiniteScroll: false,
             padEnds: false,
-            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+            enlargeStrategy: csl.CenterPageEnlargeStrategy.zoom,
             enlargeFactor: 0.25,
           ),
           items: state.maybeMap(
