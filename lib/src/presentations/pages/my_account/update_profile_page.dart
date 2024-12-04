@@ -410,12 +410,14 @@ class _UpdateProfileFormState extends State<_UpdateProfileForm> {
                     }
                   }
                 }).catchError((e) async {
-                  ErrorDialog.show(
-                    context,
-                    e.runtimeType == Exception
-                        ? e as Exception
-                        : Exception(e.toString()),
-                  );
+                  if (context.mounted) {
+                    ErrorDialog.show(
+                      context,
+                      e.runtimeType == Exception
+                          ? e as Exception
+                          : Exception(e.toString()),
+                    );
+                  }
                 });
               },
               icon: const Icon(Icons.location_pin),

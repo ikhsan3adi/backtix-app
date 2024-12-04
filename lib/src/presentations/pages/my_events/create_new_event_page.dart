@@ -104,12 +104,15 @@ class _NewEventFormState extends State<_NewEventForm> {
       lastDate: DateTime(2050),
     ).then((date) async {
       if (date == null) return date;
-      final time = await showTimePicker(
-        context: context,
-        initialTime: const TimeOfDay(hour: 7, minute: 0),
-      );
-      if (time == null) return date;
-      return date.copyWith(hour: time.hour, minute: time.minute);
+      if (context.mounted) {
+        final time = await showTimePicker(
+          context: context,
+          initialTime: const TimeOfDay(hour: 7, minute: 0),
+        );
+        if (time == null) return date;
+        return date.copyWith(hour: time.hour, minute: time.minute);
+      }
+      return null;
     });
   }
 
@@ -416,12 +419,14 @@ class _NewEventFormState extends State<_NewEventForm> {
                     }
                   }
                 }).catchError((e) async {
-                  ErrorDialog.show(
-                    context,
-                    e.runtimeType == Exception
-                        ? e as Exception
-                        : Exception(e.toString()),
-                  );
+                  if (context.mounted) {
+                    ErrorDialog.show(
+                      context,
+                      e.runtimeType == Exception
+                          ? e as Exception
+                          : Exception(e.toString()),
+                    );
+                  }
                 });
               },
               icon: const Icon(Icons.location_pin),
@@ -670,9 +675,11 @@ class _EventImagesForm extends StatelessWidget {
                       text: 'Select new images (${images.length}/$maxCount)',
                       onTap: () async {
                         await FilePicker.pickMultipleImage().then((imageFiles) {
-                          return context
-                              .read<EventImagesFormCubit>()
-                              .addImages(imageFiles);
+                          if (context.mounted) {
+                            return context
+                                .read<EventImagesFormCubit>()
+                                .addImages(imageFiles);
+                          }
                         });
                       },
                     )
@@ -684,13 +691,15 @@ class _EventImagesForm extends StatelessWidget {
                         await PickImageDialog.show(context).then((value) async {
                           if (value == null) return;
                           if (value == 0) {
-                            await showImageViewer(
-                              context,
-                              FileImage(images[index].file),
-                              useSafeArea: true,
-                              doubleTapZoomable: true,
-                              swipeDismissible: true,
-                            );
+                            if (context.mounted) {
+                              await showImageViewer(
+                                context,
+                                FileImage(images[index].file),
+                                useSafeArea: true,
+                                doubleTapZoomable: true,
+                                swipeDismissible: true,
+                              );
+                            }
                             return;
                           }
                           final file = await FilePicker.pickSingleImage(

@@ -103,12 +103,15 @@ class _UpsertTicketDialogState extends State<UpsertTicketDialog> {
       lastDate: DateTime(2050),
     ).then((date) async {
       if (date == null) return date;
-      final time = await showTimePicker(
-        context: context,
-        initialTime: const TimeOfDay(hour: 0, minute: 0),
-      );
-      if (time == null) return date;
-      return date.copyWith(hour: time.hour, minute: time.minute);
+      if (context.mounted) {
+        final time = await showTimePicker(
+          context: context,
+          initialTime: const TimeOfDay(hour: 0, minute: 0),
+        );
+        if (time == null) return date;
+        return date.copyWith(hour: time.hour, minute: time.minute);
+      }
+      return null;
     });
   }
 

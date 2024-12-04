@@ -331,7 +331,7 @@ class _Buttons extends StatelessWidget {
                         );
                       },
                     ).then((refunded) {
-                      if (refunded ?? false) {
+                      if ((refunded ?? false) && context.mounted) {
                         Toast.show(
                           context,
                           msg: 'Refund request successful',
@@ -385,7 +385,7 @@ class _EventOwnerButtons extends StatelessWidget {
                       );
                     },
                   ).then((success) {
-                    if (success ?? false) {
+                    if ((success ?? false) && context.mounted) {
                       Toast.show(
                         context,
                         msg: 'Accept refund request successful',
@@ -425,7 +425,7 @@ class _EventOwnerButtons extends StatelessWidget {
                       );
                     },
                   ).then((success) {
-                    if (success ?? false) {
+                    if ((success ?? false) && context.mounted) {
                       Toast.show(
                         context,
                         msg: 'Successfully refused refund request',

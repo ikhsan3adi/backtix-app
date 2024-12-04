@@ -107,10 +107,12 @@ class _NS<C extends NotificationsCubit> extends State<_NotificationList<C>> {
               C is InfoNotificationsCubit
                   ? 'info_last_updated'
                   : 'last_updated']);
-          context.read<C>().addNewNotifications(
-                data.map((e) => NotificationModel.fromJson(e)).toList(),
-                lastUpdated,
-              );
+          if (context.mounted) {
+            context.read<C>().addNewNotifications(
+                  data.map((e) => NotificationModel.fromJson(e)).toList(),
+                  lastUpdated,
+                );
+          }
         },
       );
     });
